@@ -6,10 +6,9 @@ package system;
  */
 public class Board {
 
-	private int x, y;
 	private PixelSquare[][] board;
-	
-	public Board() {
+
+	public Board(int x, int y) {
 		
 		board = new PixelSquare[x][y];
 	}
@@ -21,6 +20,14 @@ public class Board {
 	
 	public void setSquare(int x, int y, PixelSquare pixelSquare) {
 		board[x][y] = pixelSquare;
+	}
+	
+	public PixelSquare[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(PixelSquare[][] board) {
+		this.board = board;
 	}
 	
 }
