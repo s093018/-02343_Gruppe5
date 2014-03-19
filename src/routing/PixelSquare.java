@@ -9,9 +9,11 @@ public class PixelSquare {
 	/**
 	 * FREE = 0;
 	 * BALL = 1, 
-	 * ROBOT = 2, 
-	 * OBSTACLE = 3, 
-	 * GOAL = 4, 
+	 * ROBOT = 2,
+	 * ROBOT FRONT = 3
+	 * ROBOT BACK = 4 
+	 * OBSTACLE = 5, 
+	 * GOAL = 6, 
 	 */
 	private int status; 
 	
