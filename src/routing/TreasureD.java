@@ -1,8 +1,11 @@
-import java.io.*;
-import java.util.*;
+package routing;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
-// Objektet indeholder et koordinats¾t (row, col) samt en boolsk v¾rdi.
-// Den boolske v¾rdi er sand hvis feltets v¾rdi er en skat.
+// Objektet indeholder et koordinatsaet (row, col) samt en boolsk vaerdi.
+// Den boolske vaerdi er sand hvis feltets vaerdi er en skat.
 class Vertex {
 	public boolean treasure;
 	public char val;
@@ -20,7 +23,7 @@ public class TreasureD {
 	private Queue<Vertex> q = new LinkedList<Vertex>();
 	public int[][] state_matrix;
 
-	public int countReachableTreasures(int N, char[][] map) throws Exception {
+	public int countReachableTreasures(int N, char[][] map) {
 
 		int row, col, treasure_count = 0;
 		Vertex v;
@@ -35,12 +38,14 @@ public class TreasureD {
 				addNeighbours(map, v);
 				setState(row, col);
 				if (v.treasure) {
-					System.out.println(v.val);
+
 				}
+
 			}
 		}
 		return treasure_count;
 	}
+
 	private void addNeighbours(char[][] map, Vertex v) {
 		int row = v.row, col = v.col, N = map[0].length;
 		if (col > 0 && map[row][col - 1] != '#' && getState(row, col - 1) == 0) {
@@ -63,7 +68,7 @@ public class TreasureD {
 	private Vertex findEntrance(char[][] map) {
 		int N = map[0].length;
 		char c = 'I';
-		
+
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) {
 				if (map[row][col] == c) {
@@ -101,7 +106,6 @@ public class TreasureD {
 				map[i][j] = line.charAt(j);
 			}
 		}
-
 		System.out.println(countReachableTreasures(N, map));
 	}
 }
