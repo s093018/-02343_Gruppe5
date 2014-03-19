@@ -4,21 +4,6 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 
-// Objektet indeholder et koordinatsaet (row, col) samt en boolsk vaerdi.
-// Den boolske vaerdi er sand hvis feltets vaerdi er en skat.
-class Vertex {
-	public boolean treasure;
-	public char val;
-	public int row, col;
-
-	public Vertex(char c, int row, int col, char val) {
-		this.row = row;
-		this.col = col;
-		this.treasure = (c == '$')? true : false;
-		this.val = val;
-	}
-}
-
 public class TreasureD {
 	private Queue<Vertex> q = new LinkedList<Vertex>();
 	public int[][] state_matrix;
