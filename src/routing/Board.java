@@ -8,14 +8,14 @@ public class Board {
 
 	private char[][] board;
 
-	public Board(int x, int y) {
+	public Board() {
 		
-		board = new char[x][y];
+		board = imageProcessing.Camera.map();
 	}
 	
-	public char getSquare(int x, int y) {
+	public char getSquare() {
 		
-		return board[x][y];
+		return board;
 	}
 	
 	public void setSquare(int x, int y, char character) {
