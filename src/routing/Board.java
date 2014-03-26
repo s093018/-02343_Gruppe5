@@ -6,27 +6,27 @@ package routing;
  */
 public class Board {
 
-	private PixelSquare[][] board;
+	private char[][] board;
 
 	public Board(int x, int y) {
 		
-		board = new PixelSquare[x][y];
+		board = new char[x][y];
 	}
 	
-	public PixelSquare getSquare(int x, int y) {
+	public char getSquare(int x, int y) {
 		
 		return board[x][y];
 	}
 	
-	public void setSquare(int x, int y, PixelSquare pixelSquare) {
-		board[x][y] = pixelSquare;
+	public void setSquare(int x, int y, char character) {
+		board[x][y] = character;
 	}
 	
-	public PixelSquare[][] getBoard() {
+	public char[][] getBoard() {
 		return board;
 	}
 
-	public void setBoard(PixelSquare[][] board) {
+	public void setBoard(char[][] board) {
 		this.board = board;
 	}
 	
