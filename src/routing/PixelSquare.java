@@ -7,25 +7,25 @@ package routing;
 public class PixelSquare {
 	
 	/**
-	 * FREE = 0;
-	 * BALL = 1, 
-	 * ROBOT = 2,
-	 * ROBOT FRONT = 3
-	 * ROBOT BACK = 4 
-	 * OBSTACLE = 5, 
-	 * GOAL = 6, 
+	 * FREE = '';
+	 * BALL = "B" 
+	 * ROBOT = "R",
+	 * ROBOT FRONT = "F"
+	 * ROBOT BACK = "A" 
+	 * OBSTACLE = "O", 
+	 * GOAL = "G", 
 	 */
-	private int status; 
+	private char status; 
 	
-	public PixelSquare (int status) {
+	public PixelSquare (char status) {
 		this.status = status;
 	}
 	
-	public int getStatus () {
+	public char getStatus () {
 		return status;
 	}
 	
-	public void setSatus (int newStatus) {
+	public void setSatus (char newStatus) {
 		status = newStatus;
 	}
 }
