@@ -9,13 +9,12 @@ public class Board {
 	private char[][] board;
 
 	public Board() {
-		
-		board = imageProcessing.Camera.map();
+		board = null;
 	}
 	
-	public char getSquare() {
+	public char getSquare(int x, int y) {
 		
-		return board;
+		return board[x][y];
 	}
 	
 	public void setSquare(int x, int y, char character) {
@@ -29,5 +28,4 @@ public class Board {
 	public void setBoard(char[][] board) {
 		this.board = board;
 	}
-	
 }
