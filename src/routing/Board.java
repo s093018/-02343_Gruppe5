@@ -1,27 +1,47 @@
 package routing;
 
+import java.util.List;
+import imageProcessing.Point;
+
 /**
- * @author Christian W. Nielsen - s093018
+ * @author Julian Villadsen - s123641
  *
  */
 public class Board {
 
 	private char[][] board;
 
-	public Board() {
-		
-		board = imageProcessing.Camera.map();
+	//  denne konstruktør er overflødig pga. setBoard()
+	//	public Board(char[][] map) {
+	//		board = map;
+	//	}
+
+	public void fillInBalls(List<Point> balls){
+		for(Point point: balls)
+			board[point.pixel_x][point.pixel_y] = 'B';
 	}
 	
-	public char getSquare() {
-		
-		return board;
+	public void fillInRobotPosition(Point robotPosition){
+		board[robotPosition.pixel_x][robotPosition.pixel_y] = 'R';	
 	}
 	
+	public void clearBalls(List<Point> balls){
+		for(Point point: balls)
+			board[point.pixel_x][point.pixel_y] = '\u0000'; //the default value of char
+	}
+	
+	public void clearRobotPosition(Point robotPosition){
+		board[robotPosition.pixel_x][robotPosition.pixel_y] = '\u0000'; //the default value of char
+	}
+
+	public char getSquare(int x, int y) {
+		return board[x][y];
+	}
+
 	public void setSquare(int x, int y, char character) {
 		board[x][y] = character;
 	}
-	
+
 	public char[][] getBoard() {
 		return board;
 	}
@@ -29,5 +49,5 @@ public class Board {
 	public void setBoard(char[][] board) {
 		this.board = board;
 	}
-	
+
 }
