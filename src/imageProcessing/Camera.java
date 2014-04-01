@@ -8,8 +8,7 @@ import java.util.List;
 //
 
 
-public interface Camera
-{
+public interface Camera {
 	public void update();
 	public Point robotPosition();
 	public double robotHeading();

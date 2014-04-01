@@ -260,7 +260,7 @@ class Maze
 	void solve() 
 	{
 		// Store North(N), South(S), East(E), West(W), NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE) of MazeCell.
-		MazeCell N, S, E, W, NW, NE, SW, SE;
+		MazeCell N, S, E, W /*, NW, NE, SW, SE*/;
 
 		// Create new Queue to use for BFS.
 		Queue<MazeCell> Q = new LinkedList<MazeCell>();
@@ -375,8 +375,8 @@ class Maze
 				}
 			}
 
+			/*
 			// Northeast child
-			
 			//Bounary check
 			if ( !((CMC.getX() + 1) >= width) && !((CMC.getY() - 1) <= 0) ) {
 
@@ -460,6 +460,7 @@ class Maze
 					Q.add(SW);
 				}
 			}
+			*/
 		}
 		
 		// If we get here, the maze is not solvable.
