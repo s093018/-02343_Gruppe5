@@ -11,7 +11,7 @@ public class Board {
 
 	private char[][] board;
 
-	//  denne konstruktør er overflødig pga. setBoard()
+	//  this constructor is superfluous because of setBoard()
 	//	public Board(char[][] map) {
 	//		board = map;
 	//	}
@@ -27,7 +27,7 @@ public class Board {
 	
 	public void clearBalls(List<Point> balls){
 		for(Point point: balls)
-			board[point.pixel_x][point.pixel_y] = '\u0000'; //the default value of char
+			board[point.pixel_x][point.pixel_y] = '\u0000';  //the default value of char
 	}
 	
 	public void clearRobotPosition(Point robotPosition){
