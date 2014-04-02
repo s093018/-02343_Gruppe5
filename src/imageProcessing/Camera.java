@@ -13,6 +13,7 @@ public interface Camera
 	public void update();
 	public void updateRobot(Point expectedPosition, double searchRadius);
 	public void updateBalls();
+	public void shutDown();
 
 	public Robot getRobot();
 	public List<Point> getBalls();
