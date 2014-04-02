@@ -8,11 +8,14 @@ import java.util.List;
 //
 
 
-public interface Camera {
+public interface Camera
+{
 	public void update();
-	public Point robotPosition();
-	public double robotHeading();
-	public List<Point> balls();
-	public List<Goal> goals();
-	public Map map();
+	public void updateRobot(Point expectedPosition, double searchRadius);
+	public void updateBalls();
+
+	public Robot getRobot();
+	public List<Point> getBalls();
+	public List<Goal> getGoals();
+	public Map getMap();
 }
