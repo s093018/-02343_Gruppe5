@@ -1,10 +1,10 @@
 package imageProcessing;
 
 public class Map{
-	public boolean[][] obstacle;//true = blocked, false = open
+	public char[][] obstacle;//true = blocked, false = open
 	public double pixelSize;//cm / pixel
 	
-	public Map(boolean[][] obstacle, double pixelSize) {
+	public Map(char[][] obstacle, double pixelSize) {
 		this.obstacle = obstacle; 
 		this.pixelSize = pixelSize;
 	}
