@@ -15,7 +15,7 @@ public class RealCamera implements Camera
 	private Robot robot;
 	private VideoCapture capture;
 
-	private boolean testMode = false;
+	private boolean testMode = true;
 	private Mat testImage;
 
 	private Mat getImage()
@@ -33,11 +33,13 @@ public class RealCamera implements Camera
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		if(testMode) testImage = Highgui.imread("src/imgInOut/TESTDATA.PNG");
+		if(testMode) testImage = Highgui.imread("src/imgInOut/TESTDATA.JPG");
 		else capture = new VideoCapture(0);
+
 
 		getImage();
 		//find forhindringer
+		//Highgui.imwrite("src/imgInOut/RealCamTest.jpg", getImage());
 
 		update();//Find bolde + robot
 	}

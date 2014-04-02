@@ -36,7 +36,7 @@ public class TestCamera implements Camera
 		double scale = 180.0 / 550.0;
 		map = new Map(new char[640][480], scale);
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		Mat image = Highgui.imread("src/imgInOut/TESTMAP.JPG");
+		Mat image = Highgui.imread("src/imgInOut/TESTMAP.PNG");
 		for(int y = 0; y < 480; ++y)
 			for(int x = 0; x < 640; ++x)
 				map.obstacle[x][y] = (image.get(y, x)[2] == 255.0 ? '\0' : '\1');
