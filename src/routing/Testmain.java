@@ -30,6 +30,7 @@ public class Testmain {
 		ArrayList<String> path = M.findPath();
 		System.out.println(M);
 		
+		/* Print the found path */
 		ListIterator<String> it = path.listIterator();
 		System.out.println("Found path!");
 		while(it.hasNext()) {
