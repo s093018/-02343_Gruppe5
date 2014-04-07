@@ -1,6 +1,7 @@
 package routing;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class Testmain {
 	
@@ -26,9 +27,10 @@ public class Testmain {
 		board.setBoard(map);
 		BFS M = new BFS(board.getBoard());  
 		System.out.println(M);
-		Iterator<String> it = M.findPath().iterator();
+		ArrayList<String> path = M.findPath();
 		System.out.println(M);
 		
+		ListIterator<String> it = path.listIterator();
 		System.out.println("Found path!");
 		while(it.hasNext()) {
 			System.out.println(it.next());

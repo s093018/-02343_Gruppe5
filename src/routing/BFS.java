@@ -1,5 +1,6 @@
 package routing;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -79,8 +80,8 @@ public class BFS {
 		}
 	}
 
-	public List<String> printPath(Field pathCell) {
-		LinkedList<String> result = new LinkedList<String>();
+	public ArrayList<String> printPath(Field pathCell) {
+		ArrayList<String> result = new ArrayList<String>();
 		Stack<Field> s = new Stack<Field>();
 		
 		while (pathCell.getParent() != null) {
@@ -145,7 +146,7 @@ public class BFS {
 	 * Using a queue, this solve() method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public List<String> findPath() {
+	public ArrayList<String> findPath() {
 		/*
 		 *  Store North(N), South(S), East(E), West(W), 
 		 *	NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE)
@@ -340,7 +341,7 @@ public class BFS {
 		}
 
 		// If we get here, we're screwed!
-		System.out.println("Maze not solvable!\n");
+		System.out.println("Path not found!\n");
 		return null;
 	}
 }
