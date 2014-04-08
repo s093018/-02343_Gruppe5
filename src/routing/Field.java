@@ -1,6 +1,10 @@
 package routing;
 
 /**
+ * @author Christoffer - s103148
+ */
+
+/**
  * The Field class implements a single cell of 
  *   a map. It includes private data fields that
  *   tell: 
@@ -9,8 +13,8 @@ package routing;
  *     what a cell's parent is (for the BFS)
  *     what the cell's position is in the maze
  */
-class Field 
-{
+class Field {
+	
 	private boolean  marked;
 	private char      value;
 	private Field    parent;
@@ -19,11 +23,10 @@ class Field
 	/**
 	 * The constructor for Fields. The cells are by default
 	 *   unmarked and without a parent cell. To construct a new cell,
-	 *   its position in the maze (x,y) and its value '+', 'R', or 'B'
+	 *   its position in the maze (x,y) and its value 'O', 'R', or 'B'
 	 *   must be specified.
 	 */
-	public Field(int x, int y, char c) 
-	{
+	public Field(int x, int y, char c) {
 		marked = false;
 		parent =  null;
 		this.value = c;
@@ -32,78 +35,65 @@ class Field
 	}
 
 	/**
-	 * A public nonstatic accessor method that returns the contents
-	 *   of the Field that invokes it.
+	 * A public method that returns the value of the Field that invokes it.
 	 */
-	public char getValue() 
-	{
+	public char getValue() {
 		return this.value;
 	}
 	
-	public void setValue(char val)
-	{
+	/**
+	 * A public method that changes the value of the Field that invokes it.
+	 */
+	public void setValue(char val) {
 		this.value = val;
 	}
+	
 	/**
-	 * A public non-static method that changes marked value 
-	 *   of the Field that invokes it.
+	 * A public method that changes marked value of the Field that invokes it.
 	 */
-	public void setMark()
-	{
+	public void setMark() {
 		marked = true;
 	}
 
 	/**
-	 * A public non-static accessor method that returns the marked value
-	 *   of the Field that invokes it.
+	 * A public method that returns the marked value of the Field that invokes it.
 	 */
-	public boolean isMarked() 
-	{
+	public boolean isMarked() {
 		return this.marked;
 	}
 
 	/**
-	 * A public non-static accessor method that returns the parent
-	 *   of the Field that invokes it.
+	 * A public method that returns the parent of the Field that invokes it.
 	 */
-	public Field getParent() 
-	{
+	public Field getParent() {
 		return this.parent;
 	}
 
 	/**
-	 * A public non-static method that changes parent value 
-	 *   of the Field to parent that invokes it.
+	 * A public method that changes parent value of the Field to parent that invokes it.
 	 */
-	public void setParent(Field child) 
-	{
+	public void setParent(Field child) {
 		child.parent = this;
 	}
 
 	/**
-	 * A public nonstatic accessor method that returns the x
-	 *   of the Field that invokes it.
+	 * A public method that returns the x of the Field that invokes it.
 	 */
-	public int getX() 
-	{
+	public int getX() {
 		return this.x;
 	}  
 
 	/**
-	 * A public non-static accessor method that returns the y-coordinate
-	 *   of the Field that invokes it.
+	 * A public method that returns the y-coordinate of the Field that invokes it.
 	 */
-	public int getY() 
-	{
+	public int getY() {
 		return this.y;
 	}
 
 	/**
-	 * A public non-static method that changes the value 
-	 *   of the Field to '*'.
+	 * A public method that changes the value of the Field to '*'.
 	 */
-	public void star() 
-	{
+	public void star() {
 		value = '*';
 	}   
 }
