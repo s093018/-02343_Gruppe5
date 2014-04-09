@@ -2,7 +2,7 @@ package imageProcessing;
 
 public class Map
 {
-	public final char[][] obstacle;//true = blocked, false = open
+	public final char[][] obstacle;//1 = blocked, 0 = open
 	public final double pixelSize;//cm / pixel
 	
 	public Map(char[][] obstacle, double pixelSize)
