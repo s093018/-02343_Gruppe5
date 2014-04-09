@@ -55,14 +55,14 @@ public class BFS {
 		}
 	}
 
-	public ArrayList<Integer> printPath(Field pathCell) {
+	public ArrayList<Integer> printPath(Field start) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		Stack<Field> s = new Stack<Field>();
 		
-		while (pathCell.getParent() != null) {
-			s.push(pathCell);
+		while (start.getParent() != null) {
+			s.push(start);
 			// changes contents until it meets a null pointer.
-			pathCell = pathCell.getParent();
+			start = start.getParent();
 		}
 
 		int tmpX, tmpY;
