@@ -18,8 +18,6 @@ import java.util.Stack;
 public class BFS {
 	private Field[][]    grid;
 	private Field 		start;
-	private int        startX;
-	private int        startY;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -42,21 +40,6 @@ public class BFS {
 	public BFS(Field[][] board, Field start) {
 		this.grid = board;
 		this.start = start;
-		/*
-		grid = new Field[board.length][board[0].length];
-		for (int i = 0 ; i < board.length ; ++i) {
-			for (int j = 0 ; j < board[i].length ; ++j) {
-
-				grid[i][j] = new Field(j, i, board[i][j]);
-
-				if (board[i][j] == 'R') {
-					startX = j; 
-					startY = i;
-					start = new Field(startX, startY, 'R');
-				}
-			}
-		}
-		*/
 	}
 
 
