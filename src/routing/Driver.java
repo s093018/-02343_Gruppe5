@@ -10,17 +10,14 @@ public class Driver {
 	public static void main(String[] args) {
 			Controller ctrl = new Controller();
 			fs = ctrl.getFs();
-			ArrayList<String> stringArray = new ArrayList<String>(Arrays.asList("N","S","E","W","N","N","N","N","S","S","E","W","S","S","S"));
+			ArrayList<Integer> intArray = new ArrayList<Integer>(Arrays.asList(0,180,90,270,0,0,0,0,180,180,90,270,180,180,180));
 			ArrayList<DriverInstructions> result = new ArrayList<DriverInstructions>();
-			result = fs.sequence(stringArray);
+			result = fs.sequence(intArray);
 			for(DriverInstructions i : result) {
 				System.out.println(i.getHeading()+": "+i.getLength());
 			}
 			
 			fs.drive(result);
-			
-			
-			System.out.println(fs.radianToDegree(1.66*Math.PI));
 			
 	}
 

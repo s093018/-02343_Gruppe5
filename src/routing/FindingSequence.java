@@ -12,13 +12,13 @@ public class FindingSequence {
 		this.ctrl = ctrl;
 	}
 	
-	public ArrayList<DriverInstructions> sequence (ArrayList<String> path) { // path er det arraylist der kommer ud fra BFS algoritmen
+	public ArrayList<DriverInstructions> sequence (ArrayList<Integer> path) { // path er det arraylist der kommer ud fra BFS algoritmen
 
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
 
 		int count = 1;
 		for(int i = 1; i < path.size(); i++) {
-			if (path.get(i).equals(path.get(i-1))) {
+			if (path.get(i) == (path.get(i-1))) {
 
 				if (i == path.size()-1) {
 					count++;
@@ -41,9 +41,7 @@ public class FindingSequence {
 	
 	public void drive (ArrayList<DriverInstructions> instructions) {
 		
-		for(DriverInstructions i : instructions) {
-			
-			//if ()
+		for(DriverInstructions i : instructions) {			
 			
 			/*switch (radianToDegree(ctrl.getCamera().getRobot().heading)) {
 				
@@ -80,6 +78,11 @@ public class FindingSequence {
 		int result = (int)(degree + 22.5)/45;
 		result *=45;
 		return result;
+	}
+	
+	public int turnDegree(int algoHeading, int robotHeading) {
+	
+		return 0; // return antal grader roboten skal dreje (negativ venstre / positiv højre) MAX 180grader
 	}
 
 }
