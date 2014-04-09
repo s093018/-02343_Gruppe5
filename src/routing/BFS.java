@@ -2,9 +2,12 @@ package routing;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
+
+/**
+ * @author Christoffer - s103148
+ */
 
 /**
  * The Maze class is in essence a two-dimensional array of
@@ -15,22 +18,13 @@ import java.util.Stack;
 public class BFS {
 	private Field[][]    grid;
 	private Field 		start;
-	private int         width;
-	private int        height;
 	private int        startX;
 	private int        startY;
 
 	/**
-	 * These static arrays of Strings represent the mazes
-	 *  available. The constructor for the Maze class
-	 *  needs one of the names of these mazes as input,
-	 *  it then initializes the array of Fields appropriately.
-	 *
-	 * The first string is the maze's name.
-	 * The second string is the maze's height.
-	 * The third string is the maze's width.
+	 * The BFS constructor takes a two-dimensional Array of Chars as input.
 	 * The remaining strings are the contents of the maze:
-	 *   a 'O' character represents a wall
+	 *   a 'O' character represents an obstacle.
 	 *   a capital R represents the starting point
 	 *   a capital B represents the finishing point (the ball)
 	 *
@@ -45,14 +39,9 @@ public class BFS {
 	 *  above statically defined String arrays and creates 
 	 *  the maze represented in the specified array.
 	 */
-	public BFS(char[][] board) {
-		/*		
-		height  = (new Integer(info[1])).intValue();
-		width = (new Integer(info[2])).intValue();
-		 */
+	public BFS(Field[][] board, Field start) {
+		/*
 		grid = new Field[board.length][board[0].length];
-		height = board.length;
-		width = board[0].length;
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
 
@@ -65,6 +54,7 @@ public class BFS {
 				}
 			}
 		}
+		*/
 	}
 
 
@@ -198,7 +188,7 @@ public class BFS {
 
 			// South child
 			// Boundary check
-			if ( !((CMC.getY()) + 1 >= height) ) {
+			if ( !((CMC.getY()) + 1 >= grid.length) ) {
 
 				// Get South Field
 				S = (grid[(CMC.getY())+1][CMC.getX()]);             
@@ -240,7 +230,7 @@ public class BFS {
 			// West child
 
 			// Boundary check
-			if ( !((CMC.getX()) + 1 >= width) ) {               
+			if ( !((CMC.getX()) + 1 >= grid[0].length) ) {               
 
 				// Get West Field
 				W = (grid[CMC.getY()][(CMC.getX())+1]);
@@ -261,7 +251,7 @@ public class BFS {
 
 			// Northeast child
 			//Boundary check
-			if ( !((CMC.getX() + 1) >= width) && !((CMC.getY() - 1) <= 0) ) {
+			if ( !((CMC.getX() + 1) >= grid[0].length) && !((CMC.getY() - 1) <= 0) ) {
 				// Get northeast Field
 				NE = ( grid[(CMC.getY()) - 1][CMC.getX() + 1] );
 
@@ -301,7 +291,7 @@ public class BFS {
 
 			// Southeast child
 			// Boundary check
-			if ( !((CMC.getX() + 1) >= width) && !((CMC.getY() + 1) >= width) ) {               
+			if ( !((CMC.getX() + 1) >= grid[0].length) && !((CMC.getY() + 1) >= grid[0].length) ) {               
 				// Get southeast Field
 				SE = ( grid[(CMC.getY()) + 1][CMC.getX() + 1] );
 
@@ -321,7 +311,7 @@ public class BFS {
 
 			// Southwest child
 			// Boundary check
-			if ( !((CMC.getX() - 1) <= 0) && !((CMC.getY() + 1) >= width) ) {               
+			if ( !((CMC.getX() - 1) <= 0) && !((CMC.getY() + 1) >= grid[0].length) ) {               
 				// Get Southwest Field
 				SW = (grid[(CMC.getY()) + 1][CMC.getX() - 1]);
 
