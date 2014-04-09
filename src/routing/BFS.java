@@ -18,8 +18,6 @@ import java.util.Stack;
 public class BFS {
 	private Field[][]    grid;
 	private Field 		start;
-	private int        startX;
-	private int        startY;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -40,21 +38,8 @@ public class BFS {
 	 *  the maze represented in the specified array.
 	 */
 	public BFS(Field[][] board, Field start) {
-		/*
-		grid = new Field[board.length][board[0].length];
-		for (int i = 0 ; i < board.length ; ++i) {
-			for (int j = 0 ; j < board[i].length ; ++j) {
-
-				grid[i][j] = new Field(j, i, board[i][j]);
-
-				if (board[i][j] == 'R') {
-					startX = j; 
-					startY = i;
-					start = new Field(startX, startY, 'R');
-				}
-			}
-		}
-		*/
+		this.grid = board;
+		this.start = start;
 	}
 
 
@@ -70,41 +55,41 @@ public class BFS {
 		}
 	}
 
-	public ArrayList<String> printPath(Field pathCell) {
-		ArrayList<String> result = new ArrayList<String>();
+	public ArrayList<Integer> printPath(Field start) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		Stack<Field> s = new Stack<Field>();
 		
-		while (pathCell.getParent() != null) {
-			s.push(pathCell);
+		while (start.getParent() != null) {
+			s.push(start);
 			// changes contents until it meets a null pointer.
-			pathCell = pathCell.getParent();
+			start = start.getParent();
 		}
 
 		int tmpX, tmpY;
 		s.push(start);
 		
 		while(!s.empty()) {
-			
+
 			Field f = s.pop();
 			tmpX = start.getY() - f.getY();
 			tmpY = start.getX() - f.getX();
 			
 			if(tmpX == 1 && tmpY == 0) {
-				result.add("N");
+				result.add(0);
 			} else if(tmpX == 0 && tmpY == -1) {
-				result.add("E");
+				result.add(90);
 			} else if(tmpX == 0 && tmpY == 1) {
-				result.add("W");
+				result.add(270);
 			} else if(tmpX == -1 && tmpY == 0) {
-				result.add("S");
+				result.add(180);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add("NE");
+				result.add(45);
 			} else if(tmpX == 1 && tmpY == 1) {
-				result.add("NW");
+				result.add(315);
 			} else if(tmpX == -1 && tmpY == -1) {
-				result.add("SE");
+				result.add(135);
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add("SW");
+				result.add(225);
 			}
 
 			start = f;
@@ -136,7 +121,7 @@ public class BFS {
 	 * Using a queue, this solve() method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public ArrayList<String> findPath() {
+	public ArrayList<Integer> findPath() {
 		/*
 		 *  Store North(N), South(S), East(E), West(W), 
 		 *	NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE)
