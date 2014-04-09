@@ -9,45 +9,68 @@ import imageProcessing.Point;
  */
 public class Board {
 
-	private char[][] board;
+	private Field[][] grid;
+	private Field 		start;
+	private int        startX;
+	private int        startY;
 
-	//  this constructor is superfluous because of setBoard()
-	//	public Board(char[][] map) {
-	//		board = map;
-	//	}
+	public Board(char[][] board) {
+		
+		grid = new Field[board.length][board[0].length];
+		for (int i = 0 ; i < board.length ; ++i) {
+			for (int j = 0 ; j < board[i].length ; ++j) {
+
+				grid[i][j] = new Field(j, i, board[i][j]);
+
+				if (board[i][j] == 'R') {
+					startX = j; 
+					startY = i;
+					start = new Field(startX, startY, 'R');
+				}
+			}
+		}
+	}
 
 	public void fillInBalls(List<Point> balls){
 		for(Point point: balls)
-			board[point.pixel_x][point.pixel_y] = 'B';
+			grid[point.pixel_x][point.pixel_y] = new Field(point.pixel_x, point.pixel_y, 'B');
 	}
-	
+
 	public void fillInRobotPosition(Point robotPosition){
-		board[robotPosition.pixel_x][robotPosition.pixel_y] = 'R';	
+		grid[robotPosition.pixel_x][robotPosition.pixel_y] = 
+				new Field(robotPosition.pixel_x, robotPosition.pixel_y, 'R');	
 	}
-	
+
 	public void clearBalls(List<Point> balls){
 		for(Point point: balls)
-			board[point.pixel_x][point.pixel_y] = '\u0000';  //the default value of char
-	}
-	
-	public void clearRobotPosition(Point robotPosition){
-		board[robotPosition.pixel_x][robotPosition.pixel_y] = '\u0000'; //the default value of char
+			grid[point.pixel_x][point.pixel_y].setValue('\u0000');  //the default value of char
 	}
 
-	public char getSquare(int x, int y) {
-		return board[x][y];
+	public void clearRobotPosition(Point robotPosition) {
+		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('\u0000'); //the default value of char
 	}
 
-	public void setSquare(int x, int y, char character) {
-		board[x][y] = character;
+	public Field getField(int x, int y) {
+		return grid[x][y];
 	}
 
-	public char[][] getBoard() {
-		return board;
+	public void setField(int x, int y, Field field) {
+		grid[x][y] = field;
 	}
 
-	public void setBoard(char[][] board) {
-		this.board = board;
+	public Field[][] getGrid() {
+		return grid;
 	}
 
+	public Field getStart() {
+		return start;
+	}
+
+	public int getStartX() {
+		return startX;
+	}
+
+	public int getStartY() {
+		return startY;
+	}
 }

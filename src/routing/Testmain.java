@@ -1,5 +1,7 @@
 package routing;
 
+import imageProcessing.TestCamera;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -13,6 +15,13 @@ public class Testmain {
 	 * Main method for test cases:
 	 */
 	public static void main(String[] arg) {
+		
+		TestCamera t = new TestCamera();
+		Board board = new Board(t.getMap().obstacle);
+		board.fillInBalls(t.getBalls());
+		board.fillInRobotPosition(t.getRobot().position);
+		
+		/*
 		char[][] map = {
 				{'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
 				{'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'B', 'O'},
@@ -25,10 +34,8 @@ public class Testmain {
 				{'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O'},
 				{'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
 		};
-
-		Board board = new Board();
-		board.setBoard(map);
-		BFS M = new BFS(board.getBoard());  
+		*/
+		BFS M = new BFS(board.getGrid(), board.getStart());  
 		System.out.println(M);
 		ArrayList<String> path = M.findPath();
 		System.out.println(M);

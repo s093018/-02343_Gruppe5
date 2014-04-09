@@ -9,7 +9,7 @@ public class Driver {
 	
 	public static void main(String[] args) {
 		
-		Board Board = new Board();
+		// Board Board = new Board();
 	
 		while (!endGame) {
 			
