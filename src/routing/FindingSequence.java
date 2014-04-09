@@ -18,7 +18,7 @@ public class FindingSequence {
 
 		int count = 1;
 		for(int i = 1; i < path.size(); i++) {
-			if (path.get(i) == (path.get(i-1))) {
+			if (path.get(i).equals((path.get(i-1)))) {
 
 				if (i == path.size()-1) {
 					count++;
