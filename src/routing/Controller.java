@@ -6,10 +6,12 @@ public class Controller {
 
 	private Camera camera;
 	private FindingSequence fs,ph;
+	private robot.Control robot;
 	
 	public Controller () {
 		camera = new TestCamera();
 		fs = new FindingSequence(this);
+		robot = new robot.Control();
 	}
 
 	public Camera getCamera() {
@@ -20,6 +22,9 @@ public class Controller {
 		return fs;
 	}
 	
+	public robot.Control getrobot() {
+		return robot;
+	}
 	
 	
 }
