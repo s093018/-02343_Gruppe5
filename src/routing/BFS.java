@@ -55,8 +55,8 @@ public class BFS {
 		}
 	}
 
-	public ArrayList<String> printPath(Field pathCell) {
-		ArrayList<String> result = new ArrayList<String>();
+	public ArrayList<Integer> printPath(Field pathCell) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		Stack<Field> s = new Stack<Field>();
 		
 		while (pathCell.getParent() != null) {
@@ -69,27 +69,27 @@ public class BFS {
 		s.push(start);
 		
 		while(!s.empty()) {
-			
+
 			Field f = s.pop();
 			tmpX = start.getY() - f.getY();
 			tmpY = start.getX() - f.getX();
 			
 			if(tmpX == 1 && tmpY == 0) {
-				result.add("N");
+				result.add(0);
 			} else if(tmpX == 0 && tmpY == -1) {
-				result.add("E");
+				result.add(90);
 			} else if(tmpX == 0 && tmpY == 1) {
-				result.add("W");
+				result.add(270);
 			} else if(tmpX == -1 && tmpY == 0) {
-				result.add("S");
+				result.add(180);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add("NE");
+				result.add(45);
 			} else if(tmpX == 1 && tmpY == 1) {
-				result.add("NW");
+				result.add(315);
 			} else if(tmpX == -1 && tmpY == -1) {
-				result.add("SE");
+				result.add(135);
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add("SW");
+				result.add(225);
 			}
 
 			start = f;
@@ -121,7 +121,7 @@ public class BFS {
 	 * Using a queue, this solve() method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public ArrayList<String> findPath() {
+	public ArrayList<Integer> findPath() {
 		/*
 		 *  Store North(N), South(S), East(E), West(W), 
 		 *	NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE)
