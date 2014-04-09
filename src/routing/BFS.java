@@ -40,6 +40,8 @@ public class BFS {
 	 *  the maze represented in the specified array.
 	 */
 	public BFS(Field[][] board, Field start) {
+		this.grid = board;
+		this.start = start;
 		/*
 		grid = new Field[board.length][board[0].length];
 		for (int i = 0 ; i < board.length ; ++i) {

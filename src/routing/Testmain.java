@@ -15,7 +15,8 @@ public class Testmain {
 	 * Main method for test cases:
 	 */
 	public static void main(String[] arg) {
-		
+		 System.setProperty( "java.library.path", "/Users/Christoffer/Desktop/OpenCV/bin/opencv-248/" );
+
 		TestCamera t = new TestCamera();
 		Board board = new Board(t.getMap().obstacle);
 		board.fillInBalls(t.getBalls());
@@ -40,6 +41,9 @@ public class Testmain {
 		ArrayList<String> path = M.findPath();
 		System.out.println(M);
 		
+		for (String string : path) {
+			System.out.println(string);
+		}
 		/** Print the found path */
 		ListIterator<String> it = path.listIterator();
 		System.out.println("Found path!");
