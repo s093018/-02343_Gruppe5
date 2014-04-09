@@ -39,8 +39,8 @@ public class BFS {
 	 *  above statically defined String arrays and creates 
 	 *  the maze represented in the specified array.
 	 */
-	public BFS(char[][] board) {
-		
+	public BFS(Field[][] board, Field start) {
+		/*
 		grid = new Field[board.length][board[0].length];
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
@@ -54,6 +54,7 @@ public class BFS {
 				}
 			}
 		}
+		*/
 	}
 
 
