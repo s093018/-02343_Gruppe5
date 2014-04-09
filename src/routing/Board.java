@@ -9,45 +9,66 @@ import imageProcessing.Point;
  */
 public class Board {
 
-	private char[][] board;
+	private Field[][] grid;
+	private Field 		start;
+	private int        startX;
+	private int        startY;
+	
+		public Board(char[][] board) {
+			grid = new Field[board.length][board[0].length];
+			for (int i = 0 ; i < board.length ; ++i) {
+				for (int j = 0 ; j < board[i].length ; ++j) {
 
-	//  this constructor is superfluous because of setBoard()
-	//	public Board(char[][] map) {
-	//		board = map;
-	//	}
+					grid[i][j] = new Field(j, i, board[i][j]);
+
+					if (board[i][j] == 'R') {
+						startX = j; 
+						startY = i;
+						start = new Field(startX, startY, 'R');
+					}
+				}
+			}
+		}
 
 	public void fillInBalls(List<Point> balls){
 		for(Point point: balls)
-			board[point.pixel_x][point.pixel_y] = 'B';
+			grid[point.pixel_x][point.pixel_y].setValue('B');
 	}
 	
 	public void fillInRobotPosition(Point robotPosition){
-		board[robotPosition.pixel_x][robotPosition.pixel_y] = 'R';	
+		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('R');	
 	}
 	
 	public void clearBalls(List<Point> balls){
 		for(Point point: balls)
-			board[point.pixel_x][point.pixel_y] = '\u0000';  //the default value of char
+			grid[point.pixel_x][point.pixel_y].setValue('\u0000');  //the default value of char
 	}
 	
 	public void clearRobotPosition(Point robotPosition){
-		board[robotPosition.pixel_x][robotPosition.pixel_y] = '\u0000'; //the default value of char
+		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('\u0000'); //the default value of char
 	}
 
-	public char getSquare(int x, int y) {
-		return board[x][y];
+	public Field getField(int x, int y) {
+		return grid[x][y];
 	}
 
-	public void setSquare(int x, int y, char character) {
-		board[x][y] = character;
+	public void setField(int x, int y, Field field) {
+		grid[x][y] = field;
 	}
 
-	public char[][] getBoard() {
-		return board;
+	public Field[][] getGrid() {
+		return grid;
 	}
 
-	public void setBoard(char[][] board) {
-		this.board = board;
+	public Field getStart() {
+		return start;
 	}
 
+	public int getStartX() {
+		return startX;
+	}
+
+	public int getStartY() {
+		return startY;
+	}
 }
