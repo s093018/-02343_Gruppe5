@@ -18,6 +18,9 @@ public class Driver {
 			}
 			
 			fs.drive(result);
+			//ball count++
+			
+			
 			
 	}
 
