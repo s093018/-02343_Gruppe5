@@ -2,19 +2,19 @@ package routing;
 
 public class DriverInstructions {
 
-	private String heading;
+	private int heading;
 	private int length;
 	
-	public DriverInstructions (String heading, int length) {
+	public DriverInstructions (int heading, int length) {
 		this.heading = heading;
 		this.length = length;
 	}
 
-	public String getHeading() {
+	public int getHeading() {
 		return heading;
 	}
 
-	public void setHeading(String heading) {
+	public void setHeading(int heading) {
 		this.heading = heading;
 	}
 

@@ -39,7 +39,11 @@ public class TestCamera implements Camera
 		Mat image = Highgui.imread("src/imgInOut/TESTMAP.PNG");
 		for(int y = 0; y < 480; ++y)
 			for(int x = 0; x < 640; ++x)
+<<<<<<< HEAD
 				map.obstacle[x][y] = (image.get(y, x)[2] == 255.0 ? '0' : '1');
+=======
+				map.obstacle[x][y] = ((image.get(y, x)[0] == 0.0 && image.get(y, x)[1] == 0.0 && image.get(y, x)[2] == 255.0)? '\0' : '\1');
+>>>>>>> FETCH_HEAD
 		goals = new ArrayList<Goal>();
 		goals.add(new Goal(new Point(45, 221, scale), 4.0, Math.PI));
 		goals.add(new Goal(new Point(585, 221, scale), 10.0, Math.PI));
