@@ -1,6 +1,7 @@
 package routing;
 
 import java.util.List;
+
 import imageProcessing.Point;
 
 /**
@@ -14,15 +15,16 @@ public class Board {
 	private int        startX;
 	private int        startY;
 
-	public Board(char[][] board) {
+	public Board(char[][] map) {
 		
-		grid = new Field[board.length][board[0].length];
-		for (int i = 0 ; i < board.length ; ++i) {
-			for (int j = 0 ; j < board[i].length ; ++j) {
+		grid = new Field[map.length][map[0].length];
+		
+		for (int i = 0 ; i < map.length ; ++i) {
+			for (int j = 0 ; j < map[i].length ; ++j) {
+				
+				grid[i][j] = new Field(j, i, map[i][j]);
 
-				grid[i][j] = new Field(j, i, board[i][j]);
-
-				if (board[i][j] == 'R') {
+				if (map[i][j] == 'R') {
 					startX = j; 
 					startY = i;
 					start = new Field(startX, startY, 'R');
@@ -31,6 +33,38 @@ public class Board {
 		}
 	}
 
+
+	/**
+	 * The toString method allows a user to print
+	 *   a BFS Object with the System.out.println
+	 *   command
+	 */
+	public String toString()
+	{
+		StringBuilder printer = new StringBuilder();
+		for (int i = 0 ; i < grid.length ; ++i) {
+			for (int j = 0 ; j < grid[i].length ; ++j) {
+				printer.append(grid[i][j].getValue() + " ");
+			}
+			printer.append("\n");
+		}
+		printer.append("\n");
+		return printer.toString();
+	}
+	
+	public String toString2(char[][]map)
+	{
+		StringBuilder printer = new StringBuilder();
+		for (int i = 0 ; i < map.length ; ++i) {
+			for (int j = 0 ; j < map[i].length ; ++j) {
+				printer.append(map[i][j] + " ");
+			}
+			printer.append("\n");
+		}
+		printer.append("\n");
+		return printer.toString();
+	}
+	
 	public void fillInBalls(List<Point> balls){
 		for(Point point: balls)
 			grid[point.pixel_x][point.pixel_y] = new Field(point.pixel_x, point.pixel_y, 'B');

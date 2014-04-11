@@ -15,13 +15,18 @@ public class Testmain {
 	 * Main method for test cases:
 	 */
 	public static void main(String[] arg) {
-
+/*
 		TestCamera t = new TestCamera();
-		Board board = new Board(t.getMap().obstacle);
+		char [][] map = t.getMap().obstacle;
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
+				System.out.print(map[i][j] + " ");
+			}
+			System.out.println();
+		}
 		board.fillInBalls(t.getBalls());
 		board.fillInRobotPosition(t.getRobot().position);
-
-		/*
+*/
 		char[][] map = {
 				{'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
 				{'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'B', 'O'},
@@ -34,9 +39,10 @@ public class Testmain {
 				{'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O'},
 				{'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
 		};
-		 */
+		Board board = new Board(map);
+
 		BFS M = new BFS(board.getGrid(), board.getStart());  
-		System.out.println(M);
+		System.out.println(M.toString());
 		ArrayList<Integer> path = M.findPath();
 		System.out.println(M);
 

@@ -42,80 +42,6 @@ public class BFS {
 		this.start = start;
 	}
 
-
-	/**
-	 * The printMark method changes contents of the Field to '*'
-	 *   here invoked Queue is shortest path.
-	 */
-	public void printMark(Field pathCell) {
-		while (pathCell.getParent() != null) {
-			// changes contents until it meets a null pointer.
-			pathCell = pathCell.getParent();
-			pathCell.star();
-		}
-	}
-
-	public ArrayList<Integer> printPath(Field start) {
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		Stack<Field> s = new Stack<Field>();
-		
-		while (start.getParent() != null) {
-			s.push(start);
-			// changes contents until it meets a null pointer.
-			start = start.getParent();
-		}
-
-		int tmpX, tmpY;
-		s.push(start);
-		
-		while(!s.empty()) {
-
-			Field f = s.pop();
-			tmpX = start.getY() - f.getY();
-			tmpY = start.getX() - f.getX();
-			
-			if(tmpX == 1 && tmpY == 0) {
-				result.add(0);
-			} else if(tmpX == 0 && tmpY == -1) {
-				result.add(90);
-			} else if(tmpX == 0 && tmpY == 1) {
-				result.add(270);
-			} else if(tmpX == -1 && tmpY == 0) {
-				result.add(180);
-			} else if(tmpX == 1 && tmpY == -1) {
-				result.add(45);
-			} else if(tmpX == 1 && tmpY == 1) {
-				result.add(315);
-			} else if(tmpX == -1 && tmpY == -1) {
-				result.add(135);
-			} else if(tmpX == -1 && tmpY == 1) {
-				result.add(225);
-			}
-
-			start = f;
-		}
-		return result;
-	}   
-
-
-	/**
-	 * The toString method allows a user to print
-	 *   a BFS Object with the System.out.println
-	 *   command
-	 */
-	public String toString()
-	{
-		StringBuilder printer = new StringBuilder();
-		for (int i = 0 ; i < grid.length ; ++i) {
-			for (int j = 0 ; j < grid[i].length ; ++j) {
-				printer.append(grid[i][j].getValue() + " ");
-			}
-			printer.append("\n");
-		}
-		printer.append("\n");
-		return printer.toString();
-	}
-
 	/**
 	 * BFS routine 
 	 * Using a queue, this solve() method is doing BFS.
@@ -132,7 +58,7 @@ public class BFS {
 		Queue<Field> Q = new LinkedList<Field>();
 
 		// Create a new Field and mark it as the starting cell.
-
+		
 		// Set it as visited.
 		start.setMark();
 
@@ -318,5 +244,72 @@ public class BFS {
 		// If we get here, we're screwed!
 		System.out.println("Path not found!\n");
 		return null;
+	}
+
+	/**
+	 * The printMark method changes contents of the Field to '*'
+	 *   here invoked Queue is shortest path.
+	 */
+	public void printMark(Field pathCell) {
+		while (pathCell.getParent() != null) {
+			// changes contents until it meets a null pointer.
+			pathCell = pathCell.getParent();
+			pathCell.star();
+		}
+	}
+
+	public ArrayList<Integer> printPath(Field pathCell) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		Stack<Field> s = new Stack<Field>();
+		
+		while (pathCell.getParent() != null) {
+			s.push(pathCell);
+			// changes contents until it meets a null pointer.
+			pathCell = pathCell.getParent();
+		}
+
+		int tmpX, tmpY;
+		s.push(start);
+		
+		while(!s.empty()) {
+
+			Field f = s.pop();
+			tmpX = start.getY() - f.getY();
+			tmpY = start.getX() - f.getX();
+			
+			if(tmpX == 1 && tmpY == 0) {
+				result.add(0);
+			} else if(tmpX == 0 && tmpY == -1) {
+				result.add(90);
+			} else if(tmpX == 0 && tmpY == 1) {
+				result.add(270);
+			} else if(tmpX == -1 && tmpY == 0) {
+				result.add(180);
+			} else if(tmpX == 1 && tmpY == -1) {
+				result.add(45);
+			} else if(tmpX == 1 && tmpY == 1) {
+				result.add(315);
+			} else if(tmpX == -1 && tmpY == -1) {
+				result.add(135);
+			} else if(tmpX == -1 && tmpY == 1) {
+				result.add(225);
+			}
+
+			start = f;
+		}
+		return result;
+	}   
+	
+	public String toString()
+	{
+		StringBuilder printer = new StringBuilder();
+		for (int i = 0 ; i < grid.length ; ++i) {
+			for (int j = 0 ; j < grid[i].length ; ++j) {
+				printer.append(grid[i][j].getValue() + " ");
+			}
+			printer.append("\n");
+		}
+		printer.append("\n");
+		return printer.toString();
 	}
 }
