@@ -51,13 +51,13 @@ public class FindingSequence {
 		for(int i = 0; i < instructions.size(); i++) {			
 
 			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(camera.getRobot().heading));
+				int turn = turnDegree(instructions.get(i).getHeading(), 90); //radianToDegree(camera.getRobot().heading));
 				if(turn < 0) {
 					robot.turnLeft(Math.abs(turn));
 				} else if(turn > 0) {
 					robot.turnRight(turn);
 				} else {
-					robot.forward(instructions.get(i).getLength()*camera.getMap().pixelSize);
+					robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
 				}
 			} else {
 				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
@@ -66,7 +66,7 @@ public class FindingSequence {
 				} else if(turn > 0) {
 					robot.turnRight(turn);
 				}
-				robot.forward(instructions.get(i).getLength()*camera.getMap().pixelSize);
+				robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
 			}
 		}		
 	}
@@ -79,8 +79,14 @@ public class FindingSequence {
 	}
 
 	public int turnDegree(int algoHeading, int robotHeading) {
-
-		return 0; // return antal grader roboten skal dreje (negativ venstre / positiv højre) MAX 180grader
+		int dif = algoHeading-robotHeading;
+		if(-180<=dif && dif<=180)
+			return dif;
+		else if(dif<-180)
+			return dif + 360;
+		else if(dif>180)
+			return dif - 360; // return antal grader roboten skal dreje (negativ venstre / positiv højre) MAX 180grader
+		return dif;
 	}
 
 }

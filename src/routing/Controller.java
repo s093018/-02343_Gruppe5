@@ -5,13 +5,18 @@ import imageProcessing.*;
 public class Controller {
 
 	private Camera camera;
-	private FindingSequence fs,ph;
+	private FindingSequence fs;
 	private robot.Control robot;
 	
 	public Controller () {
 		camera = new TestCamera();
 		fs = new FindingSequence(this);
-		robot = new robot.Control();
+		try {
+			robot = new robot.Control();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Camera getCamera() {

@@ -27,6 +27,8 @@ public class Testmain {
 		board.fillInBalls(t.getBalls());
 		board.fillInRobotPosition(t.getRobot().position);
 */
+		
+		Controller ctrl = new Controller();
 		char[][] map = {
 				{'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
 				{'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'B', 'O'},
@@ -51,5 +53,9 @@ public class Testmain {
 		for (Integer step : path) {
 			System.out.println(step);
 		}
+		
+		ArrayList<DriverInstructions> di = ctrl.getFs().sequence(path);
+		ctrl.getFs().drive(di);
+		
 	}
 }
