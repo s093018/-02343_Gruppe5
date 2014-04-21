@@ -181,8 +181,13 @@ public class Testmain {
 		for (Integer step : path) {
 			System.out.println(step);
 		}
-		
+		System.out.println();
 		ArrayList<DriverInstructions> di = ctrl.getFs().sequence(path);
+		
+		/** Print the found instructions */
+		for (DriverInstructions step : di) {
+			System.out.println(step.getHeading()+" "+step.getLength());
+		}
 		ctrl.getFs().drive(di);
 		
 	}

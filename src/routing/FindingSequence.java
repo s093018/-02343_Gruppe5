@@ -13,9 +13,9 @@ public class FindingSequence {
 	private robot.Control robot;
 	private Camera camera;
 
-	public FindingSequence(Controller ctrl) {
+	public FindingSequence(Controller ctrl, robot.Control robot) {
 		this.ctrl = ctrl;
-		robot = ctrl.getrobot();
+		this.robot = robot;
 		camera = ctrl.getCamera();
 	}
 
@@ -47,30 +47,49 @@ public class FindingSequence {
 	}
 
 	public void drive (ArrayList<DriverInstructions> instructions) {
-
+		System.out.println();
 		for(int i = 0; i < instructions.size(); i++) {			
-
+			boolean done = false;
 			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), 90); //radianToDegree(camera.getRobot().heading));
+				int turn = turnDegree(instructions.get(i).getHeading(), 180); //radianToDegree(camera.getRobot().heading));
 				if(turn < 0) {
-					robot.turnLeft(Math.abs(turn));
+					while (!done) {
+						done = robot.turnLeft(Math.abs(turn));
+					}
+
 				} else if(turn > 0) {
-					robot.turnRight(turn);
-				} else {
-					robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
+					while (!done) {
+						done = robot.turnRight(turn);
+					}
 				}
+				done = false;
+				while (!done) { 
+					done = robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
+				}
+
 			} else {
 				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
 				if(turn < 0) {
-					robot.turnLeft(Math.abs(turn));
+					while (!done) {
+						done = robot.turnLeft(Math.abs(turn));
+					}
 				} else if(turn > 0) {
-					robot.turnRight(turn);
+					while (!done) {
+						done = robot.turnRight(turn);
+					}
 				}
-				robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
+				done = false;
+				while (!done) { 
+					done = robot.forward(instructions.get(i).getLength()); //camera.getMap().pixelSize);
+				}
 			}
-		}		
+		}
+//		boolean temp = false;
+//		while (!temp) {
+//			temp = robot.victoryDance();
+//		}
+		robot.shutdown();
 	}
-
 	public int radianToDegree(double radian) {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;

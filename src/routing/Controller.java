@@ -1,22 +1,24 @@
 package routing;
 
+import robot.Control;
 import imageProcessing.*;
+
 
 public class Controller {
 
 	private Camera camera;
 	private FindingSequence fs;
-	private robot.Control robot;
+	private Control robot;
 	
 	public Controller () {
 		camera = new TestCamera();
-		fs = new FindingSequence(this);
 		try {
 			robot = new robot.Control();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		fs = new FindingSequence(this, robot);
 	}
 
 	public Camera getCamera() {
