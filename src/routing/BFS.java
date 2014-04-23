@@ -37,9 +37,15 @@ public class BFS {
 	 *  above statically defined String arrays and creates 
 	 *  the maze represented in the specified array.
 	 */
-	public BFS(Field[][] board, Field start) {
+	public BFS(Field[][] board) {
 		this.grid = board;
-		this.start = start;
+		for (int i = 0 ; i < board.length ; ++i) {
+			for (int j = 0 ; j < board[i].length ; ++j) {
+				if (board[i][j].getValue() == 'R') {
+					this.start = new Field(j, i, 'R');
+				}
+			}
+		}
 	}
 
 	/**
@@ -58,8 +64,9 @@ public class BFS {
 		Queue<Field> Q = new LinkedList<Field>();
 
 		// Create a new Field and mark it as the starting cell.
-		
+
 		// Set it as visited.
+		
 		start.setMark();
 
 		//Add it to the queue.
@@ -72,7 +79,7 @@ public class BFS {
 				// Checks content of dequeued Cell.
 				// If it is 'B', found finish position.
 				printMark(CMC);
-				
+
 				// Print '*' mark at shortest path.
 				return printPath(CMC);
 			}
@@ -261,7 +268,7 @@ public class BFS {
 	public ArrayList<Integer> printPath(Field pathCell) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		Stack<Field> s = new Stack<Field>();
-		
+
 		while (pathCell.getParent() != null) {
 			s.push(pathCell);
 			// changes contents until it meets a null pointer.
@@ -270,13 +277,13 @@ public class BFS {
 
 		int tmpX, tmpY;
 		s.push(start);
-		
+
 		while(!s.empty()) {
 
 			Field f = s.pop();
 			tmpX = start.getY() - f.getY();
 			tmpY = start.getX() - f.getX();
-			
+
 			if(tmpX == 1 && tmpY == 0) {
 				result.add(0);
 			} else if(tmpX == 0 && tmpY == -1) {
@@ -299,7 +306,7 @@ public class BFS {
 		}
 		return result;
 	}   
-	
+
 	public String toString()
 	{
 		StringBuilder printer = new StringBuilder();

@@ -90,6 +90,7 @@ public class FindingSequence {
 //		}
 		robot.shutdown();
 	}
+	
 	public int radianToDegree(double radian) {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;
@@ -104,7 +105,7 @@ public class FindingSequence {
 		else if(dif<-180)
 			return dif + 360;
 		else if(dif>180)
-			return dif - 360; // return antal grader roboten skal dreje (negativ venstre / positiv højre) MAX 180grader
+			return dif - 360; // return antal grader roboten skal dreje (negativ venstre / positiv hoejre) MAX 180grader
 		return dif;
 	}
 
