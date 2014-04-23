@@ -4,14 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="src/WEB-INF/lib/opencv-248.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/Christoffer/Desktop/OpenCV/bin"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Christoffer/Dropbox/DTU - IT/6. semester/02343 CDIO-Projekt/02343 CDIO-Projekt - Gruppe 5 - GRUPPEABC/Robot/Eclipse plugin/classes.jar"/>
-	<classpathentry kind="lib" path="/Users/Christoffer/Dropbox/DTU - IT/6. semester/02343 CDIO-Projekt/02343 CDIO-Projekt - Gruppe 5 - GRUPPEABC/Robot/Interface jar/ev3.jar"/>
-	<classpathentry kind="lib" path="/Users/Christoffer/Desktop/OpenCV/bin/opencv-248.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/Christoffer/Desktop/OpenCV/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="02343_CDIO_Gruppe5/src/WEB-INF/lib/x64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
