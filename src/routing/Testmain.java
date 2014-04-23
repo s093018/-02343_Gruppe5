@@ -24,28 +24,14 @@ public class Testmain {
 		Board board = new Board(map);
 		board.fillInBalls(t.getBalls());
 		board.fillInRobotPosition(t.getRobot().position);
-	
+//		board.fillInGoals(t.getGoals().);
 		
 	//	Controller ctrl = new Controller();
 		
 
-		BFS M = new BFS(board.getGrid());  
-//		System.out.println(M.toString());
+		BFS M = new BFS(board.getGrid(), 'B');  
 		ArrayList<Integer> path = M.findPath();
-//		System.out.println(M);
 
-		String filepath2 = "/Users/Christoffer/Desktop/outputPath.txt";
-		File f2 = new File(filepath2);
-		FileWriter fw = null;
-		
-		try {
-			fw = new FileWriter(f2);
-			fw.write(M.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		
 		/** Print the found path */
 		System.out.println("Found path!");
 		for (Integer step : path) {

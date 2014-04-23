@@ -18,6 +18,9 @@ import java.util.Stack;
 public class BFS {
 	private Field[][]    grid;
 	private Field 		start;
+	private char 	  endChar;
+	private char    robotChar;
+	private char obstacleChar;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -37,12 +40,16 @@ public class BFS {
 	 *  above statically defined String arrays and creates 
 	 *  the maze represented in the specified array.
 	 */
-	public BFS(Field[][] board) {
+	public BFS(Field[][] board, char end) {
 		this.grid = board;
+		this.endChar = end;
+		this.robotChar = 'R';
+		this.obstacleChar = 'O';
+		
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
-				if (board[i][j].getValue() == 'R') {
-					this.start = new Field(j, i, 'R');
+				if (board[i][j].getValue() == robotChar) {
+					this.start = new Field(j, i, robotChar);
 				}
 			}
 		}
@@ -75,7 +82,7 @@ public class BFS {
 		while(!Q.isEmpty()) {
 			Field CMC = Q.remove();
 
-			if(CMC.getValue() == 'B') {               
+			if(CMC.getValue() == endChar) {               
 				// Checks content of dequeued Cell.
 				// If it is 'B', found finish position.
 				printMark(CMC);
@@ -91,7 +98,7 @@ public class BFS {
 				N = ( grid[(CMC.getY()) - 1][CMC.getX()] );
 
 				// If content is not wall and the North Field is not visited
-				if ( N.getValue() != 'O' && !(N.isMarked()) )
+				if ( N.getValue() != obstacleChar && !(N.isMarked()) )
 				{  
 					// Set it as visited.
 					N.setMark();
@@ -112,7 +119,7 @@ public class BFS {
 				S = (grid[(CMC.getY())+1][CMC.getX()]);             
 
 				// If content is not wall and the South Field isn't visited.
-				if ( S.getValue() != 'O' && !(S.isMarked()) ) {        
+				if ( S.getValue() != obstacleChar && !(S.isMarked()) ) {        
 
 					// Set it as visited cell.
 					S.setMark();
@@ -132,7 +139,7 @@ public class BFS {
 				E = (grid[CMC.getY()][(CMC.getX())-1]);
 
 				// If content isn't wall and the East Field is not visited.
-				if ( E.getValue() != 'O' && !(E.isMarked()) ) {     
+				if ( E.getValue() != obstacleChar && !(E.isMarked()) ) {     
 
 					// Set it as visited cell.
 					E.setMark();
@@ -154,7 +161,7 @@ public class BFS {
 				W = (grid[CMC.getY()][(CMC.getX())+1]);
 
 				// If content isn't wall and the West Field is not visited.
-				if ( W.getValue() != 'O' && !(W.isMarked()) ) {        
+				if ( W.getValue() != obstacleChar && !(W.isMarked()) ) {        
 
 					// Set it as visited cell.
 					W.setMark();
@@ -174,7 +181,7 @@ public class BFS {
 				NE = ( grid[(CMC.getY()) - 1][CMC.getX() + 1] );
 
 				// If content isn't wall and the NE Field isnt visited.
-				if ( NE.getValue() != 'O' && !(NE.isMarked()) ) {
+				if ( NE.getValue() != obstacleChar && !(NE.isMarked()) ) {
 
 					// Set it as visited cell.
 					NE.setMark();
@@ -194,7 +201,7 @@ public class BFS {
 				NW = ( grid[(CMC.getY()) - 1][CMC.getX() - 1] );
 
 				// If content is not wall and the cell is not visited,
-				if ( NW.getValue() != 'O' && !(NW.isMarked()) ) {
+				if ( NW.getValue() != obstacleChar && !(NW.isMarked()) ) {
 
 					// Set it as visited cell.
 					NW.setMark();
@@ -214,7 +221,7 @@ public class BFS {
 				SE = ( grid[(CMC.getY()) + 1][CMC.getX() + 1] );
 
 				// If content is not wall and the cell is not visited,
-				if ( SE.getValue() != 'O' && !(SE.isMarked()) ) {
+				if ( SE.getValue() != obstacleChar && !(SE.isMarked()) ) {
 
 					// Set it as visited cell.
 					SE.setMark();
@@ -234,7 +241,7 @@ public class BFS {
 				SW = (grid[(CMC.getY()) + 1][CMC.getX() - 1]);
 
 				// If content is not wall and the cell is not visited,
-				if ( SW.getValue() != 'O' && !(SW.isMarked()) ) {
+				if ( SW.getValue() != obstacleChar && !(SW.isMarked()) ) {
 
 					// Set it as visited cell.
 					SW.setMark();
