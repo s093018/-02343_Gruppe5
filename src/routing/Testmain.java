@@ -28,9 +28,9 @@ public class Testmain {
 		
 
 		BFS M = new BFS(board.getGrid());  
-		System.out.println(M.toString());
+	//	System.out.println(M.toString());
 		ArrayList<Integer> path = M.findPath();
-		System.out.println(M);
+	//	System.out.println(M);
 
 		/** Print the found path */
 		System.out.println("Found path!");
