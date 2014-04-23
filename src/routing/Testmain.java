@@ -2,8 +2,10 @@ package routing;
 
 import imageProcessing.TestCamera;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 /**
  * @author Christoffer - s103148
@@ -28,10 +30,22 @@ public class Testmain {
 		
 
 		BFS M = new BFS(board.getGrid());  
-		System.out.println(M.toString());
+//		System.out.println(M.toString());
 		ArrayList<Integer> path = M.findPath();
-		System.out.println(M);
+//		System.out.println(M);
 
+		String filepath2 = "/Users/Christoffer/Desktop/outputPath.txt";
+		File f2 = new File(filepath2);
+		FileWriter fw = null;
+		
+		try {
+			fw = new FileWriter(f2);
+			fw.write(M.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
 		/** Print the found path */
 		System.out.println("Found path!");
 		for (Integer step : path) {
