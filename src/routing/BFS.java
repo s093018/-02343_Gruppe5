@@ -93,6 +93,11 @@ public class BFS {
 
 			// North child
 			// Check boundaries.
+			
+			// for(int i = X - pixelWidth/2; i < X + pixelWidth/2; i++)
+			for(int i = CMC.getX(); i < CMC.getX(); i++) {
+				
+			}
 			if ( !((CMC.getY() - 1) <= 0) ) {               
 				// Get North Field
 				N = ( grid[(CMC.getY()) - 1][CMC.getX()] );

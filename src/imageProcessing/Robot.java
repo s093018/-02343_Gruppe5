@@ -4,14 +4,14 @@ public class Robot
 {
 	public final double heading;
 	public final Point position;
-	public final double pixelLength;
-	public final double pixelWidth;
+	public final double robotLength;
+	public final double robotWidth;
 	
-	public Robot(double heading, Point position, double pixelLength,
-			double pixelWidth) {
+	public Robot(Point position, double heading, double pixelLength, double pixelWidth) {
 		this.heading = heading;
 		this.position = position;
-		this.pixelLength = pixelLength;
-		this.pixelWidth = pixelWidth;
+		this.robotLength = pixelLength;
+		this.robotWidth = pixelWidth;
 	}
 }
+

@@ -15,8 +15,8 @@ public class TestCamera implements Camera
 	private List<Point> balls;
 	private Robot robot;
 
-	public void setRobotPosition(Point position){robot = new Robot(position, robot.heading);}
-	public void setRobotHeading(double heading){robot = new Robot(robot.position, heading);}
+	public void setRobotPosition(Point position){ robot = new Robot(position, robot.heading, robot.robotLength, robot.robotWidth);}
+	public void setRobotHeading(double heading){ robot = new Robot(robot.position, heading, robot.robotLength, robot.robotWidth);}
 	public void removeBalls(Point position, double range)
 	{
 		List<Point> newBalls = new ArrayList<Point>();
@@ -45,7 +45,7 @@ public class TestCamera implements Camera
 		goals = new ArrayList<Goal>();
 		goals.add(new Goal(new Point(45, 221, scale), 4.0, Math.PI));
 		goals.add(new Goal(new Point(585, 221, scale), 10.0, Math.PI));
-		robot = new Robot(new Point(170, 210, scale), 0.0);
+		robot = new Robot(new Point(170, 210, scale), 0.0, 38, 26);
 		balls = new ArrayList<Point>();
 		balls.add(new Point(54, 95, scale));
 		balls.add(new Point(414, 50, scale));
