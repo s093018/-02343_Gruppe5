@@ -31,8 +31,7 @@ public class TestCamera implements Camera
 	}
 
 
-	public TestCamera()
-	{
+	public TestCamera() {
 		double scale = 180.0 / 550.0;
 		map = new Map(new char[640][480], scale);
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
