@@ -32,7 +32,7 @@ public class Testmain {
 		BFS M = new BFS(board.getGrid(), 'B');  
 		ArrayList<Integer> path = M.findPath(t.getRobot().robotWidth, t.getRobot().robotLength);
 
-		/* For printing the result to a file:
+		/*
 		String filepath = "/Users/Christoffer/Desktop/outputPath.txt";
 		File f = new File(filepath);
 		FileWriter fw = null;

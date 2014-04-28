@@ -93,9 +93,9 @@ public class BFS {
 
 			// North child
 			// Check boundaries.
+/*			for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {} */
 			if (current.getY() - 1 >= 0) {               
-				for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {
-					N = (grid[current.getY() - 1][i]);
+					N = (grid[current.getY() - 1][current.getX()]);
 					// Get North Field
 					if (N.getValue() != obstacleChar && !N.isMarked()) {  
 
@@ -110,7 +110,6 @@ public class BFS {
 
 					// Add child to queue.
 					Q.add(N);
-					}
 				}
 			}
 
