@@ -11,7 +11,7 @@ import imageProcessing.Point;
  */
 public class Board {
 
-	private Field[][] grid;
+	private Field[][]    grid;
 	private Field 		start;
 	private int        startX;
 	private int        startY;

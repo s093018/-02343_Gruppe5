@@ -1,5 +1,7 @@
 package routing;
 
+import imageProcessing.Point;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -21,6 +23,7 @@ public class BFS {
 	private char 	  endChar;
 	private char    robotChar;
 	private char obstacleChar;
+	private boolean closeToWall;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -45,6 +48,7 @@ public class BFS {
 		this.endChar = end;
 		this.robotChar = 'R';
 		this.obstacleChar = 'O';
+		this.closeToWall = false;
 
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
@@ -60,7 +64,8 @@ public class BFS {
 	 * Using a queue, this solve() method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public ArrayList<Integer> findPath(double robotWidth, double robotLength) {
+	public ArrayList<Integer> findPath(/* ArrayList<Point> closeBalls */) {
+
 		/*
 		 *  Store North(N), South(S), East(E), West(W), 
 		 *	NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE)
@@ -70,10 +75,7 @@ public class BFS {
 		// Create new Queue to use for BFS.
 		Queue<Field> Q = new LinkedList<Field>();
 
-		// Create a new Field and mark it as the starting cell.
-
-		// Set it as visited.
-
+		// Create a new Field and mark it as the starting cell + set it as visited.
 		start.setMark();
 
 		//Add it to the queue.
@@ -83,6 +85,14 @@ public class BFS {
 			Field current = Q.remove();
 
 			if(current.getValue() == endChar) {               
+				/*
+				for(int i = 0; i < closeBalls.size(); i++) {
+					Point ball = closeBalls.get(i);
+					if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
+						setCloseToWall();
+					}
+				}
+				 */
 				// Checks content of dequeued Cell.
 				// If it is 'B', found finish position.
 				printMark(current);
@@ -93,15 +103,14 @@ public class BFS {
 
 			// North child
 			// Check boundaries.
-/*			for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {} */
+			// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {}
+
 			if (current.getY() - 1 >= 0) {               
-					N = (grid[current.getY() - 1][current.getX()]);
-					// Get North Field
-					if (N.getValue() != obstacleChar && !N.isMarked()) {  
+				N = (grid[current.getY() - 1][current.getX()]);
+				// Get North Field
+				if (N.getValue() != obstacleChar && !N.isMarked()) {  
 
-
-
-				// If content is not wall and the North Field is not visited
+					// If content is not wall and the North Field is not visited
 					// Set it as visited.
 					N.setMark();
 
@@ -116,8 +125,8 @@ public class BFS {
 			// South child
 			// Boundary check
 			if (current.getY() + 1 <= grid.length) {
-// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {
-				
+				// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {
+
 
 				// Get South Field
 				S = (grid[current.getY() + 1][current.getX()]);             
@@ -318,8 +327,15 @@ public class BFS {
 		return result;
 	}   
 
-	public String toString()
-	{
+	public void setCloseToWall() {
+		this.closeToWall = true;
+	}
+
+	public boolean getCloseToWall() {
+		return this.closeToWall;
+	}
+
+	public String toString() {
 		StringBuilder printer = new StringBuilder();
 		for (int i = 0 ; i < grid.length ; ++i) {
 			for (int j = 0 ; j < grid[i].length ; ++j) {
