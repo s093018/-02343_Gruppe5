@@ -21,8 +21,9 @@ public class Controller {
 	ArrayList<Integer> path;
 	ArrayList<DriverInstructions> di;
 	private char [][] map;
-	
+	private boolean endGame = false;
 	private int ballCount = 0;
+	private int tempBallCount = 0;
 	private final int MAX_NO_BALLS = 6;
 
 	public Controller () {
@@ -33,43 +34,50 @@ public class Controller {
 	}
 	public void run() {
 
-		while(true) {
-			if(ballCount <= MAX_NO_BALLS) {
+		while(!endGame) {
+			if(ballCount > MAX_NO_BALLS) {
+				if(tempBallCount <= 6) {
 
-				map = testCamera.getMap().obstacle;
+					map = testCamera.getMap().obstacle;
 
-				board = new Board(map);
-				board.fillInBalls(testCamera.getBalls());
-				board.fillInRobotPosition(testCamera.getRobot().position);
+					board = new Board(map);
+					board.fillInBalls(testCamera.getBalls());
+					board.fillInRobotPosition(testCamera.getRobot().position);
 
-				bfs = new BFS(board.getGrid(), 'B');  
-				path = bfs.findPath( /*board.getCloseBalls()*/ );
+					bfs = new BFS(board.getGrid(), 'B');  
+					path = bfs.findPath( /*board.getCloseBalls()*/ );
 
-				/** Boolean that tells whether the found ball is close to a wall or not. **/
-				bfs.getCloseToWall();
+					/** Boolean that tells whether the found ball is close to a wall or not. **/
+					bfs.getCloseToWall();
 
-				fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
+					fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
 
-				di = fs.sequence(path);
+					di = fs.sequence(path);
 
-				// Print the found instructions
-				//		for (DriverInstructions step : di) {
-				//			System.out.println(step.getHeading()+" "+step.getLength());
-				//		}
-				fs.drive(di);
+					fs.drive(di);
 
-				ballCount++;
-				
-			} else {
-				/** Drive to goal and release balls **/
-				bfs = new BFS(board.getGrid(), 'G');
-				path = bfs.findPath();
-				
-				
-				
-				ballCount = 0;
+					tempBallCount++;
+					ballCount++;
+
+				} else {
+					/** Drive to goal and release balls **/
+					bfs = new BFS(board.getGrid(), 'G');
+					path = bfs.findPath();
+
+					fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
+
+					di = fs.sequence(path);
+
+					fs.goalDrive(di);
+
+					tempBallCount = 0;
+				}
+
 			}
+			fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
+//			fs.celebration();
+			fs.shutdown();
+			endGame = true;
 		}
-
 	}
 }
