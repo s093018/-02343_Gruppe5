@@ -1,8 +1,11 @@
 package control;
 
+import imageProcessing.Point;
 import imageProcessing.TestCamera;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import robot.Control;
 import routing.BFS;
@@ -23,61 +26,65 @@ public class Controller {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private int tempBallCount = 0;
 	private final int MAX_NO_BALLS = 6;
 
 	public Controller () {
 		this.testCamera = new TestCamera();
 		try {
-			robotControl = new robot.Control();
+			//			robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 	}
 	public void run() {
-
+		System.out.println("Started!");
 		while(!endGame) {
-			if(ballCount > MAX_NO_BALLS) {
-				if(tempBallCount <= 6) {
+			System.out.println("game not ended");
+			if(ballCount <= MAX_NO_BALLS) {
 
-					map = testCamera.getMap().obstacle;
+				map = testCamera.getMap().obstacle;
 
-					board = new Board(map);
-					board.fillInBalls(testCamera.getBalls());
-					board.fillInRobotPosition(testCamera.getRobot().position);
-
-					bfs = new BFS(board.getGrid(), 'B');  
-					path = bfs.findPath( /*board.getCloseBalls()*/ );
-
-					/** Boolean that tells whether the found ball is close to a wall or not. **/
-					bfs.getCloseToWall();
-
-					fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
-
-					di = fs.sequence(path);
-
-					fs.drive(di);
-
-					tempBallCount++;
-					ballCount++;
-
-				} else {
-					/** Drive to goal and release balls **/
-					bfs = new BFS(board.getGrid(), 'G');
-					path = bfs.findPath();
-
-					fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
-
-					di = fs.sequence(path);
-
-					fs.goalDrive(di);
-
-					tempBallCount = 0;
+				board = new Board(map);
+				board.fillInBalls(testCamera.getBalls());
+				board.fillInRobotPosition(testCamera.getRobot().position);
+				List<Point> closeBalls = board.ballsCloseToObstacle(testCamera.getBalls(), 5);
+				Iterator<Point> it = closeBalls.iterator();
+				while(it.hasNext()) {
+					Point p = it.next();
+					board.buildObstacleAroundBall(p, "N" , 5);
+					System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 				}
+				
+				bfs = new BFS(board.getGrid(), 'B');  
+				path = bfs.findPath();
+/*
+				String filepath = "/Users/Christoffer/Desktop/outputPath.txt";
+				File f = new File(filepath);
+				FileWriter fw = null;
+				try  {
+					fw =  new  FileWriter(f);
+					fw.write(bfs.toString());
+				}  catch  (IOException e) {
+					e.printStackTrace();
+				}
+*/
+				fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
 
+				di = fs.sequence(path);
+
+				fs.drive(di);
+				ballCount++;
+
+			} else {
+				/** Drive to goal and release balls **/
+				bfs = new BFS(board.getGrid(), 'G');
+				path = bfs.findPath();
+				fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
+
+				di = fs.sequence(path);
+
+				fs.goalDrive(di);
+				ballCount = 0;
 			}
-			fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
-//			fs.celebration();
-			fs.shutdown();
-			endGame = true;
 		}
 	}
 }
+

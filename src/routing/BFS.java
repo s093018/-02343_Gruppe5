@@ -1,7 +1,5 @@
 package routing;
 
-import imageProcessing.Point;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -23,7 +21,6 @@ public class BFS {
 	private char 	  endChar;
 	private char    robotChar;
 	private char obstacleChar;
-	private boolean closeToWall;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -48,7 +45,6 @@ public class BFS {
 		this.endChar = end;
 		this.robotChar = 'R';
 		this.obstacleChar = 'O';
-		this.closeToWall = false;
 
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
@@ -326,14 +322,6 @@ public class BFS {
 		}
 		return result;
 	}   
-
-	public void setCloseToWall() {
-		this.closeToWall = true;
-	}
-
-	public boolean getCloseToWall() {
-		return this.closeToWall;
-	}
 
 	public String toString() {
 		StringBuilder printer = new StringBuilder();

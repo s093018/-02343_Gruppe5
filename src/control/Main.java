@@ -13,8 +13,6 @@ public class Main {
 	public static void main(String[] arg) {
 
 		Controller ctrl = new Controller();
-		while(true) {
 			ctrl.run();
-		}
 	}
 }

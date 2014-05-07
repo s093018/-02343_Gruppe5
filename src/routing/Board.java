@@ -23,7 +23,7 @@ public class Board {
 
 		for (int i = 0 ; i < map.length ; ++i) {
 			for (int j = 0 ; j < map[i].length ; ++j) {
-				grid[i][j] = new Field(j, i, map[i][j]);
+				grid[i][j] = new Field(i, j, map[i][j]);
 			}
 		}
 	}
@@ -51,6 +51,7 @@ public class Board {
 		for(Point ball: balls){
 			x=ball.pixel_x-pixelRadius;
 			y=ball.pixel_y-pixelRadius;
+			//TODO ArrayIndexOutOfBounds paa grid array hvis pixelRadius er for stor
 			Field checkObstacle = grid[x][y];
 			squareLoop:
 				for(int i=0; i<pixelRadius*2 +1; i++){
@@ -74,13 +75,13 @@ public class Board {
 
 	public void buildObstacleAroundBall(Point ball, String entranceDirection, int pixelRadius){
 		List<Field> buildObstacles = new ArrayList<Field>();
-		buildObstacles.add(grid[ball.pixel_x-pixelRadius][ball.pixel_y-pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x+pixelRadius][ball.pixel_y-pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x+pixelRadius][ball.pixel_y+pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x-pixelRadius][ball.pixel_y+pixelRadius]);
+		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
+		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
+		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
+		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
 		boolean entrance = false;
 		
-		for(int i=0; i<pixelRadius*2; i++){
+		for(int i = 0; i < pixelRadius * 2; i++){
 			if(checkAndBuild(buildObstacles))
 					entrance = true;
 			incrBuildObstacles(buildObstacles);
@@ -113,10 +114,10 @@ public class Board {
 	}
 
 	private void incrBuildObstacles(List<Field> buildObstacles){
-		buildObstacles.set(0, grid[buildObstacles.get(0).getX()+1][buildObstacles.get(0).getY()]);
-		buildObstacles.set(1, grid[buildObstacles.get(1).getX()][buildObstacles.get(1).getY()+1]);
-		buildObstacles.set(2, grid[buildObstacles.get(2).getX()-1][buildObstacles.get(2).getY()]);
-		buildObstacles.set(3, grid[buildObstacles.get(3).getX()][buildObstacles.get(3).getY()-1]);
+	buildObstacles.set(0, grid[buildObstacles.get(0).getX() + 1][buildObstacles.get(0).getY()]);
+		buildObstacles.set(1, grid[buildObstacles.get(1).getX()][buildObstacles.get(1).getY() + 1]);
+		buildObstacles.set(2, grid[buildObstacles.get(2).getX() - 1][buildObstacles.get(2).getY()]);
+		buildObstacles.set(3, grid[buildObstacles.get(3).getX()][buildObstacles.get(3).getY() - 1]);
 	}
 
 	public void fillInBalls(List<Point> balls) {
