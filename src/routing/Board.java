@@ -101,8 +101,10 @@ public class Board {
 		for(Field buildObstacle: buildObstacles){
 			try{
 				if(buildObstacle.getValue()!='R'
-						|| buildObstacle.getValue()!='B')
+						|| buildObstacle.getValue()!='B'){
 					buildObstacle.setValue('O');
+					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
+				}
 				else
 					ret = true;
 			}catch(IndexOutOfBoundsException e) {}
