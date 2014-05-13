@@ -46,8 +46,8 @@ public class TestCamera implements Camera
 		}
 
 		goals = new ArrayList<Goal>();
-		goals.add(new Goal(new Point(45, 221, scale), 4.0, Math.PI));
-		goals.add(new Goal(new Point(585, 221, scale), 10.0, Math.PI));
+		goals.add(new Goal(new Point(200, 200, scale), 4.0, Math.PI));
+//		goals.add(new Goal(new Point(240, 200, scale), 10.0, Math.PI));
 		robot = new Robot(new Point(170, 210, scale), 0.0, 38, 26);
 		balls = new ArrayList<Point>();
 		balls.add(new Point(54, 95, scale));
@@ -66,13 +66,24 @@ public class TestCamera implements Camera
 		balls.add(new Point(334, 396, scale));
 		balls.add(new Point(418, 396, scale));
 	}
-	
+
 	public void update(){}
 	public void shutDown(){}
 	public void updateRobot(Point expectedPosition, double searchRadius){}
 	public void updateBalls(){}
-	public Robot getRobot(){return robot;}
-	public List<Point> getBalls(){return balls;}
-	public List<Goal> getGoals(){return goals;}
-	public Map getMap(){return map;}
+	public Robot getRobot() {
+		return robot;
+	}
+
+	public List<Point> getBalls() {
+		return balls;
+	}
+
+	public List<Goal> getGoals() {
+		return goals;
+	}
+
+	public Map getMap() { 
+		return map; 
+	}
 }

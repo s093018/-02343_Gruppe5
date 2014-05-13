@@ -1,7 +1,10 @@
 package routing;
 
+import imageProcessing.Point;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -62,7 +65,7 @@ public class BFS {
 	 * Using a queue, this solve() method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public ArrayList<Integer> findPath(/* ArrayList<Point> closeBalls */) {
+	public ArrayList<Integer> findPath(List<Point> closeBalls) {
 
 		/*
 		 *  Store North(N), South(S), East(E), West(W), 
@@ -83,14 +86,14 @@ public class BFS {
 			Field current = Q.remove();
 
 			if(current.getValue() == endChar) {               
-				/*
+				
 				for(int i = 0; i < closeBalls.size(); i++) {
 					Point ball = closeBalls.get(i);
 					if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
 						setCloseToWall();
 					}
 				}
-				 */
+				 
 				// Checks content of dequeued Cell.
 				// If it is 'B', found finish position.
 				printMark(current);
@@ -341,7 +344,7 @@ public class BFS {
 		return closeToWall;
 	}
 	
-	public void setCloseToWall(boolean closeToWall) {
-		this.closeToWall = closeToWall;
+	public void setCloseToWall() {
+		this.closeToWall = true;
 	}
 }
