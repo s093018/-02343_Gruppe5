@@ -93,6 +93,7 @@ public class BFS {
 						setCloseToWall();
 					}
 				}
+				
 				 
 				// Checks content of dequeued Cell.
 				// If it is 'B', found finish position.
@@ -107,7 +108,7 @@ public class BFS {
 			// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {}
 
 			if (current.getY() - 1 >= 0) {               
-				N = (grid[current.getY() - 1][current.getX()]);
+				N = (grid[current.getX()][current.getY() - 1]);
 				// Get North Field
 				if (N.getValue() != obstacleChar && !N.isMarked()) {  
 
@@ -130,7 +131,7 @@ public class BFS {
 
 
 				// Get South Field
-				S = (grid[current.getY() + 1][current.getX()]);             
+				S = (grid[current.getX()][current.getY() + 1]);             
 
 				// If content is not wall and the South Field isn't visited.
 				if (S.getValue() != obstacleChar && !S.isMarked()) {        
@@ -150,7 +151,7 @@ public class BFS {
 			//Boundary check
 			if (current.getX() - 1 >= 0) {               
 				// Get East Field
-				E = (grid[current.getY()][current.getX() - 1]);
+				E = (grid[current.getX() - 1][current.getY()]);
 
 				// If content isn't wall and the East Field is not visited.
 				if (E.getValue() != obstacleChar && !E.isMarked()) {     
@@ -172,7 +173,7 @@ public class BFS {
 			if (current.getX() + 1 <= grid[0].length) {               
 
 				// Get West Field
-				W = (grid[current.getY()][current.getX() + 1]);
+				W = (grid[current.getX() + 1][current.getY()]);
 
 				// If content isn't wall and the West Field is not visited.
 				if (W.getValue() != obstacleChar && !W.isMarked()) {        
@@ -192,7 +193,7 @@ public class BFS {
 			//Boundary check
 			if (current.getX() + 1 <= grid[0].length && current.getY() - 1 >= 0) {
 				// Get northeast Field
-				NE = (grid[current.getY() - 1][current.getX() + 1]);
+				NE = (grid[current.getX() + 1][current.getY() - 1]);
 
 				// If content isn't wall and the NE Field isnt visited.
 				if (NE.getValue() != obstacleChar && !NE.isMarked()) {
@@ -302,8 +303,9 @@ public class BFS {
 		while(!s.empty()) {
 
 			Field f = s.pop();
-			tmpX = start.getY() - f.getY();
-			tmpY = start.getX() - f.getX();
+
+			tmpX = start.getX() - f.getX();
+			tmpY = start.getY() - f.getY();
 
 			if(tmpX == 1 && tmpY == 0) {
 				result.add(0);

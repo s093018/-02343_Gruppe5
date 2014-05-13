@@ -17,7 +17,6 @@ public class FindingSequence {
 	public ArrayList<DriverInstructions> sequence (ArrayList<Integer> path) { 
 
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
-
 		int count = 1;
 		for(int i = 1; i < path.size(); i++) {
 			if (path.get(i).equals((path.get(i-1)))) {
