@@ -40,82 +40,11 @@ public class FindingSequence {
 		return robotInstructions;
 	}
 
-	public void goalDrive (ArrayList<DriverInstructions> instructions) {
-
-		boolean done = false;
-		for(int i = 0; i < instructions.size(); i++) {	
-
-			done = false;
-
-			if(i == instructions.size()-1) {
-				while(!done) {
-					done = robotControl.open();
-				}
-				done = false;
-			}
-
-			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading));
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
-					}
-
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnRight(turn);
-					}
-				}
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
-				}
-
-			} else {
-				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
-					}
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnRight(turn);
-					}
-				}
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
-				}
-			}
-		}
-
-
-		done = false;
-
-		while(!done) {
-			done = robotControl.kick();
-		}
-
-		if(robotControl.getIsOpen()) {
-			while(!done) {
-				done = robotControl.close();
-			}
-		}
-	}
-
-
 	public void drive (ArrayList<DriverInstructions> instructions, boolean closeToWall) {
 
 		for(int i = 0; i < instructions.size(); i++) {	
-
 			boolean done = false;
-			/* open arms */
-			if(i == instructions.size()-2) {
-				while(!done) {
-					done = robotControl.open();
-				}
-				done = false;
-			}
+
 			/* turn robot heading or drive forward */
 			if (i == 0) {
 				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
@@ -129,6 +58,94 @@ public class FindingSequence {
 						done = robotControl.turnRight(turn);
 					}
 				}
+
+				/* open arms */
+				if(i == instructions.size()-1) {
+					done = false;
+					while(!done) {
+						done = robotControl.open();
+					}
+				}
+
+				done = false;
+				while (!done) { 
+					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+				}
+
+			} else {
+				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
+				if(turn < 0) {
+					while (!done) {
+						done = robotControl.turnLeft(Math.abs(turn));
+					}
+				} else if(turn > 0) {
+					while (!done) {
+						done = robotControl.turnRight(turn);
+					}
+				}
+
+				/* open arms */
+				if(i == instructions.size()-1) {
+					done = false;
+					while(!done) {
+						done = robotControl.open();
+					}
+				}
+
+				done = false;
+				while (!done) { 
+					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+				}
+			}
+		}
+		/* close arms */
+		boolean done = false;
+		System.out.println("linie 105");
+		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
+		if(robotControl.getIsOpen()) { //robotControl.getIsOpen virker ikke ordenligt.
+			System.out.println("linie 108");
+			while(!done) {
+				done = robotControl.close();
+			}
+		}
+
+		/*close to wall */
+		done = false;
+		if (closeToWall) {
+			while(!done) {
+				done = robotControl.revers(3);
+			}
+		}
+	}
+
+	public void goalDrive (ArrayList<DriverInstructions> instructions) {
+
+		for(int i = 0; i < instructions.size(); i++) {	
+			boolean done = false;
+
+			/* turn robot heading or drive forward */
+			if (i == 0) {
+				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
+				if(turn < 0) {
+					while (!done) {
+						done = robotControl.turnLeft(Math.abs(turn));
+					}
+
+				} else if(turn > 0) {
+					while (!done) {
+						done = robotControl.turnRight(turn);
+					}
+				}
+
+				/* open arms */
+				done = false;
+				if(i == instructions.size()-1) {
+					System.out.println("linie 145");
+					while(!done) {
+						done = robotControl.open();
+					}
+				}
+
 				done = false;
 				while (!done) { 
 					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
@@ -146,26 +163,46 @@ public class FindingSequence {
 					}
 				}
 				done = false;
+				/* open arms */
+				if(i == instructions.size()-1) {
+					System.out.println("linie 170");
+					while(!done) {
+						done = robotControl.open();
+					}
+				}
+
+				done = false;
 				while (!done) { 
 					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
 				}
 			}
-			/* close arms */
-			if(robotControl.getIsOpen()) {
-				while(!done) {
-					done = robotControl.close();
-				}
-			}
 		}
-		/*close to wall */
 		boolean done = false;
-		if (closeToWall) {
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		done = false;
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		done = false;
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		done = false;
+		System.out.println("188");
+		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
+		if(robotControl.getIsOpen()) {
+			System.out.println("Linie 191");
 			while(!done) {
-				done = robotControl.revers(3);
+				done = robotControl.close();
 			}
 		}
 	}
-
+	
 	public void shutdown () {
 		robotControl.shutdown();
 	}
