@@ -52,10 +52,10 @@ public class BFS {
 		this.obstacleChar = 'O';
 		this.closeToWall = false;
 
-		for (int i = 0 ; i < board.length ; ++i) {
-			for (int j = 0 ; j < board[i].length ; ++j) {
+		for (int i = 0 ; i < board.length; i++) {
+			for (int j = 0 ; j < board[i].length; j++) {
 				if (board[i][j].getValue() == robotChar) {
-					this.start = new Field(j, i, robotChar);
+					this.start = new Field(i, j, robotChar);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ public class BFS {
 
 	/**
 	 * BFS routine 
-	 * Using a queue, this solve() method is doing BFS.
+	 * Using a queue, this findPath(closeBalls) method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
 	public ArrayList<Integer> findPath(List<Point> closeBalls) {
@@ -91,7 +91,7 @@ public class BFS {
 			 * 	If it is equal to endChar, the finish position is found.
 			 */
 			if(current.getValue() == endChar) {               
-
+				/*
 				for(int i = 0; i < closeBalls.size(); i++) {
 					Point ball = closeBalls.get(i);
 					if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
@@ -100,7 +100,7 @@ public class BFS {
 						break;
 					}
 				}
-
+				 */
 				// Print '*' mark at shortest path. This is used to get a visual overview of the found path.
 				printMark(current);
 
@@ -112,9 +112,9 @@ public class BFS {
 			 *	North child
 			 * 	Boundary check.
 			 */
-			if (current.getY() - 1 >= 0) {               
+			if (current.getX() - 1 >= 0) {               
 				// Get North Field
-				N = (grid[current.getX()][current.getY() - 1]);
+				N = (grid[current.getX() - 1][current.getY()]);
 				// Check if the value of the Field is not an obstacle and that the Field has not been visited.
 				if (N.getValue() != obstacleChar && !N.isMarked()) {  
 					// Set it as visited.
@@ -125,7 +125,7 @@ public class BFS {
 					bfsQueue.add(N);
 				}
 			}
-			
+
 			/*
 			 *	South child
 			 * 	Boundary check.
@@ -135,9 +135,9 @@ public class BFS {
 			 *  Store parent information.
 			 *  Add the found Field to queue.
 			 */
-			
-			if (current.getY() + 1 <= grid.length) {
-				S = (grid[current.getX()][current.getY() + 1]);             
+
+			if (current.getX() + 1 <= grid.length) {
+				S = (grid[current.getX() + 1][current.getY()]);             
 				if (S.getValue() != obstacleChar && !S.isMarked()) {        
 					S.setMark();
 					current.setParent(S);
@@ -155,8 +155,8 @@ public class BFS {
 			 *  Add Field to queue.
 			 */	
 
-			if (current.getX() - 1 >= 0) {               
-				E = (grid[current.getX() - 1][current.getY()]);
+			if (current.getY() + 1 <= grid[0].length) {               
+				E = (grid[current.getX()][current.getY() + 1]);
 				if (E.getValue() != obstacleChar && !E.isMarked()) {     
 					E.setMark();
 					current.setParent(E);
@@ -173,8 +173,8 @@ public class BFS {
 			 *  5. Store parent's information.
 			 *  6. Add Field to queue.
 			 */
-			if (current.getX() + 1 <= grid[0].length) {               
-				W = (grid[current.getX() + 1][current.getY()]);
+			if (current.getY() - 1 >= 0) {               
+				W = (grid[current.getX()][current.getY() - 1]);
 				if (W.getValue() != obstacleChar && !W.isMarked()) {        
 					W.setMark();
 					current.setParent(W);
@@ -190,8 +190,8 @@ public class BFS {
 			 *  Keep parent information.
 			 *  Add Field to queue.
 			 */
-			
-			if (current.getX() + 1 <= grid[0].length && current.getY() - 1 >= 0) {
+
+			if (current.getX() - 1 >= 0 && current.getY() + 1 <= grid[0].length) {
 				NE = (grid[current.getX() + 1][current.getY() - 1]);
 				if (NE.getValue() != obstacleChar && !NE.isMarked()) {
 					NE.setMark();
@@ -199,7 +199,7 @@ public class BFS {
 					bfsQueue.add(NE);
 				}
 			}
-			
+
 			/*
 			 *	Northwest child
 			 * 	Boundary check.
@@ -209,9 +209,9 @@ public class BFS {
 			 *  Keep parents information.
 			 *  Add Field to queue.
 			 */
-			
+
 			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-				NW = (grid[current.getY() - 1][current.getX() - 1]);
+				NW = (grid[current.getX() - 1][current.getY() - 1]);
 				if (NW.getValue() != obstacleChar && !NW.isMarked()) {
 					NW.setMark();
 					current.setParent(NW);
@@ -228,9 +228,9 @@ public class BFS {
 			 * 	Store parent's information.
 			 * 	Add Field to queue.
 			 */
-			
-			if (current.getX() + 1 <= grid[0].length && current.getY() + 1 <= grid[0].length) {               
-				SE = (grid[current.getY() + 1][current.getX() + 1]);
+
+			if (current.getX() + 1 <= grid.length && current.getY() + 1 <= grid[0].length) {               
+				SE = (grid[current.getX() + 1][current.getY() + 1]);
 				if (SE.getValue() != obstacleChar && !SE.isMarked()) {
 					SE.setMark();
 					current.setParent(SE);
@@ -247,9 +247,9 @@ public class BFS {
 			 * 	Keep parents information.
 			 * 	Add Field to queue.
 			 */
-			
-			if (current.getX() - 1 >= 0 && current.getY() + 1 <= grid[0].length) {               
-				SW = (grid[current.getY() + 1][current.getX() - 1]);
+
+			if (current.getX() + 1 <= grid.length && current.getY() - 1 >= 0) {
+				SW = (grid[current.getX() + 1][current.getY() - 1]);
 				if (SW.getValue() != obstacleChar && !SW.isMarked()) {
 					SW.setMark();
 					current.setParent(SW);
