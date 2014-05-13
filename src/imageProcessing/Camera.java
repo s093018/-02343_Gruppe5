@@ -2,14 +2,9 @@ package imageProcessing;
 
 import java.util.List;
 
+/*	All angles in radians, distances in centimeters */
 
-//
-//	All angles in radians, distances in centimeters
-//
-
-
-public interface Camera
-{
+public interface Camera {
 	public void update();
 	public void updateRobot(Point expectedPosition, double searchRadius);
 	public void updateBalls();

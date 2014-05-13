@@ -15,13 +15,17 @@ public class TestCamera implements Camera
 	private List<Point> balls;
 	private Robot robot;
 
-	public void setRobotPosition(Point position){ robot = new Robot(position, robot.heading, robot.robotLength, robot.robotWidth);}
-	public void setRobotHeading(double heading){ robot = new Robot(robot.position, heading, robot.robotLength, robot.robotWidth);}
-	public void removeBalls(Point position, double range)
-	{
+	public void setRobotPosition(Point position) { 
+		robot = new Robot(position, robot.heading, robot.robotLength, robot.robotWidth);
+	}
+
+	public void setRobotHeading(double heading) {
+		robot = new Robot(robot.position, heading, robot.robotLength, robot.robotWidth);
+	}
+
+	public void removeBalls(Point position, double range) {
 		List<Point> newBalls = new ArrayList<Point>();
-		for(Point p : balls)
-		{
+		for(Point p : balls) {
 			double dx = p.x - position.x;
 			double dy = p.y - position.y;
 			if(dx*dx + dy*dy > range)
@@ -29,7 +33,6 @@ public class TestCamera implements Camera
 		}
 		balls = newBalls;
 	}
-
 
 	public TestCamera() {
 		double scale = 180.0 / 550.0;
@@ -63,6 +66,7 @@ public class TestCamera implements Camera
 		balls.add(new Point(334, 396, scale));
 		balls.add(new Point(418, 396, scale));
 	}
+	
 	public void update(){}
 	public void shutDown(){}
 	public void updateRobot(Point expectedPosition, double searchRadius){}

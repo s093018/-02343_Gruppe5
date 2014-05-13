@@ -11,8 +11,7 @@ import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 
-public class RealCamera implements Camera
-{
+public class RealCamera implements Camera {
 	private List<Goal> goals;
 	private Map map;
 	private List<Point> balls;
@@ -22,24 +21,24 @@ public class RealCamera implements Camera
 	private boolean testMode = true;
 	private Mat testImage;
 
-	private Mat getImage()
-	{
-		if(testMode) return testImage;
-		else
-		{
+	private Mat getImage(){
+		if(testMode) { 
+			return testImage;
+		} else {
 			Mat frame = new Mat();
 			capture.retrieve(frame);
 			return frame;
 		}
 	}
 
-	public RealCamera()
-	{
+	public RealCamera() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		if(testMode) testImage = Highgui.imread("src/imgInOut/TESTDATA.JPG");
-		else capture = new VideoCapture(0);
-
+		if(testMode) {
+			testImage = Highgui.imread("src/imgInOut/TESTDATA.JPG");
+		} else {
+			capture = new VideoCapture(0);
+		}
 
 		getImage();
 		//find forhindringer
@@ -48,8 +47,7 @@ public class RealCamera implements Camera
 		update();//Find bolde + robot
 	}
 
-	public void update()
-	{
+	public void update() {
 		Mat image = getImage();
 		Mat templ = Highgui.imread("../imgInOut/Template.jpg");
 
@@ -57,36 +55,56 @@ public class RealCamera implements Camera
 		int result_rows = image.rows() - templ.rows() + 1;
 		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
 
-		while(true){
+		while(true) {
 			int matchingMethod = 1;
 			Imgproc.matchTemplate(image, templ, result, matchingMethod);
 
 			MinMaxLocResult mmlr = Core.minMaxLoc(result);
 
 			org.opencv.core.Point matchLoc;
-			if( matchingMethod  == Imgproc.TM_SQDIFF || matchingMethod == Imgproc.TM_SQDIFF_NORMED ){
-				matchLoc = mmlr.minLoc; }
-			else{ 
-				matchLoc = mmlr.maxLoc; }
+			if(matchingMethod  == Imgproc.TM_SQDIFF || matchingMethod == Imgproc.TM_SQDIFF_NORMED ) {
+				matchLoc = mmlr.minLoc; 
+			} else { 
+				matchLoc = mmlr.maxLoc; 
+			}
 
 			double thresholdMatch = 0.25;
-			if(mmlr.minVal < thresholdMatch){
+			if(mmlr.minVal < thresholdMatch) {
 				Core.circle(image, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
-			}
-			else
+			} else {
 				break;
+			}
 		}
 		Highgui.imwrite("../imgInOut/Result.jpg", image);
 	}
 
-	//optimer de her senere hvis det bliver nødvendigt
-	public void updateRobot(Point expectedPosition, double searchRadius){update();}
-	public void updateBalls(){update();}
-	public void shutDown(){if(!testMode) capture.release();}
+	//Optimize these later if necessary.
+	public void updateRobot(Point expectedPosition, double searchRadius) {
+		update();
+	}
 
-	public Robot getRobot(){return robot;}
-	public List<Point> getBalls(){return balls;}
-	public List<Goal> getGoals(){return goals;}
-	public Map getMap(){return map;}
+	public void updateBalls() {
+		update();
+	}
+	public void shutDown() {
+		if(!testMode) capture.release();
+	}
+
+	public Robot getRobot() {
+		return robot;
+	}
+
+	public List<Point> getBalls() { 
+		return balls;
+	}
+
+	public List<Goal> getGoals()
+	{
+		return goals;
+	}
+
+	public Map getMap() {
+		return map;
+	}
 }
