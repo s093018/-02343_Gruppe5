@@ -3,6 +3,9 @@ package control;
 import imageProcessing.Point;
 import imageProcessing.TestCamera;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +64,7 @@ public class Controller {
 				bfs = new BFS(board.getGrid(), 'B');  
 				path = bfs.findPath(closeBalls);
 				System.out.println(path.size());
-				/*
+				
 				String filepath = "/Users/Christoffer/Desktop/outputPath.txt";
 				File f = new File(filepath);
 				FileWriter fw = null;
@@ -71,16 +74,15 @@ public class Controller {
 				}  catch  (IOException e) {
 					e.printStackTrace();
 				}
-				 */
+				/*
 				fs = new FindingSequence(robotControl, testCamera.getRobot().heading, testCamera.getMap().pixelSize);
 				if(path != null) {
 					di = fs.sequence(path);
 					fs.drive(di, bfs.getCloseToWall());
-					ballCount++;
 					System.out.println("Ballcount = " + ballCount);
 				}
-				break;
-
+*/
+				ballCount++;
 			} else {
 				/** Drive to goal and release balls **/
 				bfs = new BFS(board.getGrid(), 'G');

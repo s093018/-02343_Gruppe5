@@ -21,7 +21,7 @@ public class RealCamera implements Camera {
 	private boolean testMode = true;
 	private Mat testImage;
 
-	private Mat getImage(){
+	private Mat getImage() {
 		if(testMode) { 
 			return testImage;
 		} else {

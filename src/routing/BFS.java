@@ -44,6 +44,7 @@ public class BFS {
 	 *  above statically defined String arrays and creates 
 	 *  the maze represented in the specified array.
 	 */
+
 	public BFS(Field[][] board, char end) {
 		this.grid = board;
 		this.endChar = end;
@@ -68,204 +69,191 @@ public class BFS {
 	public ArrayList<Integer> findPath(List<Point> closeBalls) {
 
 		/*
-		 *  Store North(N), South(S), East(E), West(W), 
-		 *	NorthEast(NE), NorthWest(NW), SouthWest(SW) and SouthEast(SE)
+		 *  Crete fields for North(N), South(S), East(E), West(W), 
+		 *	Northeast(NE), Northwest(NW), Southwest(SW) and Southeast(SE)
 		 */
-		Field N, S, E, W, NW, NE, SW, SE;
+		Field N, S, E, W, NW, NE, SW, SE, current;
 
-		// Create new Queue to use for BFS.
-		Queue<Field> Q = new LinkedList<Field>();
+		// Create new Queue to use for BFS. 
+		Queue<Field> bfsQueue = new LinkedList<Field>();
 
 		// Create a new Field and mark it as the starting cell + set it as visited.
 		start.setMark();
 
 		//Add it to the queue.
-		Q.add(start);
+		bfsQueue.add(start);
 
-		while(!Q.isEmpty()) {
-			Field current = Q.remove();
+		while(!bfsQueue.isEmpty()) {
 
+			current = bfsQueue.remove();
+			/*
+			 *  Checks content of the dequeued Field.
+			 * 	If it is equal to endChar, the finish position is found.
+			 */
 			if(current.getValue() == endChar) {               
-				
+
 				for(int i = 0; i < closeBalls.size(); i++) {
 					Point ball = closeBalls.get(i);
 					if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
+						System.out.println("The found ball is close to a wall.");
 						setCloseToWall();
+						break;
 					}
 				}
-				
-				 
-				// Checks content of dequeued Cell.
-				// If it is 'B', found finish position.
+
+				// Print '*' mark at shortest path. This is used to get a visual overview of the found path.
 				printMark(current);
 
-				// Print '*' mark at shortest path.
+				/* Call printPath to get a list of directions to return. */
 				return printPath(current);
 			}
 
-			// North child
-			// Check boundaries.
-			// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {}
-
+			/*
+			 *	North child
+			 * 	Boundary check.
+			 */
 			if (current.getY() - 1 >= 0) {               
-				N = (grid[current.getX()][current.getY() - 1]);
 				// Get North Field
+				N = (grid[current.getX()][current.getY() - 1]);
+				// Check if the value of the Field is not an obstacle and that the Field has not been visited.
 				if (N.getValue() != obstacleChar && !N.isMarked()) {  
-
-					// If content is not wall and the North Field is not visited
 					// Set it as visited.
 					N.setMark();
-
 					// Store parent information.
 					current.setParent(N);
-
-					// Add child to queue.
-					Q.add(N);
+					// Add the found Field to queue.
+					bfsQueue.add(N);
 				}
 			}
-
-			// South child
-			// Boundary check
+			
+			/*
+			 *	South child
+			 * 	Boundary check.
+			 *  Get South Field
+			 *  Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 *  Set it as visited.
+			 *  Store parent information.
+			 *  Add the found Field to queue.
+			 */
+			
 			if (current.getY() + 1 <= grid.length) {
-				// for(int i = current.getX() - (int) robotWidth/2; i < current.getX() + robotWidth/2; ++i) {
-
-
-				// Get South Field
 				S = (grid[current.getX()][current.getY() + 1]);             
-
-				// If content is not wall and the South Field isn't visited.
 				if (S.getValue() != obstacleChar && !S.isMarked()) {        
-
-					// Set it as visited cell.
 					S.setMark();
-
-					// Store parent information.
 					current.setParent(S);
-
-					// Add child to queue.
-					Q.add(S);
+					bfsQueue.add(S);
 				}
 			}
 
-			// East child
-			//Boundary check
+			/*
+			 *	East child
+			 * 	Boundary check.
+			 *  Get East Field
+			 *  Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 *  Set it as visited.
+			 *	Store parent's information.
+			 *  Add Field to queue.
+			 */	
+
 			if (current.getX() - 1 >= 0) {               
-				// Get East Field
 				E = (grid[current.getX() - 1][current.getY()]);
-
-				// If content isn't wall and the East Field is not visited.
 				if (E.getValue() != obstacleChar && !E.isMarked()) {     
-
-					// Set it as visited cell.
 					E.setMark();
-
-					// Store parent's information.
 					current.setParent(E);
-
-					// Add child to queue.
-					Q.add(E);
+					bfsQueue.add(E);
 				}
 			}
 
-			// West child
-
-			// Boundary check
+			/*
+			 *	West child
+			 * 	1. Boundary check.
+			 *  2. Get West Field
+			 *  3. Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 *  4. Set it as visited.
+			 *  5. Store parent's information.
+			 *  6. Add Field to queue.
+			 */
 			if (current.getX() + 1 <= grid[0].length) {               
-
-				// Get West Field
 				W = (grid[current.getX() + 1][current.getY()]);
-
-				// If content isn't wall and the West Field is not visited.
 				if (W.getValue() != obstacleChar && !W.isMarked()) {        
-
-					// Set it as visited cell.
 					W.setMark();
-
-					// Store parent's infomation.
 					current.setParent(W);
-
-					// Add child to queue.
-					Q.add(W);
+					bfsQueue.add(W);
 				}
 			}
-
-			// Northeast child
-			//Boundary check
+			/*
+			 *	Northeast child
+			 * 	Boundary check.
+			 *  Get northeast Field
+			 *  Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 *  Set it as visited cell.
+			 *  Keep parent information.
+			 *  Add Field to queue.
+			 */
+			
 			if (current.getX() + 1 <= grid[0].length && current.getY() - 1 >= 0) {
-				// Get northeast Field
 				NE = (grid[current.getX() + 1][current.getY() - 1]);
-
-				// If content isn't wall and the NE Field isnt visited.
 				if (NE.getValue() != obstacleChar && !NE.isMarked()) {
-
-					// Set it as visited cell.
 					NE.setMark();
-
-					// Keep parent's infomation.
 					current.setParent(NE);
-
-					// Add child to queue.
-					Q.add(NE);
+					bfsQueue.add(NE);
 				}
 			}
-
-			// Northwest child.
-			// Boundary check
+			
+			/*
+			 *	Northwest child
+			 * 	Boundary check.
+			 *  Get northwest Field
+			 *  Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 *  Set it as visited.
+			 *  Keep parents information.
+			 *  Add Field to queue.
+			 */
+			
 			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-				// Get northwest Field
 				NW = (grid[current.getY() - 1][current.getX() - 1]);
-
-				// If content is not wall and the cell is not visited,
 				if (NW.getValue() != obstacleChar && !NW.isMarked()) {
-
-					// Set it as visited cell.
 					NW.setMark();
-
-					// Keep parent's infomation.
 					current.setParent(NW);
-
-					// Add child to queue.
-					Q.add(NW);
+					bfsQueue.add(NW);
 				}
 			}
 
-			// Southeast child
-			// Boundary check
+			/*
+			 *	Southeast child
+			 * 	Boundary check.
+			 * 	Get southeast Field.
+			 * 	Check if the value of the Field is not an obstacle and that the Field has not been visited.
+			 * 	Set it as visited.
+			 * 	Store parent's information.
+			 * 	Add Field to queue.
+			 */
+			
 			if (current.getX() + 1 <= grid[0].length && current.getY() + 1 <= grid[0].length) {               
-				// Get southeast Field
 				SE = (grid[current.getY() + 1][current.getX() + 1]);
-
-				// If content is not wall and the cell is not visited,
 				if (SE.getValue() != obstacleChar && !SE.isMarked()) {
-
-					// Set it as visited cell.
 					SE.setMark();
-
-					// Keep parent's infomation.
 					current.setParent(SE);
-
-					// Add child to queue.
-					Q.add(SE);
+					bfsQueue.add(SE);
 				}
 			}
 
-			// Southwest child
-			// Boundary check
+			/*
+			 *	Southwest child
+			 * 	Boundary check.
+			 * 	Get southwest Field.
+			 * 	Check if the value of the Field is not an obstacle and that the Field ahs not been visited.
+			 * 	Set it as visited.
+			 * 	Keep parents information.
+			 * 	Add Field to queue.
+			 */
+			
 			if (current.getX() - 1 >= 0 && current.getY() + 1 <= grid[0].length) {               
-				// Get Southwest Field
 				SW = (grid[current.getY() + 1][current.getX() - 1]);
-
-				// If content is not wall and the cell is not visited,
 				if (SW.getValue() != obstacleChar && !SW.isMarked()) {
-
-					// Set it as visited cell.
 					SW.setMark();
-
-					// Keep parent's infomation.
 					current.setParent(SW);
-
-					// Add child to queue.
-					Q.add(SW);
+					bfsQueue.add(SW);
 				}
 			}
 		}
@@ -289,23 +277,22 @@ public class BFS {
 
 	public ArrayList<Integer> printPath(Field pathCell) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		Stack<Field> s = new Stack<Field>();
+		Stack<Field> path = new Stack<Field>();
 
 		while (pathCell.getParent() != null) {
-			s.push(pathCell);
+			path.push(pathCell);
 			// changes contents until it meets a null pointer.
 			pathCell = pathCell.getParent();
 		}
 
 		int tmpX, tmpY;
-		s.push(start);
+		path.push(start);
 
-		while(!s.empty()) {
+		while(!path.empty()) {
+			Field current_field = path.pop();
 
-			Field f = s.pop();
-
-			tmpX = start.getX() - f.getX();
-			tmpY = start.getY() - f.getY();
+			tmpX = start.getX() - current_field.getX();
+			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 1 && tmpY == 0) {
 				result.add(0);
@@ -324,15 +311,14 @@ public class BFS {
 			} else if(tmpX == -1 && tmpY == 1) {
 				result.add(225);
 			}
-
-			start = f;
+			start = current_field;
 		}
 		return result;
 	}   
 
 	public String toString() {
 		StringBuilder printer = new StringBuilder();
-		for (int i = 0 ; i < grid.length ; ++i) {
+		for (int i = 0; i < grid.length ; ++i) {
 			for (int j = 0 ; j < grid[i].length ; ++j) {
 				printer.append(grid[i][j].getValue() + " ");
 			}
@@ -341,11 +327,11 @@ public class BFS {
 		printer.append("\n");
 		return printer.toString();
 	}
-	
+
 	public boolean getCloseToWall() {
 		return closeToWall;
 	}
-	
+
 	public void setCloseToWall() {
 		this.closeToWall = true;
 	}
