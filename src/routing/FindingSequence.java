@@ -40,14 +40,14 @@ public class FindingSequence {
 
 		return robotInstructions;
 	}
-	
+
 	public void goalDrive (ArrayList<DriverInstructions> instructions) {
-		
+
 		boolean done = false;
 		for(int i = 0; i < instructions.size(); i++) {	
 
 			done = false;
-			
+
 			if(i == instructions.size()-1) {
 				while(!done) {
 					done = robotControl.open();
@@ -89,37 +89,37 @@ public class FindingSequence {
 				}
 			}
 		}
-		
-		
+
+
 		done = false;
-		
+
 		while(!done) {
 			done = robotControl.kick();
 		}
-		
+
 		if(robotControl.getIsOpen()) {
 			while(!done) {
 				done = robotControl.close();
 			}
 		}
 	}
-	
 
-	public void drive (ArrayList<DriverInstructions> instructions) {
+
+	public void drive (ArrayList<DriverInstructions> instructions, boolean closeToWall) {
 
 		for(int i = 0; i < instructions.size(); i++) {	
 
 			boolean done = false;
-
+			/* open arms */
 			if(i == instructions.size()-2) {
 				while(!done) {
 					done = robotControl.open();
 				}
 				done = false;
 			}
-
+			/* turn robot heading or drive forward */
 			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading));  //radianToDegree(camera.getRobot().heading));
+				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
 				if(turn < 0) {
 					while (!done) {
 						done = robotControl.turnLeft(Math.abs(turn));
@@ -151,28 +151,35 @@ public class FindingSequence {
 					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
 				}
 			}
-			
+			/* close arms */
 			if(robotControl.getIsOpen()) {
 				while(!done) {
 					done = robotControl.close();
 				}
 			}
 		}
+		/*close to wall */
+		boolean done = false;
+		if (closeToWall) {
+			while(!done) {
+				done = robotControl.revers(3);
+			}
+		}
 	}
-	
+
 	public void shutdown () {
 		robotControl.shutdown();
 	}
-	
-//	public void celebration () {
-//		for(int i = 0; i < 10; i++) {
-//			boolean done = false;
-//
-//			while(!done){
-//				done = robotControl.celebrate();
-//			}
-//		}
-//	}
+
+	//	public void celebration () {
+	//		for(int i = 0; i < 10; i++) {
+	//			boolean done = false;
+	//
+	//			while(!done){
+	//				done = robotControl.celebrate();
+	//			}
+	//		}
+	//	}
 
 	public int radianToDegree(double radian) {
 		double degree = (radian*180)/Math.PI;

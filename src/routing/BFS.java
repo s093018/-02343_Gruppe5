@@ -21,6 +21,7 @@ public class BFS {
 	private char 	  endChar;
 	private char    robotChar;
 	private char obstacleChar;
+	private boolean closeToWall;
 
 	/**
 	 * The BFS constructor takes a two-dimensional Array of Chars as input.
@@ -45,6 +46,7 @@ public class BFS {
 		this.endChar = end;
 		this.robotChar = 'R';
 		this.obstacleChar = 'O';
+		this.closeToWall = false;
 
 		for (int i = 0 ; i < board.length ; ++i) {
 			for (int j = 0 ; j < board[i].length ; ++j) {
@@ -333,5 +335,13 @@ public class BFS {
 		}
 		printer.append("\n");
 		return printer.toString();
+	}
+	
+	public boolean getCloseToWall() {
+		return closeToWall;
+	}
+	
+	public void setCloseToWall(boolean closeToWall) {
+		this.closeToWall = closeToWall;
 	}
 }

@@ -70,8 +70,9 @@ public class Controller {
 
 				di = fs.sequence(path);
 
-				fs.drive(di);
+				fs.drive(di, bfs.getCloseToWall());
 				ballCount++;
+				bfs.setCloseToWall(false);
 
 			} else {
 				/** Drive to goal and release balls **/
