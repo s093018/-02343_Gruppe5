@@ -76,6 +76,7 @@ public class Controller {
 				if(path != null) {
 					di = fs.sequence(path);
 					fs.drive(di, bfs.getCloseToWall());
+					fs.shutdown();
 					ballCount++;
 					System.out.println("Ballcount = " + ballCount);
 				}
@@ -90,6 +91,7 @@ public class Controller {
 				di = fs.sequence(path);
 
 				fs.goalDrive(di);
+				fs.shutdown();
 				ballCount = 0;
 			}
 		}
