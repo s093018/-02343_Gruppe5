@@ -51,27 +51,27 @@ public class Board {
 		for(Point ball: balls){
 			x=ball.pixel_x-pixelRadius;
 			y=ball.pixel_y-pixelRadius;
-			//TODO ArrayIndexOutOfBounds paa grid array hvis pixelRadius er for stor
-			Field checkObstacle = grid[x][y];
 			squareLoop:
 				for(int i=0; i<pixelRadius*2 +1; i++){
-					for(int j=0; j<pixelRadius*2 +1; j++){
-						try{
-							if(checkObstacle.getValue()=='O'){
-								closeBalls.add(ball);
-								break squareLoop;
-							}
-						}catch(IndexOutOfBoundsException e) {}
-						x++;
-						checkObstacle = grid[x][y];
+					try{
+						Field checkObstacle = grid[x][y];
+						for(int j=0; j<pixelRadius*2 +1; j++){
+							try{
+								checkObstacle = grid[x][y];
+								if(checkObstacle.getValue()=='O'){
+									closeBalls.add(ball);
+									break squareLoop;
+								}
+							}catch(IndexOutOfBoundsException e) {}
+							x++;
+						}
+					}catch(IndexOutOfBoundsException e) {}
+						y++;
+						x=ball.pixel_x-pixelRadius;
 					}
-					y++;
-					x=ball.pixel_x-pixelRadius;
-					checkObstacle = grid[x][y];
 				}
+			return closeBalls;
 		}
-		return closeBalls;
-	}
 
 	public void buildObstacleAroundBall(Point ball, String entranceDirection, int pixelRadius){
 		List<Field> buildObstacles = new ArrayList<Field>();
