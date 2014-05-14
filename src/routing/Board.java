@@ -73,7 +73,7 @@ public class Board {
 			return closeBalls;
 		}
 
-	public void buildObstacleAroundBall(Point ball, String entranceDirection, int pixelRadius){
+	public void buildObstacleAroundBall(Point ball, List<String> entranceDirections, int pixelRadius){
 		List<Field> buildObstacles = new ArrayList<Field>();
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
@@ -82,13 +82,38 @@ public class Board {
 		boolean entrance = false;
 		
 		for(int i = 0; i < pixelRadius * 2; i++){
-			if(checkAndBuild(buildObstacles))
+			if(checkAndBuild(buildObstacles, 'O'))
 					entrance = true;
 			incrBuildObstacles(buildObstacles);
 		}
 		
-		if(!entrance){
-			//TODO replace obstacle with ' ' at entranceDirection 
+		if(!entrance){ //TODO reconsider this "if"; are multiple entrances problematic?
+			List<Field> entrances = new ArrayList<Field>();
+			if(entranceDirections.contains("N")){
+				entrances.add(grid[ball.pixel_x][ball.pixel_y - pixelRadius]);
+			}
+			if(entranceDirections.contains("S")){
+				entrances.add(grid[ball.pixel_x][ball.pixel_y + pixelRadius]);
+			}
+			if(entranceDirections.contains("E")){
+				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y]);
+			}
+			if(entranceDirections.contains("W")){
+				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y]);
+			}
+			if(entranceDirections.contains("NW")){
+				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
+			}
+			if(entranceDirections.contains("NE")){
+				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
+			}
+			if(entranceDirections.contains("SW")){
+				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
+			}
+			if(entranceDirections.contains("SE")){
+				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
+			}
+			checkAndBuild(entrances, ' ');
 		}
 	}
 	
@@ -97,13 +122,13 @@ public class Board {
  * build an obstacle, which means there exists an entrance to the ball
  * through the walls in progress of being built.
  */
-	private boolean checkAndBuild(List<Field> buildObstacles){
+	private boolean checkAndBuild(List<Field> buildObstacles, char value){
 		boolean ret = false;
 		for(Field buildObstacle: buildObstacles){
 			try{
 				if(buildObstacle.getValue()!='R'
 						|| buildObstacle.getValue()!='B'){
-					buildObstacle.setValue('O');
+					buildObstacle.setValue(value);
 					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
 				}
 				else
