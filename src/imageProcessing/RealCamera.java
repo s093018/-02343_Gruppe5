@@ -49,9 +49,9 @@ public class RealCamera implements Camera
 	}
 	private void saveImage(String filename, Mat image, double scaling)
 	{
-		Mat scaledImage = image.mul(Mat.ones(image.size(), image.type()), scaling);
-		if(image.type() == CvType.CV_8U)
+		if(image.get(0, 0).length == 1)
 		{
+			Mat scaledImage = image.mul(Mat.ones(image.size(), image.type()), scaling);
 			List<Mat> layers = new ArrayList<Mat>();
 			layers.add(scaledImage.clone());
 			layers.add(scaledImage.clone());
@@ -60,7 +60,11 @@ public class RealCamera implements Camera
 			Core.merge(layers, result);
 			Highgui.imwrite("src/imgInOut/" + filename, result);
 		}
-		else Highgui.imwrite("src/imgInOut/" + filename, scaledImage);
+		else
+		{
+			Mat scaler = new Mat(image.size(), image.type(), new Scalar(scaling, scaling, scaling, 255));
+			Highgui.imwrite("src/imgInOut/" + filename, scaler.mul(image));
+		}
 	}
 	private void showStep(String filename, Mat image, double scaling)
 	{
@@ -257,8 +261,8 @@ public class RealCamera implements Camera
 	}
 	private Mat detectCentralObstacle(Mat image)
 	{
-		int size = 20;
-		Scalar tolerance = new Scalar(20, 20, 20, 255);
+		int size = settings.centralObstacleSize;
+		Scalar tolerance = settings.centralObstacleTolerance;
 		Scalar white = new Scalar(255, 255, 255, 255);
 		//Look for whitest area
 		Mat detector = new Mat(new Size(size, size), image.type());
@@ -282,10 +286,6 @@ public class RealCamera implements Camera
 		Mat result = new Mat();
 		Core.subtract(Mat.ones(obstacleMask.size(), CvType.CV_8U), obstacleMask, result);
 		return result;
-
-//		Mat result = new Mat(image.size(), image.type());
-//		result.setTo(white, obstacleMask.submat(new Rect(1, 1, image.width(), image.height())));
-//		return result.mul(centralRect);//For some reason the mask has dirt near the top, so crop it out.
 	}
 	private double estimatePixelSize(Mat image, Mat bounds)
 	{

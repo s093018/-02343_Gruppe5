@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.opencv.core.Scalar;
+
 
 //Uses fully qualified OpenCV Point classes since we already have a Point class.
 public class Configuration
@@ -17,6 +19,37 @@ public class Configuration
 	public final int boundsStrategy;
 	public final int pixelSizeStrategy;
 	public final String obstaclePrototype;
+	public final int centralObstacleSize;
+	public final org.opencv.core.Scalar centralObstacleTolerance;
+
+	public Configuration(String filename)
+	{
+		Properties props = load(filename);
+		NW = getPoint(props, "NW", new org.opencv.core.Point(160, 120));
+		SE = getPoint(props, "NW", new org.opencv.core.Point(480, 360));
+		testMode = getInt(props, "testMode", 0) != 0;
+		testImageFile = testMode ? getString(props, "testImageFile", "src/imgInOut/TESTDATA.JPG") : null;
+		showSteps = getInt(props, "showSteps", 1) != 0;
+		boundsStrategy = getInt(props, "boundsStrategy", 0);
+		pixelSizeStrategy = getInt(props, "pixelSizeStrategy", 0);
+		floodFillOrigin = getPoint(props, "floodFillOrigin", new org.opencv.core.Point(320, 240));
+		obstaclePrototype = getString(props, "obstaclePrototype", "src/imgInOut/woodPrototype.png");
+		centralObstacleSize = getInt(props, "centralObstacleSize", 20);
+		centralObstacleTolerance = getScalar(props, "centralObstacleTolerance", new Scalar(20, 20, 20, 255));
+	}
+	private Properties load(String filename)
+	{
+		Properties props = new Properties();
+		try
+		{
+			//TODO: Convert keys to lowercase (also when extracting)
+			FileInputStream configFile = new FileInputStream(filename);
+			props.load(configFile);
+			configFile.close();
+		}
+		catch(IOException e){System.out.println("Cannot open " + filename + "!");}
+		return props;
+	}
 
 	private static int []extractInts(String value, int count) throws NullPointerException, NumberFormatException
 	{
@@ -88,27 +121,5 @@ public class Configuration
 		catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
 		catch (NullPointerException npe){System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");}
 		return defaultValue;
-	}
-	public Configuration(String filename)
-	{
-		Properties props = new Properties();
-		try
-		{
-			//TODO: Convert keys to lowercase (also when extracting)
-			FileInputStream configFile = new FileInputStream(filename);
-			props.load(configFile);
-			configFile.close();
-		}
-		catch(IOException e){System.out.println("Cannot open " + filename + "!");}
-		NW = getPoint(props, "NW", new org.opencv.core.Point(160, 120));
-		SE = getPoint(props, "NW", new org.opencv.core.Point(480, 360));
-		testMode = getInt(props, "testMode", 1) != 0;
-		if(testMode) testImageFile = getString(props, "testImageFile", "src/imgInOut/TESTDATA.JPG");
-		else testImageFile = null;
-		showSteps = getInt(props, "showSteps", 1) != 0;
-		boundsStrategy = getInt(props, "boundsStrategy", 0);
-		pixelSizeStrategy = getInt(props, "pixelSizeStrategy", 0);
-		floodFillOrigin = getPoint(props, "floodFillOrigin", new org.opencv.core.Point(320, 240));
-		obstaclePrototype = getString(props, "", "src/imgInOut/woodPrototype.png");
 	}
 }
