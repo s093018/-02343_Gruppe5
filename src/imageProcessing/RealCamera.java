@@ -16,6 +16,7 @@ import org.opencv.highgui.VideoCapture;
 
 public class RealCamera implements Camera
 {
+	//
 	private List<Goal> goals;
 	private Map map;
 	private List<Point> balls;
