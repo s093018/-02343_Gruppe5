@@ -275,6 +275,7 @@ public class RealCamera implements Camera
 			points.add(findCorner(blurred, i));
 			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
 		}
+		//derp
 
 		goals = new ArrayList<Goal>();
 		goals.add(getGoal(points.get(2), points.get(3)));
