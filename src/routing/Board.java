@@ -99,6 +99,7 @@ public class Board {
 	public void moveGoals(List<Goal> goals, int pixelDistance, char newValueAtOldLocation){
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
 		for(Goal goal: goals){
+			radianToDegree(goal.heading);
 //			Field fieldOld = new Field(goal.pixel_x, goal.pixel_y, newValueAtOldLocation);
 //			int x_new = goal.pixel_x, y_new = goal.pixel_y;
 //
@@ -277,5 +278,41 @@ public class Board {
 
 	public int getStartY() {
 		return startY;
+	}
+	
+	public int radianToDegree(double radian) {
+		double degree = (radian*180)/Math.PI;
+		int result = (int)(degree + 22.5)/45;
+		result *=45;
+		return result;
+	}
+	
+	public String degreeToDirection(int degree){
+		String direction = "N";
+		return direction;
+//		if(entranceDirections.contains("N")){
+//			path.add(grid[center.pixel_x][center.pixel_y - l]);
+//		}
+//		if(entranceDirections.contains("S")){
+//			path.add(grid[center.pixel_x][center.pixel_y + l]);
+//		}
+//		if(entranceDirections.contains("E")){
+//			path.add(grid[center.pixel_x + l][center.pixel_y]);
+//		}
+//		if(entranceDirections.contains("W")){
+//			path.add(grid[center.pixel_x - l][center.pixel_y]);
+//		}
+//		if(entranceDirections.contains("NW")){
+//			path.add(grid[center.pixel_x - l][center.pixel_y - l]);
+//		}
+//		if(entranceDirections.contains("NE")){
+//			path.add(grid[center.pixel_x + l][center.pixel_y - l]);
+//		}
+//		if(entranceDirections.contains("SW")){
+//			path.add(grid[center.pixel_x - l][center.pixel_y + l]);
+//		}
+//		if(entranceDirections.contains("SE")){
+//			path.add(grid[center.pixel_x + l][center.pixel_y + l]);
+//		}
 	}
 }
