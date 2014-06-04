@@ -87,55 +87,56 @@ public class Board {
 			incrBuildObstacles(buildObstacles);
 		}
 		
-		if(!entrance){ //TODO reconsider this "if"; are multiple entrances problematic?
+		if(!entrance){ //TODO reconsider this "if"; maybe multiple entrances aren't problematic?
 			buildPath(ball, entranceDirections, pixelRadius, ' ');
 		}
 	}
 	
 	/**
-	 * Returns false if new location was obstructed and the point wasn't moved.
+	 * If new location was obstructed and the point wasn't moved, retries at another nearby field.
+	 * Heading: radian--> degrees --> direction
 	 */
-	public boolean moveGoals(Point point, char pointChar, String direction, int pixelDistance, char newValueAtOldLocation){
+	public void moveGoals(List<Goal> goals, int pixelDistance, char newValueAtOldLocation){
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
-		Field fieldOld = new Field(point.pixel_x, point.pixel_y, newValueAtOldLocation);
-		int x_new = point.pixel_x, y_new = point.pixel_y;
-		
-		if(direction.equals("N")){
-			y_new = point.pixel_y - pixelDistance;
+		for(Goal goal: goals){
+//			Field fieldOld = new Field(goal.pixel_x, goal.pixel_y, newValueAtOldLocation);
+//			int x_new = goal.pixel_x, y_new = goal.pixel_y;
+//
+//			if(direction.equals("N")){
+//				y_new = goal.pixel_y - pixelDistance;
+//			}
+//			if(direction.equals("S")){
+//				y_new = goal.pixel_y + pixelDistance;
+//			}
+//			if(direction.equals("E")){
+//				x_new = goal.pixel_x + pixelDistance;
+//			}
+//			if(direction.equals("W")){
+//				x_new = goal.pixel_x - pixelDistance;
+//			}
+//			if(direction.equals("NW")){
+//				x_new = goal.pixel_x - pixelDistance;
+//				y_new = goal.pixel_y - pixelDistance;
+//			}
+//			if(direction.equals("NE")){
+//				x_new = goal.pixel_x + pixelDistance;
+//				y_new = goal.pixel_y - pixelDistance;
+//			}
+//			if(direction.equals("SW")){
+//				x_new = goal.pixel_x - pixelDistance;
+//				y_new = goal.pixel_y + pixelDistance;
+//			}
+//			if(direction.equals("SE")){
+//				x_new = goal.pixel_x + pixelDistance;
+//				y_new = goal.pixel_y + pixelDistance;
+//			}
+//
+//			fieldListNew.add(new Field(x_new, y_new, pointChar));
+//		}
+//
+//		if(!checkAndBuild(fieldListNew, pointChar)){
+//			setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
 		}
-		if(direction.equals("S")){
-			y_new = point.pixel_y + pixelDistance;
-		}
-		if(direction.equals("E")){
-			x_new = point.pixel_x + pixelDistance;
-		}
-		if(direction.equals("W")){
-			x_new = point.pixel_x - pixelDistance;
-		}
-		if(direction.equals("NW")){
-			x_new = point.pixel_x - pixelDistance;
-			y_new = point.pixel_y - pixelDistance;
-		}
-		if(direction.equals("NE")){
-			x_new = point.pixel_x + pixelDistance;
-			y_new = point.pixel_y - pixelDistance;
-		}
-		if(direction.equals("SW")){
-			x_new = point.pixel_x - pixelDistance;
-			y_new = point.pixel_y + pixelDistance;
-		}
-		if(direction.equals("SE")){
-			x_new = point.pixel_x + pixelDistance;
-			y_new = point.pixel_y + pixelDistance;
-		}
-
-		fieldListNew.add(new Field(x_new, y_new, pointChar));
-		
-		if(!checkAndBuild(fieldListNew, pointChar)){
-			setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
-			return true;
-		}
-		return false;
 	}
 
 
