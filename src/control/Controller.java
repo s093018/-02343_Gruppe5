@@ -49,11 +49,11 @@ public class Controller {
 			closeBalls = board.ballsCloseToObstacle(testCamera.getBalls(), 5);
 			
 			if(ballCount <= MAX_NO_BALLS) {
-
+				
 				Iterator<Point> it = closeBalls.iterator();
 				while(it.hasNext()) {
 					Point p = it.next();
-					board.buildObstacleAroundBall(p, "N" , 5);
+//					board.buildObstacleAroundBall(p, "N" , 5);
 					System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 				}
 
