@@ -88,33 +88,89 @@ public class Board {
 		}
 		
 		if(!entrance){ //TODO reconsider this "if"; are multiple entrances problematic?
-			List<Field> entrances = new ArrayList<Field>();
+			buildPath(ball, entranceDirections, pixelRadius, ' ');
+		}
+	}
+	
+	/**
+	 * Returns false if new location was obstructed and the point wasn't moved.
+	 */
+	public boolean movePoint(Point point, char pointChar, String direction, int pixelDistance, char newValueAtOldLocation){
+		ArrayList<Field> fieldListNew = new ArrayList<Field>();
+		Field fieldOld = new Field(point.pixel_x, point.pixel_y, newValueAtOldLocation);
+		int x_new = point.pixel_x, y_new = point.pixel_y;
+		
+		if(direction.equals("N")){
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("S")){
+			y_new = point.pixel_y + pixelDistance;
+		}
+		if(direction.equals("E")){
+			x_new = point.pixel_x + pixelDistance;
+		}
+		if(direction.equals("W")){
+			x_new = point.pixel_x - pixelDistance;
+		}
+		if(direction.equals("NW")){
+			x_new = point.pixel_x - pixelDistance;
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("NE")){
+			x_new = point.pixel_x + pixelDistance;
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("SW")){
+			x_new = point.pixel_x - pixelDistance;
+			y_new = point.pixel_y + pixelDistance;
+		}
+		if(direction.equals("SE")){
+			x_new = point.pixel_x + pixelDistance;
+			y_new = point.pixel_y + pixelDistance;
+		}
+
+		fieldListNew.add(new Field(x_new, y_new, pointChar));
+		
+		if(!checkAndBuild(fieldListNew, pointChar)){
+			setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * Create path from a point and outwards in the entrance directions
+	 */
+	public void buildPath(Point center, List<String> entranceDirections, int pixelLength, char value){
+		List<Field> path = new ArrayList<Field>();
+		for(int l = 1; l <= pixelLength; l++){
 			if(entranceDirections.contains("N")){
-				entrances.add(grid[ball.pixel_x][ball.pixel_y - pixelRadius]);
+				path.add(grid[center.pixel_x][center.pixel_y - l]);
 			}
 			if(entranceDirections.contains("S")){
-				entrances.add(grid[ball.pixel_x][ball.pixel_y + pixelRadius]);
+				path.add(grid[center.pixel_x][center.pixel_y + l]);
 			}
 			if(entranceDirections.contains("E")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y]);
+				path.add(grid[center.pixel_x + l][center.pixel_y]);
 			}
 			if(entranceDirections.contains("W")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y]);
+				path.add(grid[center.pixel_x - l][center.pixel_y]);
 			}
 			if(entranceDirections.contains("NW")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
+				path.add(grid[center.pixel_x - l][center.pixel_y - l]);
 			}
 			if(entranceDirections.contains("NE")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
+				path.add(grid[center.pixel_x + l][center.pixel_y - l]);
 			}
 			if(entranceDirections.contains("SW")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
+				path.add(grid[center.pixel_x - l][center.pixel_y + l]);
 			}
 			if(entranceDirections.contains("SE")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
+				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
 			}
-			checkAndBuild(entrances, ' ');
 		}
+		checkAndBuild(path, value);
 	}
 	
 /**
@@ -143,6 +199,31 @@ public class Board {
 		buildObstacles.set(1, grid[buildObstacles.get(1).getX()][buildObstacles.get(1).getY() + 1]);
 		buildObstacles.set(2, grid[buildObstacles.get(2).getX() - 1][buildObstacles.get(2).getY()]);
 		buildObstacles.set(3, grid[buildObstacles.get(3).getX()][buildObstacles.get(3).getY() - 1]);
+	}
+	
+	public void fakeWallsBuild(double robotWidth) {
+		int pixelRadius = (int)robotWidth;
+		for (int i = 0 ; i < grid.length ; ++i) {
+			for (int j = 0 ; j < grid[i].length ; ++j) {
+				if (grid[i][j].getValue() == 'O') {
+					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
+						if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O') {
+							grid[i+pixelRadius][j].setValue('F');
+						}
+						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O') {
+							grid[i-pixelRadius][j].setValue('F');
+						}
+						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O') {
+							grid[i][j+pixelRadius].setValue('F');
+						}
+						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O') {
+							grid[i][j-pixelRadius].setValue('F');
+						}
+						// tilføj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
+					}
+				}
+			}
+		}
 	}
 
 	public void fillInBalls(List<Point> balls) {
