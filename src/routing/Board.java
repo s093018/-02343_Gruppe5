@@ -87,37 +87,90 @@ public class Board {
 			incrBuildObstacles(buildObstacles);
 		}
 		
-		// Create path from ball and outwards in the entrance directions
 		if(!entrance){ //TODO reconsider this "if"; are multiple entrances problematic?
-			List<Field> entrances = new ArrayList<Field>();
-			for(int r = 1; r <= pixelRadius; r++){
-				if(entranceDirections.contains("N")){
-					entrances.add(grid[ball.pixel_x][ball.pixel_y - r]);
-				}
-				if(entranceDirections.contains("S")){
-					entrances.add(grid[ball.pixel_x][ball.pixel_y + r]);
-				}
-				if(entranceDirections.contains("E")){
-					entrances.add(grid[ball.pixel_x + r][ball.pixel_y]);
-				}
-				if(entranceDirections.contains("W")){
-					entrances.add(grid[ball.pixel_x - r][ball.pixel_y]);
-				}
-				if(entranceDirections.contains("NW")){
-					entrances.add(grid[ball.pixel_x - r][ball.pixel_y - r]);
-				}
-				if(entranceDirections.contains("NE")){
-					entrances.add(grid[ball.pixel_x + r][ball.pixel_y - r]);
-				}
-				if(entranceDirections.contains("SW")){
-					entrances.add(grid[ball.pixel_x - r][ball.pixel_y + r]);
-				}
-				if(entranceDirections.contains("SE")){
-					entrances.add(grid[ball.pixel_x + r][ball.pixel_y + r]);
-				}
-			}
-			checkAndBuild(entrances, ' ');
+			buildPath(ball, entranceDirections, pixelRadius, ' ');
 		}
+	}
+	
+	/**
+	 * Returns false if new location was obstructed and the point wasn't moved.
+	 */
+	public boolean movePoint(Point point, char pointChar, String direction, int pixelDistance, char newValueAtOldLocation){
+		ArrayList<Field> fieldListNew = new ArrayList<Field>();
+		Field fieldOld = new Field(point.pixel_x, point.pixel_y, newValueAtOldLocation);
+		int x_new = point.pixel_x, y_new = point.pixel_y;
+		
+		if(direction.equals("N")){
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("S")){
+			y_new = point.pixel_y + pixelDistance;
+		}
+		if(direction.equals("E")){
+			x_new = point.pixel_x + pixelDistance;
+		}
+		if(direction.equals("W")){
+			x_new = point.pixel_x - pixelDistance;
+		}
+		if(direction.equals("NW")){
+			x_new = point.pixel_x - pixelDistance;
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("NE")){
+			x_new = point.pixel_x + pixelDistance;
+			y_new = point.pixel_y - pixelDistance;
+		}
+		if(direction.equals("SW")){
+			x_new = point.pixel_x - pixelDistance;
+			y_new = point.pixel_y + pixelDistance;
+		}
+		if(direction.equals("SE")){
+			x_new = point.pixel_x + pixelDistance;
+			y_new = point.pixel_y + pixelDistance;
+		}
+
+		fieldListNew.add(new Field(x_new, y_new, pointChar));
+		
+		if(!checkAndBuild(fieldListNew, pointChar)){
+			setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * Create path from a point and outwards in the entrance directions
+	 */
+	public void buildPath(Point center, List<String> entranceDirections, int pixelLength, char value){
+		List<Field> path = new ArrayList<Field>();
+		for(int l = 1; l <= pixelLength; l++){
+			if(entranceDirections.contains("N")){
+				path.add(grid[center.pixel_x][center.pixel_y - l]);
+			}
+			if(entranceDirections.contains("S")){
+				path.add(grid[center.pixel_x][center.pixel_y + l]);
+			}
+			if(entranceDirections.contains("E")){
+				path.add(grid[center.pixel_x + l][center.pixel_y]);
+			}
+			if(entranceDirections.contains("W")){
+				path.add(grid[center.pixel_x - l][center.pixel_y]);
+			}
+			if(entranceDirections.contains("NW")){
+				path.add(grid[center.pixel_x - l][center.pixel_y - l]);
+			}
+			if(entranceDirections.contains("NE")){
+				path.add(grid[center.pixel_x + l][center.pixel_y - l]);
+			}
+			if(entranceDirections.contains("SW")){
+				path.add(grid[center.pixel_x - l][center.pixel_y + l]);
+			}
+			if(entranceDirections.contains("SE")){
+				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
+			}
+		}
+		checkAndBuild(path, value);
 	}
 	
 /**
