@@ -41,8 +41,7 @@ public class RealCamera implements Camera
 	}
 	private Mat replaceColor(Mat image, double[] source, double[] dest)
 	{
-		Mat result = new Mat(image.size(), image.type());
-		result.setTo(image);
+		Mat result = image.clone();
 		for(int j = 0; j < image.rows(); ++j)
 			for(int i = 0; i < image.cols(); ++i)
 				if(compareColors(image.get(j, i), source))
@@ -80,22 +79,11 @@ public class RealCamera implements Camera
 		{
 			Mat frame = new Mat();
 			capture.retrieve(frame);
-			return frame;
-		}
-	}
-	private List<Point> cornerSearch(Mat image)
-	{
-		double[] red = {0.0, 0.0, 255.0};//Apparently, OpenCV format is BGRA
-		Mat NE = replaceColor(Highgui.imread("src/imgInOut/NE.PNG"), red, floorColor);
-		Mat NW = replaceColor(Highgui.imread("src/imgInOut/NW.PNG"), red, floorColor);
-		Mat SE = replaceColor(Highgui.imread("src/imgInOut/SE.PNG"), red, floorColor);
-		Mat SW = replaceColor(Highgui.imread("src/imgInOut/SW.PNG"), red, floorColor);
 
-		Highgui.imwrite("src/imgInOut/NETest.png", NE);
-		Highgui.imwrite("src/imgInOut/NWTest.png", NW);
-		Highgui.imwrite("src/imgInOut/SETest.png", SE);
-		Highgui.imwrite("src/imgInOut/SWTest.png", SW);
-		return null;
+			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
+			Highgui.imwrite("frame.png", frame);
+			return Highgui.imread("frame.png");
+		}
 	}
 	private double[] estimateFloorColor(Mat image)
 	{
@@ -208,7 +196,7 @@ public class RealCamera implements Camera
 		Scalar min = new Scalar(floorColor[0] * lodiff, floorColor[1] * lodiff, floorColor[2] * lodiff, 255);
 		Scalar max = new Scalar(floorColor[0] * updiff, floorColor[1] * updiff, floorColor[2] * updiff, 255);
 		Imgproc.floodFill(cleared, mask, settings.floodFillOrigin, new Scalar(255, 255, 255, 255), null, min, max, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
-		return mask;
+		return mask.submat(1, mask.height()-1, 1, mask.width()-1);
 	}
 	private Mat canny(Mat image)
 	{
@@ -233,17 +221,16 @@ public class RealCamera implements Camera
 
 	private Mat floodFillDetection(Mat image)
 	{
+		Mat filled = floodFill(smooth(image), settings.floodFillLodiff, settings.floodFillUpdiff);
 		//TODO: Get rid of holes/goals
-		return floodFill(smooth(image), 2.0, 0.2);
+		//erode bumps, then dilate enough to remove robot, then erode again
+		//Also, locate goals
+		return filled;
 	}
 	private Mat prototypeBoundsDetection(Mat image)
 	{
 		Mat template = Highgui.imread(settings.obstaclePrototype);
 		Mat match = new Mat();
-		System.out.println(CvType.CV_8U);
-		System.out.println(CvType.CV_32F);
-		System.out.println(image.depth());
-		System.out.println(template.depth());
 		Imgproc.matchTemplate(image, template, match, Imgproc.TM_CCORR);
 		Mat result = new Mat();
 		Imgproc.threshold(match, result, settings.woodTreshold, 1, Imgproc.THRESH_BINARY);
@@ -254,26 +241,59 @@ public class RealCamera implements Camera
 		//Build prototype
 		double[] blue = {255.0, 0.0, 0.0};
 		Mat prototype = replaceColor(Highgui.imread(settings.cornerPrototypes[quadrant-1]), blue, floorColor);
+		showStep("adjustedprototype.png", prototype, 1.0);
 
 		//Select quadrant
 		int width = image.width()/2;
 		int height = image.height()/2;
 		int xOff = (quadrant == 1 || quadrant == 4) ? width : 0;
-		int yOff = (quadrant > 2) ? height / 2 : 0;
-		Mat Q = image.submat(yOff, yOff + width, xOff, xOff + height);
+		int yOff = (quadrant > 2) ? height : 0;
+		Mat Q = image.submat(yOff, yOff + height, xOff, xOff + width);
 
-		//maxloc on Q
+		//Find best match
 		Mat match = new Mat();
-		Imgproc.matchTemplate(image, prototype, match, Imgproc.TM_SQDIFF);
-		return Core.minMaxLoc(match).maxLoc;
+		Imgproc.matchTemplate(Q, prototype, match, Imgproc.TM_SQDIFF_NORMED);
+		showStep("cornerintensity" + quadrant + ".png", match, 255.0);
+		org.opencv.core.Point origin = Core.minMaxLoc(match).minLoc;
+		return new org.opencv.core.Point(xOff + origin.x + prototype.width()/2, yOff + origin.y + prototype.height()/2);
+	}
+	private Goal getGoal(org.opencv.core.Point left, org.opencv.core.Point right)
+	{
+		int xDiff = (int)(left.x+right.x);
+		int yDiff = (int)(left.y+right.y);
+		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(yDiff, -xDiff));
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
 		Mat course = Mat.ones(image.size(), CvType.CV_8U);
-		List<MatOfPoint> points = new ArrayList<MatOfPoint>();
-		points.add(new MatOfPoint(findCorner(image, 1), findCorner(image, 2), findCorner(image, 3), findCorner(image, 4)));
-		Imgproc.drawContours(course, points, -1, new Scalar(0, 0, 0, 255), Core.FILLED);
-		return null;
+		Mat blurred = smooth(image);
+		Mat marked = image.clone();
+
+		List<org.opencv.core.Point> points = new ArrayList<org.opencv.core.Point>();
+		for(int i = 1; i < 5; ++i)
+		{
+			points.add(findCorner(blurred, i));
+			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
+		}
+
+		goals = new ArrayList<Goal>();
+		goals.add(getGoal(points.get(2), points.get(3)));
+		goals.add(getGoal(points.get(4), points.get(1)));
+		for(Goal g : goals)
+		{
+			;
+		}
+		new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y)
+		Core.circle(marked, goals.get(0), 4, new Scalar(0, 255, 255), -1);
+		Core.circle(marked, goals.get(0), 4, new Scalar(0, 255, 255), -1);
+
+		showStep("corners.png", marked, 1.0);
+		
+		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
+		Imgproc.drawContours(course, contours, -1, new Scalar(0, 0, 0, 255), Core.FILLED);
+
+		return course;
 	}
 	private Mat detectBounds(Mat image, int strategy)
 	{
@@ -314,7 +334,7 @@ public class RealCamera implements Camera
 
 		Mat result = new Mat();
 		Core.subtract(Mat.ones(obstacleMask.size(), CvType.CV_8U), obstacleMask, result);
-		return result;
+		return result.submat(1, result.height()-1, 1, result.width()-1);
 	}
 	private double estimatePixelSize(Mat image, Mat bounds)
 	{
@@ -326,12 +346,7 @@ public class RealCamera implements Camera
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		if(settings.testMode)
-		{
-			testImage = Highgui.imread(settings.testImageFile);
-			testImage.convertTo(testImage, CvType.CV_32F);
-			System.out.println("Converted to " + testImage.depth());
-		}
+		if(settings.testMode) testImage = Highgui.imread(settings.testImageFile);
 		else capture = new VideoCapture(0);
 
 		Mat image = getImage();
@@ -343,7 +358,7 @@ public class RealCamera implements Camera
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
 		pixelSize = estimatePixelSize(image, bounds);
 
-		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);//642x482
+		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
@@ -360,10 +375,7 @@ public class RealCamera implements Camera
 	{
 		balls = new ArrayList<Point>();
 
-		//Ensure image and template have the same type (converTo() doesn't work).
-		Highgui.imwrite("frame.png", getImage());
-		Mat image = Highgui.imread("frame.png");
-
+		Mat image = getImage();
 		Mat templ = Highgui.imread("src/imgInOut/Template.png");
 
 		int result_cols = image.cols() - templ.cols() + 1;
