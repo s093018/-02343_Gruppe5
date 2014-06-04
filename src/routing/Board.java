@@ -153,14 +153,17 @@ public class Board {
 		for (int i = 0 ; i < grid.length ; ++i) {
 			for (int j = 0 ; j < grid[i].length ; ++j) {
 				if (grid[i][j].getValue() == 'O') {
-					if(i+pixelRadius <= grid.length-1 || i-pixelRadius > 0 || j+pixelRadius <= grid[i].length-1 || j-pixelRadius > 0) {
-						if(grid[i+pixelRadius][j].getValue() != 'G' || grid[i+pixelRadius][j].getValue() != 'B') {
+					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
+						if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B'&& grid[i+pixelRadius][j].getValue() != 'O') {
 							grid[i+pixelRadius][j].setValue('F');
-						}else if (grid[i][j+pixelRadius].getValue() != 'G' ||grid[i][j+pixelRadius].getValue() != 'B') {
+						}
+						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B'&& grid[i-pixelRadius][j].getValue() != 'O') {
 							grid[i][j+pixelRadius].setValue('F');
-						}else if (grid[i-pixelRadius][j].getValue() != 'G' || grid[i-pixelRadius][j].getValue() != 'B') {
+						}
+						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O') {
 							grid[i-pixelRadius][j].setValue('F');
-						}else if (grid[i][j-pixelRadius].getValue() != 'G' || grid[i][j-pixelRadius].getValue() != 'B') {
+						}
+						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O') {
 							grid[i][j-pixelRadius].setValue('F');
 						}
 					}
