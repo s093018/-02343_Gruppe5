@@ -275,18 +275,14 @@ public class RealCamera implements Camera
 			points.add(findCorner(blurred, i));
 			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
 		}
-		//derp
 
 		goals = new ArrayList<Goal>();
-		goals.add(getGoal(points.get(2), points.get(3)));
-		goals.add(getGoal(points.get(4), points.get(1)));
+		goals.add(getGoal(points.get(1), points.get(2)));
+		goals.add(getGoal(points.get(3), points.get(0)));
 		for(Goal g : goals)
 		{
-			;
+			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
 		}
-		new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y)
-		Core.circle(marked, goals.get(0), 4, new Scalar(0, 255, 255), -1);
-		Core.circle(marked, goals.get(0), 4, new Scalar(0, 255, 255), -1);
 
 		showStep("corners.png", marked, 1.0);
 		
