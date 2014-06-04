@@ -359,15 +359,12 @@ public class RealCamera implements Camera
 	public void update()
 	{
 		balls = new ArrayList<Point>();
+
+		//Ensure image and template have the same type (converTo() doesn't work).
 		Highgui.imwrite("frame.png", getImage());
 		Mat image = Highgui.imread("frame.png");
 
 		Mat templ = Highgui.imread("src/imgInOut/Template.png");
-
-		System.out.println(image.depth());
-		System.out.println(templ.depth());
-		System.out.println(image.type());
-		System.out.println(templ.type());
 
 		int result_cols = image.cols() - templ.cols() + 1;
 		int result_rows = image.rows() - templ.rows() + 1;
