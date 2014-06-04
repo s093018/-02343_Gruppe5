@@ -2,6 +2,7 @@ package control;
 
 import imageProcessing.Point;
 import imageProcessing.TestCamera;
+import imageProcessing.Goal;
 
 import java.io.*;
 import java.util.*;
@@ -47,6 +48,18 @@ public class Controller {
 			board.fillInGoals(testCamera.getGoals());
 			board.fakeWallsBuild(testCamera.getRobot().robotWidth);
 			closeBalls = board.ballsCloseToObstacle(testCamera.getBalls(), 5);
+			
+			ArrayList<String> direction = new ArrayList<String>();
+			direction.add("N");
+			for (Point ball : closeBalls) {
+				board.buildObstacleAroundBall(ball, direction, (int)testCamera.getRobot().robotWidth); 
+			}
+			for (Goal goal : testCamera.getGoals()) {
+				board.movePoint(goal, pointChar, direction, pixelDistance, newValueAtOldLocation)
+			}
+			board.movePoint(testCamera.getGoals(), pointChar, direction, pixelDistance, newValueAtOldLocation);
+			board.buildPath(center, entranceDirections, pixelLength, value);
+			board.
 			
 			if(ballCount <= MAX_NO_BALLS) {
 				
