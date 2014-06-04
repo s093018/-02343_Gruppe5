@@ -95,7 +95,7 @@ public class Board {
 	/**
 	 * Returns false if new location was obstructed and the point wasn't moved.
 	 */
-	public boolean movePoint(Point point, char pointChar, String direction, int pixelDistance, char newValueAtOldLocation){
+	public boolean moveGoals(Point point, char pointChar, String direction, int pixelDistance, char newValueAtOldLocation){
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
 		Field fieldOld = new Field(point.pixel_x, point.pixel_y, newValueAtOldLocation);
 		int x_new = point.pixel_x, y_new = point.pixel_y;
