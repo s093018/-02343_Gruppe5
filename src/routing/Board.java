@@ -87,31 +87,34 @@ public class Board {
 			incrBuildObstacles(buildObstacles);
 		}
 		
+		// Create path from ball and outwards in the entrance directions
 		if(!entrance){ //TODO reconsider this "if"; are multiple entrances problematic?
 			List<Field> entrances = new ArrayList<Field>();
-			if(entranceDirections.contains("N")){
-				entrances.add(grid[ball.pixel_x][ball.pixel_y - pixelRadius]);
-			}
-			if(entranceDirections.contains("S")){
-				entrances.add(grid[ball.pixel_x][ball.pixel_y + pixelRadius]);
-			}
-			if(entranceDirections.contains("E")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y]);
-			}
-			if(entranceDirections.contains("W")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y]);
-			}
-			if(entranceDirections.contains("NW")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
-			}
-			if(entranceDirections.contains("NE")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
-			}
-			if(entranceDirections.contains("SW")){
-				entrances.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
-			}
-			if(entranceDirections.contains("SE")){
-				entrances.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
+			for(int r = 1; r <= pixelRadius; r++){
+				if(entranceDirections.contains("N")){
+					entrances.add(grid[ball.pixel_x][ball.pixel_y - r]);
+				}
+				if(entranceDirections.contains("S")){
+					entrances.add(grid[ball.pixel_x][ball.pixel_y + r]);
+				}
+				if(entranceDirections.contains("E")){
+					entrances.add(grid[ball.pixel_x + r][ball.pixel_y]);
+				}
+				if(entranceDirections.contains("W")){
+					entrances.add(grid[ball.pixel_x - r][ball.pixel_y]);
+				}
+				if(entranceDirections.contains("NW")){
+					entrances.add(grid[ball.pixel_x - r][ball.pixel_y - r]);
+				}
+				if(entranceDirections.contains("NE")){
+					entrances.add(grid[ball.pixel_x + r][ball.pixel_y - r]);
+				}
+				if(entranceDirections.contains("SW")){
+					entrances.add(grid[ball.pixel_x - r][ball.pixel_y + r]);
+				}
+				if(entranceDirections.contains("SE")){
+					entrances.add(grid[ball.pixel_x + r][ball.pixel_y + r]);
+				}
 			}
 			checkAndBuild(entrances, ' ');
 		}
