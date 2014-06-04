@@ -147,6 +147,25 @@ public class Board {
 		buildObstacles.set(2, grid[buildObstacles.get(2).getX() - 1][buildObstacles.get(2).getY()]);
 		buildObstacles.set(3, grid[buildObstacles.get(3).getX()][buildObstacles.get(3).getY() - 1]);
 	}
+	
+	public void fakeWallsBuild(double robotWidth) {
+		int pixelRadius = (int)robotWidth;
+		for (int i = 0 ; i < grid.length ; ++i) {
+			for (int j = 0 ; j < grid[i].length ; ++j) {
+				if (grid[i][j].getValue() == 'O') {
+					if(grid[i+pixelRadius][j].getValue() != 'G' || grid[i+pixelRadius][j].getValue() != 'B') {
+						grid[i+pixelRadius][j].setValue('F');
+					}else if (grid[i][j+pixelRadius].getValue() != 'G' ||grid[i][j+pixelRadius].getValue() != 'B') {
+						grid[i][j+pixelRadius].setValue('F');
+					}else if (grid[i-pixelRadius][j].getValue() != 'G' || grid[i-pixelRadius][j].getValue() != 'B') {
+						grid[i-pixelRadius][j].setValue('F');
+					}else if (grid[i][j-pixelRadius].getValue() != 'G' || grid[i][j-pixelRadius].getValue() != 'B') {
+						grid[i][j-pixelRadius].setValue('F');
+					}
+				}
+			}
+		}
+	}
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls)

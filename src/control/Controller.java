@@ -46,6 +46,7 @@ public class Controller {
 			board.fillInBalls(testCamera.getBalls());
 			board.fillInRobotPosition(testCamera.getRobot().position);
 			board.fillInGoals(testCamera.getGoals());
+			board.fakeWallsBuild(testCamera.getRobot().robotWidth);
 			closeBalls = board.ballsCloseToObstacle(testCamera.getBalls(), 5);
 			
 			if(ballCount <= MAX_NO_BALLS) {
