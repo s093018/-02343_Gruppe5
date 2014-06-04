@@ -1,11 +1,14 @@
 package imageProcessing;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -16,14 +19,13 @@ import org.opencv.highgui.VideoCapture;
 
 public class RealCamera implements Camera
 {
-	//
 	private List<Goal> goals;
 	private Map map;
 	private List<Point> balls;
 	private Robot robot;
 
 	private VideoCapture capture;
-	private Configuration settings = new Configuration("settings.cfg");
+	private Configuration settings = new Configuration("src/imgInOut/settings.cfg");
 	private Mat testImage;
 
 	private double pixelSize;
@@ -78,7 +80,6 @@ public class RealCamera implements Camera
 		{
 			Mat frame = new Mat();
 			capture.retrieve(frame);
-			frame.convertTo(frame, CvType.CV_32F);
 			return frame;
 		}
 	}
@@ -235,20 +236,48 @@ public class RealCamera implements Camera
 		//TODO: Get rid of holes/goals
 		return floodFill(smooth(image), 2.0, 0.2);
 	}
-	private Mat cornerBasedDetection(Mat image)
-	{
-		return null;
-	}
 	private Mat prototypeBoundsDetection(Mat image)
 	{
 		Mat template = Highgui.imread(settings.obstaclePrototype);
+		Mat match = new Mat();
+		System.out.println(CvType.CV_8U);
+		System.out.println(CvType.CV_32F);
+		System.out.println(image.depth());
+		System.out.println(template.depth());
+		Imgproc.matchTemplate(image, template, match, Imgproc.TM_CCORR);
 		Mat result = new Mat();
-		Imgproc.matchTemplate(image, template, result, Imgproc.TM_CCORR);
-		//threshold
+		Imgproc.threshold(match, result, settings.woodTreshold, 1, Imgproc.THRESH_BINARY);
+		return result;
+	}
+	private org.opencv.core.Point findCorner(Mat image, int quadrant)
+	{
+		//Build prototype
+		double[] blue = {255.0, 0.0, 0.0};
+		Mat prototype = replaceColor(Highgui.imread(settings.cornerPrototypes[quadrant-1]), blue, floorColor);
+
+		//Select quadrant
+		int width = image.width()/2;
+		int height = image.height()/2;
+		int xOff = (quadrant == 1 || quadrant == 4) ? width : 0;
+		int yOff = (quadrant > 2) ? height / 2 : 0;
+		Mat Q = image.submat(yOff, yOff + width, xOff, xOff + height);
+
+		//maxloc on Q
+		Mat match = new Mat();
+		Imgproc.matchTemplate(image, prototype, match, Imgproc.TM_SQDIFF);
+		return Core.minMaxLoc(match).maxLoc;
+	}
+	private Mat cornerBasedDetection(Mat image)
+	{
+		Mat course = Mat.ones(image.size(), CvType.CV_8U);
+		List<MatOfPoint> points = new ArrayList<MatOfPoint>();
+		points.add(new MatOfPoint(findCorner(image, 1), findCorner(image, 2), findCorner(image, 3), findCorner(image, 4)));
+		Imgproc.drawContours(course, points, -1, new Scalar(0, 0, 0, 255), Core.FILLED);
 		return null;
 	}
 	private Mat detectBounds(Mat image, int strategy)
 	{
+		//TODO: Floodfill to select outermost structure to avoid robot being seen as obstacle
 		switch(strategy)
 		{
 		case 0: return floodFillDetection(image);
@@ -301,6 +330,7 @@ public class RealCamera implements Camera
 		{
 			testImage = Highgui.imread(settings.testImageFile);
 			testImage.convertTo(testImage, CvType.CV_32F);
+			System.out.println("Converted to " + testImage.depth());
 		}
 		else capture = new VideoCapture(0);
 
@@ -326,13 +356,22 @@ public class RealCamera implements Camera
 		//Find initial position of balls + robot
 		update();
 	}
-	public void update() {
-		Mat image = getImage();
-		Mat templ = Highgui.imread("../imgInOut/Template.jpg");
+	public void update()
+	{
+		balls = new ArrayList<Point>();
+		Highgui.imwrite("frame.png", getImage());
+		Mat image = Highgui.imread("frame.png");
+
+		Mat templ = Highgui.imread("src/imgInOut/Template.png");
+
+		System.out.println(image.depth());
+		System.out.println(templ.depth());
+		System.out.println(image.type());
+		System.out.println(templ.type());
 
 		int result_cols = image.cols() - templ.cols() + 1;
 		int result_rows = image.rows() - templ.rows() + 1;
-		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
+		Mat result = new Mat(result_rows, result_cols, CvType.CV_32F);
 
 		while(true) {
 			int matchingMethod = 1;
@@ -349,13 +388,14 @@ public class RealCamera implements Camera
 
 			double thresholdMatch = 0.25;
 			if(mmlr.minVal < thresholdMatch) {
+				balls.add(new Point((int)(matchLoc.x + (templ.cols()/2)), (int)(matchLoc.y + (templ.rows()/2)), pixelSize));
 				Core.circle(image, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
 			} else {
 				break;
 			}
 		}
-		Highgui.imwrite("../imgInOut/Result.jpg", image);
+		Highgui.imwrite("src/imgInOut/Result.jpg", image);
 	}
 
 	
