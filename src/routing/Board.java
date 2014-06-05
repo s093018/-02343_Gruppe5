@@ -94,50 +94,65 @@ public class Board {
 	
 	/**
 	 * If new location was obstructed and the point wasn't moved, retries at another nearby field.
-	 * Heading: radian--> degrees --> direction
+	 * Also builds path using pixelLength.
 	 */
-	public void moveGoals(List<Goal> goals, int pixelDistance, char newValueAtOldLocation){
+	public List<Field> moveGoals(List<Goal> goals, int pixelDistance, char newValueAtOldLocation, int pixelLength){
+		ArrayList<Field> fieldListOld = new ArrayList<Field>();
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
-		for(Goal goal: goals){
-			radianToDegree(goal.heading);
-//			Field fieldOld = new Field(goal.pixel_x, goal.pixel_y, newValueAtOldLocation);
-//			int x_new = goal.pixel_x, y_new = goal.pixel_y;
-//
-//			if(direction.equals("N")){
-//				y_new = goal.pixel_y - pixelDistance;
-//			}
-//			if(direction.equals("S")){
-//				y_new = goal.pixel_y + pixelDistance;
-//			}
-//			if(direction.equals("E")){
-//				x_new = goal.pixel_x + pixelDistance;
-//			}
-//			if(direction.equals("W")){
-//				x_new = goal.pixel_x - pixelDistance;
-//			}
-//			if(direction.equals("NW")){
-//				x_new = goal.pixel_x - pixelDistance;
-//				y_new = goal.pixel_y - pixelDistance;
-//			}
-//			if(direction.equals("NE")){
-//				x_new = goal.pixel_x + pixelDistance;
-//				y_new = goal.pixel_y - pixelDistance;
-//			}
-//			if(direction.equals("SW")){
-//				x_new = goal.pixel_x - pixelDistance;
-//				y_new = goal.pixel_y + pixelDistance;
-//			}
-//			if(direction.equals("SE")){
-//				x_new = goal.pixel_x + pixelDistance;
-//				y_new = goal.pixel_y + pixelDistance;
-//			}
-//
-//			fieldListNew.add(new Field(x_new, y_new, pointChar));
-//		}
-//
-//		if(!checkAndBuild(fieldListNew, pointChar)){
-//			setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+		ArrayList<String> directions = new ArrayList<String>();
+		
+		for(int i = 0; i < goals.size(); i++){
+			directions.add(degreeToDirection((radianToDegree(goals.get(i).heading))));
+			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
+			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
+
+			if(directions.get(i).equals("N")){
+				y_new = goals.get(i).center.pixel_y - pixelDistance;
+			}
+			if(directions.get(i).equals("S")){
+				y_new = goals.get(i).center.pixel_y + pixelDistance;
+			}
+			if(directions.get(i).equals("E")){
+				x_new = goals.get(i).center.pixel_x + pixelDistance;
+			}
+			if(directions.get(i).equals("W")){
+				x_new = goals.get(i).center.pixel_x - pixelDistance;
+			}
+			if(directions.get(i).equals("NW")){
+				x_new = goals.get(i).center.pixel_x - pixelDistance;
+				y_new = goals.get(i).center.pixel_y - pixelDistance;
+			}
+			if(directions.get(i).equals("NE")){
+				x_new = goals.get(i).center.pixel_x + pixelDistance;
+				y_new = goals.get(i).center.pixel_y - pixelDistance;
+			}
+			if(directions.get(i).equals("SW")){
+				x_new = goals.get(i).center.pixel_x - pixelDistance;
+				y_new = goals.get(i).center.pixel_y + pixelDistance;
+			}
+			if(directions.get(i).equals("SE")){
+				x_new = goals.get(i).center.pixel_x + pixelDistance;
+				y_new = goals.get(i).center.pixel_y + pixelDistance;
+			}
+
+			fieldListNew.add(new Field(x_new, y_new, 'G'));
 		}
+
+		if(!checkAndBuild(fieldListNew, 'G')){
+			ArrayList<String> directionArg = new ArrayList<String>();
+			for(int i = 0; i < fieldListNew.size(); i++){
+				directionArg.clear();
+				directionArg.add(directions.get(i));
+				
+				buildPath(new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0),
+						directionArg, pixelLength, ' ');
+			}
+			for(Field fieldOld : fieldListOld)
+				setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+		}
+		//TODO retry checkAndBuild() nearby if it failed
+		
+		return fieldListNew;
 	}
 
 
