@@ -137,20 +137,28 @@ public class Board {
 
 			fieldListNew.add(new Field(x_new, y_new, 'G'));
 		}
+		
+		int retryCounter = 0;
+		do{
+			if(!checkAndBuild(fieldListNew, 'G')){
+				ArrayList<String> directionArg = new ArrayList<String>();
+				for(int i = 0; i < fieldListNew.size(); i++){
+					directionArg.clear();
+					directionArg.add(directions.get(i));
 
-		if(!checkAndBuild(fieldListNew, 'G')){
-			ArrayList<String> directionArg = new ArrayList<String>();
-			for(int i = 0; i < fieldListNew.size(); i++){
-				directionArg.clear();
-				directionArg.add(directions.get(i));
-				
-				buildPath(new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0),
-						directionArg, pixelLength, ' ');
+					buildPath(new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0),
+							directionArg, pixelLength, ' ');
+				}
+				for(Field fieldOld : fieldListOld)
+					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+				return fieldListNew;
 			}
-			for(Field fieldOld : fieldListOld)
-				setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
-		}
-		//TODO retry checkAndBuild() nearby if it failed
+			for(int i = 0; i < fieldListNew.size(); i++){
+				Field fieldNewRetry = new Field(fieldListNew.get(i).getX() + 1, fieldListNew.get(i).getY(), fieldListNew.get(i).getValue());
+				fieldListNew.set(i, fieldNewRetry);
+			}
+			retryCounter++;
+		}while(retryCounter < 50);
 		
 		return fieldListNew;
 	}
