@@ -287,32 +287,12 @@ public class Board {
 		return result;
 	}
 	
+	 // Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
+	/**
+	 * degree should be positive, if not may throw ArrayIndexOutOfBoundsException.
+	 */
 	public String degreeToDirection(int degree){
-		String direction = "N";
-		return direction;
-//		if(entranceDirections.contains("N")){
-//			path.add(grid[center.pixel_x][center.pixel_y - l]);
-//		}
-//		if(entranceDirections.contains("S")){
-//			path.add(grid[center.pixel_x][center.pixel_y + l]);
-//		}
-//		if(entranceDirections.contains("E")){
-//			path.add(grid[center.pixel_x + l][center.pixel_y]);
-//		}
-//		if(entranceDirections.contains("W")){
-//			path.add(grid[center.pixel_x - l][center.pixel_y]);
-//		}
-//		if(entranceDirections.contains("NW")){
-//			path.add(grid[center.pixel_x - l][center.pixel_y - l]);
-//		}
-//		if(entranceDirections.contains("NE")){
-//			path.add(grid[center.pixel_x + l][center.pixel_y - l]);
-//		}
-//		if(entranceDirections.contains("SW")){
-//			path.add(grid[center.pixel_x - l][center.pixel_y + l]);
-//		}
-//		if(entranceDirections.contains("SE")){
-//			path.add(grid[center.pixel_x + l][center.pixel_y + l]);
-//		}
+		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+		return directions[(((degree + 22) % 360) / 45)];
 	}
 }
