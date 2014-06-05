@@ -1,7 +1,5 @@
 package imageProcessing;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -179,8 +176,8 @@ public class RealCamera implements Camera
 	private Mat smooth(Mat image)
 	{
 		Mat result = new Mat();
-//		Imgproc.GaussianBlur(image, result, new Size(5, 5), 1);
-//		Imgproc.medianBlur(image, result, 5);
+		//		Imgproc.GaussianBlur(image, result, new Size(5, 5), 1);
+		//		Imgproc.medianBlur(image, result, 5);
 		Imgproc.bilateralFilter(image, result, -1, 180, 4);
 		return result;
 	}
@@ -285,7 +282,7 @@ public class RealCamera implements Camera
 		}
 
 		showStep("corners.png", marked, 1.0);
-		
+
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
 		Imgproc.drawContours(course, contours, -1, new Scalar(0, 0, 0, 255), Core.FILLED);
@@ -370,17 +367,26 @@ public class RealCamera implements Camera
 	}
 	public void update()
 	{
-		balls = new ArrayList<Point>();
+		this.balls = new ArrayList<Point>();
 
-		Mat image = getImage();
-		Mat templ = Highgui.imread("src/imgInOut/Template.png");
+		//Ensure image and template have the same type (converTo() doesn't work).
+		Highgui.imwrite("frame.png", getImage());
+		Mat image = Highgui.imread("frame.png");
+
+		findBalls(image, "src/imgInOut/Template.png");
+		findRobot(image, "src/imgInOut/Front.png", "src/imgInOut/Back.png");
+	}
+
+	public void findBalls(Mat image, String templFileName)
+	{
+		Mat templ = Highgui.imread(templFileName);
 
 		int result_cols = image.cols() - templ.cols() + 1;
 		int result_rows = image.rows() - templ.rows() + 1;
 		Mat result = new Mat(result_rows, result_cols, CvType.CV_32F);
 
+		int matchingMethod = 1;
 		while(true) {
-			int matchingMethod = 1;
 			Imgproc.matchTemplate(image, templ, result, matchingMethod);
 
 			MinMaxLocResult mmlr = Core.minMaxLoc(result);
@@ -393,18 +399,54 @@ public class RealCamera implements Camera
 			}
 
 			double thresholdMatch = 0.25;
+
 			if(mmlr.minVal < thresholdMatch) {
-				balls.add(new Point((int)(matchLoc.x + (templ.cols()/2)), (int)(matchLoc.y + (templ.rows()/2)), pixelSize));
-				Core.circle(image, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
-						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
+				this.balls.add(new Point((int)(matchLoc.x + (templ.cols()/2)), (int)(matchLoc.y + (templ.rows()/2)), pixelSize));
 			} else {
 				break;
 			}
 		}
-		Highgui.imwrite("src/imgInOut/Result.jpg", image);
 	}
 
-	
+	public void findRobot(Mat image, String front, String back)
+	{
+		double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+
+		ArrayList<String> templates = new ArrayList<String>();
+		templates.add(back);
+		templates.add(front);
+
+		for(int i = 0; i<templates.size(); i++){
+
+			Mat templ = Highgui.imread(templates.get(i));
+
+			int result_cols = image.cols() - templ.cols() + 1;
+			int result_rows = image.rows() - templ.rows() + 1;
+			Mat result = new Mat(result_rows, result_cols, CvType.CV_32F);
+
+			int matchingMethod = 0;
+
+			Imgproc.matchTemplate(image, templ, result, matchingMethod);
+
+			MinMaxLocResult mmlr = Core.minMaxLoc(result);
+
+			org.opencv.core.Point matchLoc = mmlr.minLoc;
+
+			double thresholdMatch = 0.25;
+
+			if(mmlr.minVal < thresholdMatch) {
+				if(i == 0){
+					x1 = matchLoc.x + (templ.cols()/2);
+					y1 = matchLoc.y + (templ.rows()/2);
+				}
+				else if(i == 1){
+					x2 = matchLoc.x + (templ.cols()/2);
+					y2 = matchLoc.y + (templ.rows()/2);
+				}
+			}
+		}
+		new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(x2-x1, y2-y1), 24*pixelSize, 38*pixelSize);
+	}
 
 	//optimer de her senere hvis det bliver nødvendigt
 	public void updateRobot(Point expectedPosition, double searchRadius){update();}

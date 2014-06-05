@@ -6,7 +6,7 @@ public class Point {
 		
 	public Point(int pixel_x, int pixel_y, double pixelSize) {
 		this.x = pixel_x*pixelSize;
-		this.y = pixel_x*pixelSize;
+		this.y = pixel_y*pixelSize;
 		this.pixel_x = pixel_x;
 		this.pixel_y = pixel_y;
 	}
