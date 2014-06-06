@@ -370,7 +370,7 @@ public class RealCamera implements Camera
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
 			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? ' ' : 'O';
+				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);
