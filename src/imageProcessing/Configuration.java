@@ -24,6 +24,7 @@ public class Configuration
 	public final String obstaclePrototype;
 	public final int centralObstacleSize;
 	public final org.opencv.core.Scalar centralObstacleTolerance;
+	public final Scalar centralObstacleColor;
 	public final double woodTreshold;
 	public final String cornerPrototypes[];
 	public final double floodFillUpdiff;
@@ -45,6 +46,7 @@ public class Configuration
 		obstaclePrototype = getString(props, "obstaclePrototype", "src/imgInOut/woodPrototype.png");
 		centralObstacleSize = getInt(props, "centralObstacleSize", 20);
 		centralObstacleTolerance = getScalar(props, "centralObstacleTolerance", new Scalar(20, 20, 20, 255));
+		centralObstacleColor = getScalar(props, "centralObstacleColor", new Scalar(37, 37, 90, 255));
 		woodTreshold = getDouble(props, "woodTreshold", 50.0);
 		cornerPrototypes = new String[4];
 		cornerPrototypes[0] = getString(props, "corner1", "src/imgInOut/corner.png");
