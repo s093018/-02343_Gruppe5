@@ -309,6 +309,10 @@ public class RealCamera implements Camera
 			return floodFillDetection(image);
 		}
 	}
+	private Mat findCentralObstacle(Mat image)
+	{
+		return null;
+	}
 	private Mat detectCentralObstacle(Mat image)
 	{
 		int size = settings.centralObstacleSize;
@@ -328,13 +332,15 @@ public class RealCamera implements Camera
 		//Floodfill using original image, since intensity map has softened corners 
 		Mat obstacleMask = new Mat(new Size(image.width() + 2, image.height() + 2), CvType.CV_8U);
 		obstacleMask.setTo(new Scalar(0, 0, 0, 255));
-		Imgproc.floodFill(image, obstacleMask, maximum, settings.centralObstacleColor, null, tolerance, settings.centralObstacleColor, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
+		Imgproc.floodFill(image, obstacleMask, maximum, settings.centralObstacleColor, null, tolerance, tolerance, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
 
 		//TODO: Maybe dilate mask as well?
 
 		Mat result = new Mat();
 		Core.subtract(Mat.ones(obstacleMask.size(), CvType.CV_8U), obstacleMask, result);
-		return result.submat(1, result.height()-1, 1, result.width()-1);
+		Mat centralMask = result.submat(1, result.height()-1, 1, result.width()-1);
+		showStep("centralObstacleMask.png", centralMask, 255);
+		return centralMask;
 	}
 	private double estimatePixelSize(Mat image, Mat bounds)
 	{
@@ -358,13 +364,13 @@ public class RealCamera implements Camera
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
 		pixelSize = estimatePixelSize(image, bounds);
 
-		//Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
-		Mat blocked = bounds;
+		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
+		blocked = bounds;
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
 			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? '\0' : '\1';
+				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? ' ' : 'O';
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);
@@ -381,7 +387,7 @@ public class RealCamera implements Camera
 		Highgui.imwrite("frame.png", getImage());
 		Mat image = Highgui.imread("frame.png");
 
-		findBalls(image, "src/imgInOut/Template.png");
+		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/Front.png", "src/imgInOut/Back.png");
 	}
 
