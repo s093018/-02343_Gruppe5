@@ -1,5 +1,7 @@
 package imageProcessing;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -176,8 +179,8 @@ public class RealCamera implements Camera
 	private Mat smooth(Mat image)
 	{
 		Mat result = new Mat();
-		//		Imgproc.GaussianBlur(image, result, new Size(5, 5), 1);
-		//		Imgproc.medianBlur(image, result, 5);
+//		Imgproc.GaussianBlur(image, result, new Size(5, 5), 1);
+//		Imgproc.medianBlur(image, result, 5);
 		Imgproc.bilateralFilter(image, result, -1, 180, 4);
 		return result;
 	}
@@ -229,8 +232,11 @@ public class RealCamera implements Camera
 		Mat template = Highgui.imread(settings.obstaclePrototype);
 		Mat match = new Mat();
 		Imgproc.matchTemplate(image, template, match, Imgproc.TM_CCORR);
-		Mat result = new Mat();
-		Imgproc.threshold(match, result, settings.woodTreshold, 1, Imgproc.THRESH_BINARY);
+		Mat thresh = new Mat();
+		Imgproc.threshold(match, thresh, settings.woodTreshold, 1, Imgproc.THRESH_BINARY);
+		Mat result = Mat.ones(image.size(), image.type());
+		result.submat(template.height()/2, template.height()/2 + thresh.height(), template.width()/2, template.width()/2 + thresh.width()).setTo(thresh);
+		//TODO: Floodfill to select outermost structure to avoid robot being seen as obstacle
 		return result;
 	}
 	private org.opencv.core.Point findCorner(Mat image, int quadrant)
@@ -262,8 +268,10 @@ public class RealCamera implements Camera
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
-		Mat course = Mat.ones(image.size(), CvType.CV_8U);
+		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
 		Mat blurred = smooth(image);
+		//New central obstacle is same color as bounds, so black it out while looking for corners
+		Core.circle(blurred, settings.floodFillOrigin, 100, new Scalar(0, 0, 0), -1);
 		Mat marked = image.clone();
 
 		List<org.opencv.core.Point> points = new ArrayList<org.opencv.core.Point>();
@@ -282,16 +290,15 @@ public class RealCamera implements Camera
 		}
 
 		showStep("corners.png", marked, 1.0);
-
+		
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
-		Imgproc.drawContours(course, contours, -1, new Scalar(0, 0, 0, 255), Core.FILLED);
+		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
 
 		return course;
 	}
 	private Mat detectBounds(Mat image, int strategy)
 	{
-		//TODO: Floodfill to select outermost structure to avoid robot being seen as obstacle
 		switch(strategy)
 		{
 		case 0: return floodFillDetection(image);
@@ -302,14 +309,14 @@ public class RealCamera implements Camera
 			return floodFillDetection(image);
 		}
 	}
+//	private Mat 
 	private Mat detectCentralObstacle(Mat image)
 	{
 		int size = settings.centralObstacleSize;
 		Scalar tolerance = settings.centralObstacleTolerance;
-		Scalar white = new Scalar(255, 255, 255, 255);
 		//Look for whitest area
 		Mat detector = new Mat(new Size(size, size), image.type());
-		detector.setTo(white);
+		detector.setTo(settings.centralObstacleColor);
 		Mat centralRect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
 		Core.rectangle(centralRect, settings.NW, settings.SE, new Scalar(1, 1, 1, 1), Core.FILLED);
 		Mat intensity = new Mat();
@@ -322,7 +329,7 @@ public class RealCamera implements Camera
 		//Floodfill using original image, since intensity map has softened corners 
 		Mat obstacleMask = new Mat(new Size(image.width() + 2, image.height() + 2), CvType.CV_8U);
 		obstacleMask.setTo(new Scalar(0, 0, 0, 255));
-		Imgproc.floodFill(image, obstacleMask, maximum, white, null, tolerance, white, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
+		Imgproc.floodFill(image, obstacleMask, maximum, settings.centralObstacleColor, null, tolerance, settings.centralObstacleColor, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
 
 		//TODO: Maybe dilate mask as well?
 
