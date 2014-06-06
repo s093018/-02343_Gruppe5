@@ -100,10 +100,8 @@ public class FindingSequence {
 		}
 		/* close arms */
 		boolean done = false;
-		System.out.println("linie 105");
 		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
-		if(robotControl.getIsOpen()) { //robotControl.getIsOpen virker ikke ordenligt.
-			System.out.println("linie 108");
+		if(robotControl.getIsOpen()) { 
 			while(!done) {
 				done = robotControl.close();
 			}
@@ -193,10 +191,8 @@ public class FindingSequence {
 			done = robotControl.kick();
 		}
 		done = false;
-		System.out.println("188");
 		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
 		if(robotControl.getIsOpen()) {
-			System.out.println("Linie 191");
 			while(!done) {
 				done = robotControl.close();
 			}

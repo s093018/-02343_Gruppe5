@@ -27,7 +27,7 @@ public class Controller {
 	public Controller () {
 		this.realCamera = new RealCamera();
 		try {
-			//		robotControl = new robot.Control();
+			robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -36,23 +36,19 @@ public class Controller {
 
 		try {
 			System.out.println("Started!");
-			ArrayList<String> directions = new ArrayList<String>();
-			directions.add("N");
 			map = realCamera.getMap().obstacle;
 			while(!endGame) {
 				realCamera.update();
 				board = new Board(map);
 				board.fillInBalls(realCamera.getBalls());
-				board.fillInRobotPosition(realCamera.getRobot().position);
+				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
 				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
 
 				ArrayList<String> direction = new ArrayList<String>();
-				direction.add("N");
-				for (Point ball : closeBalls) {
-					board.buildObstacleAroundBall(ball, direction, (int)realCamera.getRobot().robotWidth); 
-				}
+				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
+				direction.add("NE");direction.add("NW");direction.add("SE");direction.add("SW");
 
 				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 
@@ -61,61 +57,62 @@ public class Controller {
 					Iterator<Point> it = closeBalls.iterator();
 					while(it.hasNext()) {
 						Point p = it.next();
-						board.buildObstacleAroundBall(p, directions , 5);
+						board.buildObstacleAroundBall(p, direction , 5);
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
-					
+
 
 					String filepath = "/Users/Christian/Desktop/outputPath.txt";
 					File f = new File(filepath);
 					FileWriter fw = null;
 					try  {
 						fw =  new  FileWriter(f);
-						fw.write(bfs.toString());
+						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-						//		fs.shutdown();
+						fs.shutdown();
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							//				fs.shutdown();
+							fs.shutdown();
 						} 
 					} 
-					
-					//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-					//					
-					//					if(path != null) {
-					//						di = fs.sequence(path);
-					//						fs.drive(di, bfs.getCloseToWall());
-					//						ballCount++;
-					//						System.out.println("Ballcount = " + ballCount);
-					//					}
-					//				} else {
-					//					/** Drive to goal and release balls **/
-					//
-					//					bfs = new BFS(board.getGrid(), 'G');
-					//					path = bfs.findPath(closeBalls);
-					//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-					//
-					//					di = fs.sequence(path);
-					//
-					//					fs.goalDrive(di);
-					//
-					//					ballCount = 0;
-					//					endGame = true;
-					//				}
+
+					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+
+					if(path != null) {
+						di = fs.sequence(path);
+						fs.drive(di, bfs.getCloseToWall());
+						ballCount++;
+						System.out.println("Ballcount = " + ballCount);
+					}
+				} else {
+					/** Drive to goal and release balls **/
+
+					bfs = new BFS(board.getGrid(), 'G');
+					path = bfs.findPath(closeBalls);
+					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+
+					di = fs.sequence(path);
+
+					fs.goalDrive(di);
+
+					ballCount = 0;
+					endGame = true;
 				}
-				endGame = true;
 			}
-			//	fs.shutdown();
+			endGame = true;
+
+			fs.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
-			//		fs.shutdown();
+			fs.shutdown();
 		} 		
 	}
 }
+
 
