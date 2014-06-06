@@ -379,7 +379,7 @@ public class RealCamera implements Camera
 		Highgui.imwrite("frame.png", getImage());
 		Mat image = Highgui.imread("frame.png");
 
-		findBalls(image, "src/imgInOut/Template.png");
+//		findBalls(image, "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/Front.png", "src/imgInOut/Back.png");
 	}
 
@@ -392,8 +392,14 @@ public class RealCamera implements Camera
 		Mat result = new Mat(result_rows, result_cols, CvType.CV_32F);
 
 		int matchingMethod = 1;
+		boolean derp = true;
 		while(true) {
 			Imgproc.matchTemplate(image, templ, result, matchingMethod);
+			if(derp)
+			{
+				derp = false;
+				showStep("ballintensity.png", result, 255.0/(templ.width()*templ.height()));
+			}
 
 			MinMaxLocResult mmlr = Core.minMaxLoc(result);
 
@@ -415,13 +421,13 @@ public class RealCamera implements Camera
 				break;
 			}
 		}
-		Highgui.imwrite("src/imgInOut/billede2.png", image);
+		Highgui.imwrite("src/imgInOut/billede3.png", image);
 	}
 
 	public void findRobot(Mat image, String front, String back)
 	{
-		Mat image1 = image;
-		Mat image2 = image;
+		Mat image1 = image.clone();
+		Mat image2 = image.clone();
 		double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
 		ArrayList<String> templates = new ArrayList<String>();
@@ -444,23 +450,22 @@ public class RealCamera implements Camera
 
 			org.opencv.core.Point matchLoc = mmlr.minLoc;
 
-			double thresholdMatch = 0.25;
-
-			if(mmlr.minVal < thresholdMatch) {
-				if(i == 0){
-					Core.circle(image1, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
-							matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
-					Highgui.imwrite("../imgInOut/billede1.png", image);
-					x1 = matchLoc.x + (templ.cols()/2);
-					y1 = matchLoc.y + (templ.rows()/2);
-				}
-				else if(i == 1){
-					Core.circle(image2, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
-							matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
-					Highgui.imwrite("../imgInOut/billede2.png", image);
-					x2 = matchLoc.x + (templ.cols()/2);
-					y2 = matchLoc.y + (templ.rows()/2);
-				}
+			System.out.println(i);
+			if(i == 0){
+				Core.circle(image1, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
+						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
+				showStep("robotint0.png", result, 0.005 / (templ.width()*templ.height()));
+				Highgui.imwrite("src/imgInOut/billede1.png", image1);
+				x1 = matchLoc.x + (templ.cols()/2);
+				y1 = matchLoc.y + (templ.rows()/2);
+			}
+			else if(i == 1){
+				Core.circle(image2, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
+						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
+				showStep("robotint1.png", result, 0.005 / (templ.width()*templ.height()));
+				Highgui.imwrite("src/imgInOut/billede2.png", image2);
+				x2 = matchLoc.x + (templ.cols()/2);
+				y2 = matchLoc.y + (templ.rows()/2);
 			}
 		}
 		new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(x2-x1, y2-y1), 24*pixelSize, 38*pixelSize);
