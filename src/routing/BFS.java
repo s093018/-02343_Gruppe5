@@ -71,7 +71,7 @@ public class BFS {
 	 * Using a queue, this findPath(closeBalls) method is doing BFS.
 	 * enqueues all children and dequeues them until it finds the end point.
 	 */
-	public ArrayList<Integer> findPath(List<Point> closeBalls) {
+	public ArrayList<Integer> findPath(List<Point> closeBalls) throws Exception {
 
 		/*
 		 *  Crete fields for North(N), South(S), East(E), West(W), 
@@ -83,7 +83,7 @@ public class BFS {
 		Queue<Field> bfsQueue = new LinkedList<Field>();
 
 		// Create a new Field and mark it as the starting cell + set it as visited.
-		start.setMark();
+			start.setMark();
 
 		//Add it to the queue.
 		bfsQueue.add(start);
