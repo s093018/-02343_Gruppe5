@@ -309,7 +309,7 @@ public class RealCamera implements Camera
 			return floodFillDetection(image);
 		}
 	}
-//	private Mat 
+//	private Mat findCentralObstacle(Mat image)
 	private Mat detectCentralObstacle(Mat image)
 	{
 		int size = settings.centralObstacleSize;
