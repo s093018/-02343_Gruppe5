@@ -476,11 +476,7 @@ public class RealCamera implements Camera
 				y2 = matchLoc.y + (templ.rows()/2);
 			}
 		}
-		System.out.print(x1); System.out.println(", " + y1);
-		System.out.print(x2); System.out.println(", " + y2);
-		System.out.print(x2-x1); System.out.println(", " + (y2-y1));
 		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y1-y2, x2-x1), 24/pixelSize, 38/pixelSize);
-		System.out.println(robot.heading);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt
