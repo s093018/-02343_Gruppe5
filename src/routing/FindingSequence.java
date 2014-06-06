@@ -47,6 +47,8 @@ public class FindingSequence {
 
 			/* turn robot heading or drive forward */
 			if (i == 0) {
+				System.out.println("robotHeading radian: "+robotHeading);
+				System.out.println("robotHeading degree: "+radianToDegree(robotHeading));
 				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
 				if(turn < 0) {
 					while (!done) {
@@ -65,11 +67,12 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
+					System.out.println("open");
 				}
 
 				done = false;
 				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
 
 			} else {
@@ -90,21 +93,23 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
+					System.out.println("open");
 				}
 
 				done = false;
 				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
 			}
 		}
 		/* close arms */
 		boolean done = false;
-		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
 		if(robotControl.getIsOpen()) { 
+			
 			while(!done) {
 				done = robotControl.close();
 			}
+			System.out.println("close");
 		}
 
 		/*close to wall */
@@ -138,15 +143,15 @@ public class FindingSequence {
 				/* open arms */
 				done = false;
 				if(i == instructions.size()-1) {
-					System.out.println("linie 145");
 					while(!done) {
 						done = robotControl.open();
 					}
+					System.out.println("open");
 				}
 
 				done = false;
 				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
 
 			} else {
@@ -163,15 +168,15 @@ public class FindingSequence {
 				done = false;
 				/* open arms */
 				if(i == instructions.size()-1) {
-					System.out.println("linie 170");
 					while(!done) {
 						done = robotControl.open();
 					}
+					System.out.println("open");
 				}
 
 				done = false;
 				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()/pixelSize)); 
+					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
 			}
 		}
@@ -191,11 +196,11 @@ public class FindingSequence {
 			done = robotControl.kick();
 		}
 		done = false;
-		System.out.println("robotControl.getIsOpen = "+robotControl.getIsOpen());
 		if(robotControl.getIsOpen()) {
 			while(!done) {
 				done = robotControl.close();
 			}
+			System.out.println("close");
 		}
 	}
 	
@@ -217,6 +222,7 @@ public class FindingSequence {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;
 		result *=45;
+		result = Math.abs(result);
 		return result;
 	}
 

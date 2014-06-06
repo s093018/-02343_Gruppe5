@@ -21,7 +21,7 @@ public class Controller {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS = 5;
+	private final int MAX_NO_BALLS = 0;
 	private List<Point> closeBalls;
 
 	public Controller () {
@@ -43,14 +43,14 @@ public class Controller {
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
-				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
+			//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
 
 				ArrayList<String> direction = new ArrayList<String>();
 				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
 				direction.add("NE");direction.add("NW");direction.add("SE");direction.add("SW");
 
-				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
+//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 
 				if(ballCount <= MAX_NO_BALLS) {
 
@@ -74,11 +74,13 @@ public class Controller {
 					}  catch  (IOException e) {
 						e.printStackTrace();
 						fs.shutdown();
+						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
 							fs.shutdown();
+							System.out.println("Emergency shutdown");
 						} 
 					} 
 
@@ -90,8 +92,8 @@ public class Controller {
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
-				} else {
-					/** Drive to goal and release balls **/
+				}/* else {
+					/** Drive to goal and release balls **//*
 
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
@@ -103,14 +105,16 @@ public class Controller {
 
 					ballCount = 0;
 					endGame = true;
-				}
+				}*/
+				endGame = true;
 			}
-			endGame = true;
 
 			fs.shutdown();
+			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fs.shutdown();
+			System.out.println("Emergency shutdown");
 		} 		
 	}
 }
