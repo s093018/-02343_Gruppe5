@@ -19,6 +19,14 @@ public class Board {
 
 	public Board(char[][] map) {
 
+//		grid = new Field[map.length][map[0].length];
+//
+//		for (int i = 0 ; i < map.length ; ++i) {
+//			for (int j = 0 ; j < map[i].length ; ++j) {
+//				grid[i][j] = new Field(i, j, map[i][j]);
+//			}
+//		}
+		
 		grid = new Field[map.length][map[0].length];
 
 		for (int i = 0 ; i < map.length ; ++i) {
@@ -26,6 +34,7 @@ public class Board {
 				grid[i][j] = new Field(i, j, map[i][j]);
 			}
 		}
+		
 	}
 
 	/**
@@ -292,6 +301,11 @@ public class Board {
 	public Field[][] getGrid() {
 		return grid;
 	}
+	
+	public void setGrid(Field[][] newGrid) {
+		grid = newGrid;
+	}
+	
 
 	public Field getStart() {
 		return start;
@@ -320,4 +334,25 @@ public class Board {
 		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
 		return directions[(((degree + 22) % 360) / 45)];
 	}
+
+	/*Virker ikke endnu*/
+	public Board rotate (Board oldBoard) {
+	
+		System.out.println("length: "+oldBoard.getGrid().length+" width: "+oldBoard.getGrid()[0].length);
+        char[][] newGrid = new char[oldBoard.getGrid()[0].length][oldBoard.getGrid().length];
+
+        int ii = 0;
+        int jj = 0;
+        for(int i=0; i < oldBoard.getGrid()[0].length; i++){
+            for(int j = oldBoard.getGrid().length-1; j >= 0; j--){
+                System.out.print(ii+","+jj+" på "+i+","+j);
+                newGrid[ii][jj] = oldBoard.getGrid()[i][j].getValue();
+                jj++;
+            }
+            System.out.println();
+            ii++;
+        }
+        Board board = new Board(newGrid);
+        return board;
+    }
 }

@@ -36,7 +36,8 @@ public class FindingSequence {
 				count = 1;
 			}
 		}
-
+		for(DriverInstructions d : robotInstructions) {
+		}
 		return robotInstructions;
 	}
 
@@ -47,9 +48,9 @@ public class FindingSequence {
 
 			/* turn robot heading or drive forward */
 			if (i == 0) {
-				System.out.println("robotHeading radian: "+robotHeading);
-				System.out.println("robotHeading degree: "+radianToDegree(robotHeading));
+
 				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
+
 				if(turn < 0) {
 					while (!done) {
 						done = robotControl.turnLeft(Math.abs(turn));
@@ -67,10 +68,11 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
-					System.out.println("open");
+
 				}
 
 				done = false;
+				System.out.println("Length: "+(int) (instructions.get(i).getLength()*pixelSize));
 				while (!done) { 
 					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
@@ -93,7 +95,7 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
-					System.out.println("open");
+
 				}
 
 				done = false;
@@ -109,7 +111,7 @@ public class FindingSequence {
 			while(!done) {
 				done = robotControl.close();
 			}
-			System.out.println("close");
+
 		}
 
 		/*close to wall */
@@ -146,7 +148,7 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
-					System.out.println("open");
+
 				}
 
 				done = false;
@@ -171,7 +173,6 @@ public class FindingSequence {
 					while(!done) {
 						done = robotControl.open();
 					}
-					System.out.println("open");
 				}
 
 				done = false;
@@ -200,7 +201,7 @@ public class FindingSequence {
 			while(!done) {
 				done = robotControl.close();
 			}
-			System.out.println("close");
+
 		}
 	}
 	
@@ -222,7 +223,6 @@ public class FindingSequence {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;
 		result *=45;
-		result = Math.abs(result);
 		return result;
 	}
 

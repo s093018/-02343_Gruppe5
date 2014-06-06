@@ -27,7 +27,7 @@ public class Controller {
 	public Controller () {
 		this.realCamera = new RealCamera();
 		try {
-			robotControl = new robot.Control();
+			//		robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -43,14 +43,14 @@ public class Controller {
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
-			//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
+				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
+				board = board.rotate(board);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
-
 				ArrayList<String> direction = new ArrayList<String>();
 				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
 				direction.add("NE");direction.add("NW");direction.add("SE");direction.add("SW");
 
-//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
+				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 
 				if(ballCount <= MAX_NO_BALLS) {
 
@@ -73,17 +73,17 @@ public class Controller {
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-						fs.shutdown();
+						//			fs.shutdown();
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							fs.shutdown();
+							//					fs.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
 					} 
-
+					/*
 					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
 					if(path != null) {
@@ -92,7 +92,7 @@ public class Controller {
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
-				}/* else {
+				} else {
 					/** Drive to goal and release balls **//*
 
 					bfs = new BFS(board.getGrid(), 'G');
@@ -106,14 +106,15 @@ public class Controller {
 					ballCount = 0;
 					endGame = true;
 				}*/
-				endGame = true;
-			}
+					endGame = true;
+				}
+			} 
 
-			fs.shutdown();
+			//			fs.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
-			fs.shutdown();
+			//		fs.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
 	}
