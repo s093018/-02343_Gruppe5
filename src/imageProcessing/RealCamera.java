@@ -372,6 +372,7 @@ public class RealCamera implements Camera
 		//Find initial position of balls + robot
 		update();
 	}
+	//
 	public void update()
 	{
 		this.balls = new ArrayList<Point>();
