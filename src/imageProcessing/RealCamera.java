@@ -28,7 +28,7 @@ public class RealCamera implements Camera
 	private Configuration settings = new Configuration("src/imgInOut/settings.cfg");
 	private Mat testImage;
 
-	private double pixelSize;
+	private double pixelSize;//cm/pixel
 	private double floorColor[];
 
 
@@ -264,7 +264,7 @@ public class RealCamera implements Camera
 	{
 		int xDiff = (int)(left.x+right.x);
 		int yDiff = (int)(left.y+right.y);
-		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(yDiff, -xDiff));
+		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(-xDiff, -yDiff));
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
@@ -476,7 +476,7 @@ public class RealCamera implements Camera
 				y2 = matchLoc.y + (templ.rows()/2);
 			}
 		}
-		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(x2-x1, y2-y1), 24*pixelSize, 38*pixelSize);
+		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y1-y2, x2-x1), 24*pixelSize, 38*pixelSize);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt
