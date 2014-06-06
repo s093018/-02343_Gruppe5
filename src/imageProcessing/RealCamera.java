@@ -309,12 +309,11 @@ public class RealCamera implements Camera
 			return floodFillDetection(image);
 		}
 	}
-//	private Mat findCentralObstacle(Mat image)
 	private Mat detectCentralObstacle(Mat image)
 	{
 		int size = settings.centralObstacleSize;
 		Scalar tolerance = settings.centralObstacleTolerance;
-		//Look for whitest area
+		//Look for reddest point in central area
 		Mat detector = new Mat(new Size(size, size), image.type());
 		detector.setTo(settings.centralObstacleColor);
 		Mat centralRect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
