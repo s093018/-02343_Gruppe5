@@ -380,7 +380,7 @@ public class RealCamera implements Camera
 		Highgui.imwrite("frame.png", getImage());
 		Mat image = Highgui.imread("frame.png");
 
-//		findBalls(image, "src/imgInOut/Template.png");
+		findBalls(image, "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/Front.png", "src/imgInOut/Back.png");
 	}
 
@@ -469,7 +469,7 @@ public class RealCamera implements Camera
 				y2 = matchLoc.y + (templ.rows()/2);
 			}
 		}
-		new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(x2-x1, y2-y1), 24*pixelSize, 38*pixelSize);
+		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(x2-x1, y2-y1), 24*pixelSize, 38*pixelSize);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt
