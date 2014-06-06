@@ -27,7 +27,7 @@ public class Controller {
 	public Controller () {
 		this.realCamera = new RealCamera();
 		try {
-			robotControl = new robot.Control();
+			//		robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -67,9 +67,9 @@ public class Controller {
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
+					
 
-
-					String filepath = "/Users/Julian/Desktop/outputPath.txt";
+					String filepath = "/Users/Christian/Desktop/outputPath.txt";
 					File f = new File(filepath);
 					FileWriter fw = null;
 					try  {
@@ -77,41 +77,45 @@ public class Controller {
 						fw.write(bfs.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
+						//		fs.shutdown();
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-						}
-					}
-					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-					if(path != null) {
-						di = fs.sequence(path);
-						fs.drive(di, bfs.getCloseToWall());
-						ballCount++;
-						System.out.println("Ballcount = " + ballCount);
-					}
-				} else {
-					/** Drive to goal and release balls **/
-
-					bfs = new BFS(board.getGrid(), 'G');
-					path = bfs.findPath(closeBalls);
-					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-
-					di = fs.sequence(path);
-
-					fs.goalDrive(di);
-
-					ballCount = 0;
-					endGame = true;
+							//				fs.shutdown();
+						} 
+					} 
+					
+					//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					//					
+					//					if(path != null) {
+					//						di = fs.sequence(path);
+					//						fs.drive(di, bfs.getCloseToWall());
+					//						ballCount++;
+					//						System.out.println("Ballcount = " + ballCount);
+					//					}
+					//				} else {
+					//					/** Drive to goal and release balls **/
+					//
+					//					bfs = new BFS(board.getGrid(), 'G');
+					//					path = bfs.findPath(closeBalls);
+					//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					//
+					//					di = fs.sequence(path);
+					//
+					//					fs.goalDrive(di);
+					//
+					//					ballCount = 0;
+					//					endGame = true;
+					//				}
 				}
+				endGame = true;
 			}
-			fs.shutdown();
+			//	fs.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			fs.shutdown();
-			System.out.println("Emergency shutdown");
-		}
+			//		fs.shutdown();
+		} 		
 	}
 }
 

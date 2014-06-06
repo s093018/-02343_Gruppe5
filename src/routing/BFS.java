@@ -157,7 +157,7 @@ public class BFS {
 			 *  Add Field to queue.
 			 */	
 
-			if (current.getY() + 1 <= grid[0].length) {               
+			if (current.getY() + 1 < grid[0].length) {               
 				E = (grid[current.getX()][current.getY() + 1]);
 				if (E.getValue() != obstacle && E.getValue() != fakeObstacle && !E.isMarked()) {     
 					E.setMark();
