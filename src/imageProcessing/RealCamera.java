@@ -358,7 +358,8 @@ public class RealCamera implements Camera
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
 		pixelSize = estimatePixelSize(image, bounds);
 
-		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
+		//Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
+		Mat blocked = bounds;
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
