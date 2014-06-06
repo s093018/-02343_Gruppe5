@@ -153,6 +153,7 @@ public class Board {
 					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
 				return fieldListNew;
 			}
+			// May require optimizing
 			for(int i = 0; i < fieldListNew.size(); i++){
 				Field fieldNewRetry = new Field(fieldListNew.get(i).getX() + 1, fieldListNew.get(i).getY(), fieldListNew.get(i).getValue());
 				fieldListNew.set(i, fieldNewRetry);
@@ -160,6 +161,7 @@ public class Board {
 			retryCounter++;
 		}while(retryCounter < 50);
 		
+		System.out.println("The goals were not moved.");
 		return fieldListNew;
 	}
 
