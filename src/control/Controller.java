@@ -54,13 +54,9 @@ public class Controller {
 			for (Point ball : closeBalls) {
 				board.buildObstacleAroundBall(ball, direction, (int)testCamera.getRobot().robotWidth); 
 			}
-			for (Goal goal : testCamera.getGoals()) {
-				board.movePoint(goal, pointChar, direction, pixelDistance, newValueAtOldLocation)
-			}
-			board.movePoint(testCamera.getGoals(), pointChar, direction, pixelDistance, newValueAtOldLocation);
-			board.buildPath(center, entranceDirections, pixelLength, value);
-			board.
 			
+			board.moveGoals(testCamera.getGoals(), 10, 'F', 10);
+						
 			if(ballCount <= MAX_NO_BALLS) {
 				
 				Iterator<Point> it = closeBalls.iterator();
@@ -74,7 +70,7 @@ public class Controller {
 				path = bfs.findPath(closeBalls);
 
 					
-					String filepath = "/Users/Christian/Desktop/outputPath.txt";
+					String filepath = "/Users/Julian/Desktop/outputPath.txt";
 					File f = new File(filepath);
 					FileWriter fw = null;
 					try  {
