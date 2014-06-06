@@ -56,8 +56,11 @@ public class BFS {
 
 		for (int i = 0 ; i < board.length; i++) {
 			for (int j = 0 ; j < board[i].length; j++) {
+				if( board[i][j].getValue() != ' ' && board[i][j].getValue() != 'O' && board[i][j].getValue() != 'F') {
+					System.out.println("vaerdi paa: ["+i+","+j+"] = "+board[i][j].getValue());
+				}
 				if (board[i][j].getValue() == robotChar) {
-					this.start = new Field(i, j, robotChar);
+					this.start = new Field(i, j, robotChar); // kommer aldrig herind
 				}
 			}
 		}
