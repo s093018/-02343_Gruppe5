@@ -44,7 +44,7 @@ public class Controller {
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
 				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-				board = board.rotate(board);
+	//			board = board.rotate(board);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
 				ArrayList<String> direction = new ArrayList<String>();
 				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
@@ -64,7 +64,8 @@ public class Controller {
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
 
-
+					System.out.println("Heading: "+board.radianToDegree(realCamera.getRobot().heading));
+					
 					String filepath = "/Users/Christian/Desktop/outputPath.txt";
 					File f = new File(filepath);
 					FileWriter fw = null;
