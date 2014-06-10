@@ -68,6 +68,7 @@ public class Board {
 							try{
 								checkObstacle = grid[x][y];
 								if(checkObstacle.getValue()=='O'){
+									ball.setPathDirection(directionFromAToB(ball, grid[x][y]));
 									closeBalls.add(ball);
 									break squareLoop;
 								}
@@ -81,6 +82,30 @@ public class Board {
 				}
 			return closeBalls;
 		}
+	
+	private String directionFromAToB(Point a, Field b){
+//			if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
+//				directions.add("SE");
+//			else
+//				directions.add("Failed to identify zone"); //For debugging purposes
+		return null;
+	}
 
 	public void buildObstacleAroundBall(Point ball, List<String> entranceDirections, int pixelRadius){
 		List<Field> buildObstacles = new ArrayList<Field>();

@@ -3,7 +3,12 @@ package imageProcessing;
 public class Point {
 	public final double x, y;//Spatial position
 	public final int pixel_x, pixel_y;//Position on the image
+	public String pathDirection; 
 		
+	public void setPathDirection(String pathDirection) {
+		this.pathDirection = pathDirection;
+	}
+
 	public Point(int pixel_x, int pixel_y, double pixelSize) {
 		this.x = pixel_x*pixelSize;
 		this.y = pixel_y*pixelSize;
