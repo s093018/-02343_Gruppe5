@@ -51,7 +51,7 @@ public class Controller {
 				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 	//			board = board.rotate(board);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
-				ArrayList<String> direction = new ArrayList<String>();
+				ArrayList<String> direction = new ArrayList<String>(); //TODO use direction on specific point instead (when this is impl in Board)
 				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
 				direction.add("NE");direction.add("NW");direction.add("SE");direction.add("SW");
 

@@ -68,7 +68,7 @@ public class Board {
 							try{
 								checkObstacle = grid[x][y];
 								if(checkObstacle.getValue()=='O'){
-									ball.setPathDirection(directionFromAToB(ball, grid[x][y]));
+									ball.setPathDirection(directionToObstacle(ball, grid[x][y]));
 									closeBalls.add(ball);
 									break squareLoop;
 								}
@@ -83,28 +83,31 @@ public class Board {
 			return closeBalls;
 		}
 	
-	private String directionFromAToB(Point a, Field b){
-//			if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else if(point.pixel_x <= max_x/3 && point.pixel_y <= max_y/3)
-//				directions.add("SE");
-//			else
-//				directions.add("Failed to identify zone"); //For debugging purposes
-		return null;
+	private String directionToObstacle(Point point){
+		Point b = new Point(point.pixel_x, point.pixel_y, 0);
+		
+		//TODO Search in all directions (SE, S etc.) for obstacle - save distance and save closest point as b
+		
+		if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
+			return "SE";
+		else
+			return "Failed to identify direction"; //For debugging purposes
 	}
 
 	public void buildObstacleAroundBall(Point ball, List<String> entranceDirections, int pixelRadius){
