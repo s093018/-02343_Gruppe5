@@ -336,23 +336,23 @@ public class Board {
 	}
 
 	/*Virker ikke endnu*/
-	public Board rotate (Board oldBoard) {
-	
-		System.out.println("length: "+oldBoard.getGrid().length+" width: "+oldBoard.getGrid()[0].length);
-        char[][] newGrid = new char[oldBoard.getGrid()[0].length][oldBoard.getGrid().length];
-
-        int ii = 0;
-        int jj = 0;
-        for(int i=0; i < oldBoard.getGrid()[0].length; i++){
-            for(int j = oldBoard.getGrid().length-1; j >= 0; j--){
-                System.out.print(ii+","+jj+" på "+i+","+j);
-                newGrid[ii][jj] = oldBoard.getGrid()[i][j].getValue();
-                jj++;
-            }
-            System.out.println();
-            ii++;
-        }
-        Board board = new Board(newGrid);
-        return board;
-    }
+//	public Board rotate (Board oldBoard) {
+//	
+//		System.out.println("length: "+oldBoard.getGrid().length+" width: "+oldBoard.getGrid()[0].length);
+//        char[][] newGrid = new char[oldBoard.getGrid()[0].length][oldBoard.getGrid().length];
+//
+//        int ii = 0;
+//        int jj = 0;
+//        for(int i=0; i < oldBoard.getGrid()[0].length; i++){
+//            for(int j = oldBoard.getGrid().length-1; j >= 0; j--){
+//                System.out.print(ii+","+jj+" på "+i+","+j);
+//                newGrid[ii][jj] = oldBoard.getGrid()[i][j].getValue();
+//                jj++;
+//            }
+//            System.out.println();
+//            ii++;
+//        }
+//        Board board = new Board(newGrid);
+//        return board;
+//    }
 }
