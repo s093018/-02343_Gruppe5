@@ -68,7 +68,7 @@ public class Board {
 							try{
 								checkObstacle = grid[x][y];
 								if(checkObstacle.getValue()=='O'){
-									ball.setPathDirection(directionToObstacle(ball, grid[x][y]));
+									ball.setPathDirection(directionToObstacle(ball));
 									closeBalls.add(ball);
 									break squareLoop;
 								}
@@ -86,7 +86,7 @@ public class Board {
 	private String directionToObstacle(Point point){
 		Point b = new Point(point.pixel_x, point.pixel_y, 0);
 		
-		//TODO Search in all directions (SE, S etc.) for obstacle - save distance and save closest point as b
+		//TODO Search in all directions (SE, S etc.) for obstacle - save distance and choose closest point as b
 		
 		if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
 			return "SE";
