@@ -13,7 +13,7 @@ package routing;
  *     what a cell's parent is (for the BFS)
  *     what the cell's position is in the maze
  */
-class Field {
+public class Field {
 	
 	private boolean  marked;
 	private char      value;

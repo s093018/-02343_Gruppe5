@@ -23,6 +23,7 @@ public class RealCamera implements Camera
 	private Map map;
 	private List<Point> balls;
 	private Robot robot;
+	public Point frontPoint, backPoint;
 
 	private VideoCapture capture;
 	private Configuration settings = new Configuration("src/imgInOut/settings.cfg");
@@ -264,7 +265,7 @@ public class RealCamera implements Camera
 	{
 		int xDiff = (int)(left.x+right.x);
 		int yDiff = (int)(left.y+right.y);
-		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(-xDiff, -yDiff));
+		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(-yDiff, -xDiff));
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
@@ -370,7 +371,7 @@ public class RealCamera implements Camera
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
 			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
+				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' '; // Fejl!  mappet bliver drejet 90 grader.
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);
@@ -388,7 +389,7 @@ public class RealCamera implements Camera
 		Mat image = Highgui.imread("frame.png");
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
-		findRobot(image, "src/imgInOut/Front.png", "src/imgInOut/Back.png");
+		findRobot(image, "src/imgInOut/FrontOrange.png", "src/imgInOut/Back.png");
 	}
 
 	public void findBalls(Mat image, String templFileName)
@@ -476,9 +477,15 @@ public class RealCamera implements Camera
 				y2 = matchLoc.y + (templ.rows()/2);
 			}
 		}
+		//x1,y1 back
+		//x2, y2 front
+		frontPoint = new Point((int)x2,(int)y2, pixelSize);
+		backPoint = new Point((int)x1,(int)y1, pixelSize);
+		
 		System.out.println("x1: "+x1+", x2: "+x2+", y1: "+y1+", y2: "+y2);
-		System.out.println("gradtal: "+Math.atan2(y1-y2, x2-x1));
-		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y1-y2, x2-x1), 24/pixelSize, 38/pixelSize);
+		System.out.println("gradtal: "+Math.atan2(y2-y1, x2-x1));
+		//Spørg Rasmus om dette er korrekt Math.atan2(y1-y2, x2-x1)
+		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt

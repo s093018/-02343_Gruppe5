@@ -16,6 +16,7 @@ public class Controller {
 	private Board board;
 	private BFS bfs;
 
+	private Field frontField, backField;
 	private ArrayList<Integer> path;
 	private ArrayList<DriverInstructions> di;
 	private char [][] map;
@@ -40,6 +41,10 @@ public class Controller {
 			while(!endGame) {
 				realCamera.update();
 				board = new Board(map);
+				Field frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
+				board.setField(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, frontField);
+				Field backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
+				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, backField);
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
