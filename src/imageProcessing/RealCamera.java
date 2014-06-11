@@ -381,7 +381,7 @@ public class RealCamera implements Camera
 		char obstacle[][] = new char[blocked.height()][blocked.width()];
 		for(int y = 0; y < blocked.height(); ++y)
 			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[y][x] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
+				obstacle[y][x] = blocked.get(blocked.height()-(y+1), x)[0] == 0.0 ? 'O' : ' ';
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);
@@ -389,7 +389,6 @@ public class RealCamera implements Camera
 		//Find initial position of balls + robot
 		update();
 	}
-	//
 	public void update()
 	{
 		this.balls = new ArrayList<Point>();
