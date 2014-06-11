@@ -71,7 +71,11 @@ public class RealCamera implements Camera
 	private void showStep(String filename, Mat image, double scaling)
 	{
 		if(settings.showSteps)
+		{
+			Core.flip(image, image, 1);
 			saveImage(filename, image, scaling);
+			Core.flip(image, image, 1);
+		}
 	}
 	private Mat getImage()
 	{
@@ -83,7 +87,9 @@ public class RealCamera implements Camera
 
 			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 			Highgui.imwrite("frame.png", frame);
-			return Highgui.imread("frame.png");
+			frame = Highgui.imread("frame.png");
+			Core.flip(frame, frame, 1);
+			return frame;
 		}
 	}
 	private double[] estimateFloorColor(Mat image)
@@ -353,7 +359,11 @@ public class RealCamera implements Camera
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		if(settings.testMode) testImage = Highgui.imread(settings.testImageFile);
+		if(settings.testMode)
+		{
+			testImage = Highgui.imread(settings.testImageFile);
+			Core.flip(testImage,  testImage, 1);
+		}
 		else capture = new VideoCapture(0);
 
 		Mat image = getImage();
@@ -368,10 +378,10 @@ public class RealCamera implements Camera
 		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
 		blocked = bounds;
 
-		char obstacle[][] = new char[blocked.width()][blocked.height()];
+		char obstacle[][] = new char[blocked.height()][blocked.width()];
 		for(int y = 0; y < blocked.height(); ++y)
 			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' '; // Fejl!  mappet bliver drejet 90 grader.
+				obstacle[y][x] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);
@@ -385,11 +395,10 @@ public class RealCamera implements Camera
 		this.balls = new ArrayList<Point>();
 
 		//Ensure image and template have the same type (converTo() doesn't work).
-		Highgui.imwrite("frame.png", getImage());
-		Mat image = Highgui.imread("frame.png");
+		Mat image = getImage();
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
-		findRobot(image, "src/imgInOut/FrontOrange.png", "src/imgInOut/Back.png");
+		findRobot(image, "src/imgInOut/FrontPink.png", "src/imgInOut/Back.png");
 	}
 
 	public void findBalls(Mat image, String templFileName)
@@ -430,7 +439,7 @@ public class RealCamera implements Camera
 				break;
 			}
 		}
-		Highgui.imwrite("src/imgInOut/billede3.png", image);
+		showStep("billede3.png", image, 1);
 	}
 
 	public void findRobot(Mat image, String front, String back)
@@ -464,7 +473,7 @@ public class RealCamera implements Camera
 				Core.circle(image1, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
 				showStep("robotint0.png", result, 0.005 / (templ.width()*templ.height()));
-				Highgui.imwrite("src/imgInOut/billede1.png", image1);
+				showStep("billede1.png", image1, 1);
 				x1 = matchLoc.x + (templ.cols()/2);
 				y1 = matchLoc.y + (templ.rows()/2);
 			}
@@ -472,7 +481,7 @@ public class RealCamera implements Camera
 				Core.circle(image2, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
 				showStep("robotint1.png", result, 0.005 / (templ.width()*templ.height()));
-				Highgui.imwrite("src/imgInOut/billede2.png", image2);
+				showStep("billede2.png", image2, 1);
 				x2 = matchLoc.x + (templ.cols()/2);
 				y2 = matchLoc.y + (templ.rows()/2);
 			}
@@ -485,7 +494,10 @@ public class RealCamera implements Camera
 		System.out.println("x1: "+x1+", x2: "+x2+", y1: "+y1+", y2: "+y2);
 		System.out.println("gradtal: "+Math.atan2(y2-y1, x2-x1));
 		//Spørg Rasmus om dette er korrekt Math.atan2(y1-y2, x2-x1)
-		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
+/*		Mat rpos = image.clone();
+		Core.circle(rpos, new org.opencv.core.Point((int)((x1+x2)/2), (int)((y1+y2)/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
+		showStep("rpos.png", rpos, 1);
+*/		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt
