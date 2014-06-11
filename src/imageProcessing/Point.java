@@ -24,6 +24,6 @@ public class Point {
 	}
 	public Point convert()
 	{
-		return new Point(x, y, pixel_x, 480-1-pixel_y);
+		return new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
 	}
 }
