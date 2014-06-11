@@ -41,6 +41,8 @@ public class Controller {
 			while(!endGame) {
 				realCamera.update();
 				board = new Board(map);
+				System.out.println("map dimension: x="+map.length+", y="+map[0].length);
+				System.out.println("board dimension: x="+board.getGrid().length+", y="+board.getGrid()[0].length);
 				Field frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
 				board.setField(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, frontField);
 				Field backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
@@ -86,7 +88,6 @@ public class Controller {
 							System.out.println("Emergency shutdown");
 						} 
 					}
-					System.out.println("board dimension: x="+board.getGrid().length+", y="+board.getGrid()[0].length);
 					/*
 					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
