@@ -28,7 +28,7 @@ public class Controller {
 	public Controller () {
 		this.realCamera = new RealCamera();
 		try {
-			//		robotControl = new robot.Control();
+					robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -81,17 +81,17 @@ public class Controller {
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-						//			fs.shutdown();
+									fs.shutdown();
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							//					fs.shutdown();
+												fs.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
 					}
-					/*
+					
 					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
 					if(path != null) {
@@ -118,11 +118,11 @@ public class Controller {
 				}
 			} 
 
-			//			fs.shutdown();
+						fs.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
-			//		fs.shutdown();
+					fs.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
 	}
