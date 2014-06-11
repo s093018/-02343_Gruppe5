@@ -86,7 +86,7 @@ public class Board {
 	private String directionToObstacle(Point point){
 		// Search in all directions (SE, S etc.) for obstacle - find closest obstacle and return direction
 		int shortest_dist = 0, temp_dist = 0, temp_pixel_x = point.pixel_x, temp_pixel_y = point.pixel_y;
-		String shortest_direction = "Failed to identify direction";
+		String path_direction = "Failed to identify direction";
 		boolean done = false;
 		
 		// N
@@ -97,7 +97,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "S";
+						path_direction = "S";
 					}
 					done = true;
 				}
@@ -117,7 +117,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "SW";
+						path_direction = "SW";
 					}
 					done = true;
 				}
@@ -136,7 +136,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "W";
+						path_direction = "W";
 					}
 					done = true;
 				}
@@ -156,7 +156,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "NW";
+						path_direction = "NW";
 					}
 					done = true;
 				}
@@ -175,7 +175,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "N";
+						path_direction = "N";
 					}
 					done = true;
 				}
@@ -195,7 +195,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "NE";
+						path_direction = "NE";
 					}
 					done = true;
 				}
@@ -215,7 +215,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "E";
+						path_direction = "E";
 					}
 					done = true;
 				}
@@ -235,14 +235,14 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "SE";
+						path_direction = "SE";
 					}
 					done = true;
 				}
 			}catch(IndexOutOfBoundsException e) { break; }
 		}		
 		
-		return shortest_direction;
+		return path_direction;
 	}
 
 	public void buildObstacleAroundBall(Point ball, int pixelRadius){
