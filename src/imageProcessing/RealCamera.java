@@ -222,7 +222,7 @@ public class RealCamera implements Camera
 		//Estimate pixel size
 		double diagonal = (getDistance(points.get(0), points.get(2)) + getDistance(points.get(1), points.get(3)))/2;
 		pixelSize = 216.33 / diagonal;
-		System.out.println("Estimated pixel size: " + pixelSize + "cm/pixel");
+		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
 
 		goals = new ArrayList<Goal>();
 		goals.add(getGoal(points.get(1), points.get(2)));
