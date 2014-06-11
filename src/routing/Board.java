@@ -84,49 +84,180 @@ public class Board {
 		}
 	
 	private String directionToObstacle(Point point){
-		Point b = new Point(point.pixel_x, point.pixel_y, 0);
+		// Search in all directions (SE, S etc.) for obstacle - find closest obstacle and return direction
+		int shortest_dist = 0, temp_dist = 0, temp_pixel_x = point.pixel_x, temp_pixel_y = point.pixel_y;
+		String shortest_direction = "Failed to identify direction";
+		boolean done = false;
 		
-		//TODO Search in all directions (SE, S etc.) for obstacle - save distance and choose closest point as b
+		// N
+		while(!done){
+			temp_pixel_y--;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "N";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
 		
-		if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else if(point.pixel_x <= b.pixel_x/3 && point.pixel_y <= b.pixel_y/3)
-			return "SE";
-		else
-			return "Failed to identify direction"; //For debugging purposes
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// NE
+		while(!done){
+			temp_pixel_y--;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "NE";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// E
+		while(!done){
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "E";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// SE
+		while(!done){
+			temp_pixel_y++;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "SE";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// S
+		while(!done){
+			temp_pixel_y++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "S";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// SW
+		while(!done){
+			temp_pixel_y++;
+			temp_pixel_x--;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "SW";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		
+		// W
+		while(!done){
+			temp_pixel_x--;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "W";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
+		//Reset bookkeeping  values
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		
+		// NW
+		while(!done){
+			temp_pixel_y--;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						shortest_direction = "NW";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}		
+		
+		return shortest_direction;
 	}
 
-	public void buildObstacleAroundBall(Point ball, List<String> entranceDirections, int pixelRadius){
+	public void buildObstacleAroundBall(Point ball, int pixelRadius){
 		List<Field> buildObstacles = new ArrayList<Field>();
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
-		boolean entrance = false;
 		
 		for(int i = 0; i < pixelRadius * 2; i++){
-			if(checkAndBuild(buildObstacles, 'O'))
-					entrance = true;
+			checkAndBuild(buildObstacles, 'F');
 			incrBuildObstacles(buildObstacles);
 		}
 		
-		if(!entrance){ //TODO reconsider this "if"; maybe multiple entrances aren't problematic?
-			buildPath(ball, entranceDirections, pixelRadius, ' ');
-		}
+			buildPath(ball, pixelRadius, ' ');
 	}
 	
 	/**
@@ -184,7 +315,7 @@ public class Board {
 					directionArg.add(directions.get(i));
 
 					buildPath(new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0),
-							directionArg, pixelLength, ' ');
+							pixelLength, ' ');
 				}
 				for(Field fieldOld : fieldListOld)
 					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
@@ -206,31 +337,31 @@ public class Board {
 	/**
 	 * Create path from a point and outwards in the entrance directions
 	 */
-	public void buildPath(Point center, List<String> entranceDirections, int pixelLength, char value){
+	public void buildPath(Point center, int pixelLength, char value){
 		List<Field> path = new ArrayList<Field>();
 		for(int l = 1; l <= pixelLength; l++){
-			if(entranceDirections.contains("N")){
+			if(center.pathDirection.equals("N")){
 				path.add(grid[center.pixel_x][center.pixel_y - l]);
 			}
-			if(entranceDirections.contains("S")){
+			if(center.pathDirection.equals("S")){
 				path.add(grid[center.pixel_x][center.pixel_y + l]);
 			}
-			if(entranceDirections.contains("E")){
+			if(center.pathDirection.equals("E")){
 				path.add(grid[center.pixel_x + l][center.pixel_y]);
 			}
-			if(entranceDirections.contains("W")){
+			if(center.pathDirection.equals("W")){
 				path.add(grid[center.pixel_x - l][center.pixel_y]);
 			}
-			if(entranceDirections.contains("NW")){
+			if(center.pathDirection.equals("NW")){
 				path.add(grid[center.pixel_x - l][center.pixel_y - l]);
 			}
-			if(entranceDirections.contains("NE")){
+			if(center.pathDirection.equals("NE")){
 				path.add(grid[center.pixel_x + l][center.pixel_y - l]);
 			}
-			if(entranceDirections.contains("SW")){
+			if(center.pathDirection.equals("SW")){
 				path.add(grid[center.pixel_x - l][center.pixel_y + l]);
 			}
-			if(entranceDirections.contains("SE")){
+			if(center.pathDirection.equals("SE")){
 				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
 			}
 		}

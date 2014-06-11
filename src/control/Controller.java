@@ -51,9 +51,6 @@ public class Controller {
 				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 	//			board = board.rotate(board);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
-				ArrayList<String> direction = new ArrayList<String>(); //TODO use direction on specific point instead (when this is impl in Board)
-				direction.add("N");direction.add("S");direction.add("E");direction.add("W");
-				direction.add("NE");direction.add("NW");direction.add("SE");direction.add("SW");
 
 				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 
@@ -62,7 +59,7 @@ public class Controller {
 					Iterator<Point> it = closeBalls.iterator();
 					while(it.hasNext()) {
 						Point p = it.next();
-						board.buildObstacleAroundBall(p, direction , 5);
+						board.buildObstacleAroundBall(p, 5);
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
 
