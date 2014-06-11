@@ -29,7 +29,7 @@ public class RealCamera implements Camera
 	private Configuration settings = new Configuration("src/imgInOut/settings.cfg");
 	private Mat testImage;
 
-	private double pixelSize;//cm/pixel
+	private double pixelSize = 0.35;//cm/pixel
 	private double floorColor[];
 
 
@@ -269,9 +269,9 @@ public class RealCamera implements Camera
 	}
 	private Goal getGoal(org.opencv.core.Point left, org.opencv.core.Point right)
 	{
-		int xDiff = (int)(left.x+right.x);
-		int yDiff = (int)(left.y+right.y);
-		return new Goal(new Point(xDiff/2, yDiff/2, pixelSize), 10, Math.atan2(-yDiff, -xDiff));
+		int xAvg = (int)(left.x+right.x);
+		int yAvg = (int)(left.y+right.y);
+		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
@@ -353,7 +353,7 @@ public class RealCamera implements Camera
 	{
 		//TODO: Find red+green dots, divide 10 by pixel distance
 		//Alternatively, use size of non-blocked area (ignoring central obstacle)
-		return 0.58;
+		return 0.35;
 	}
 	public RealCamera()
 	{
