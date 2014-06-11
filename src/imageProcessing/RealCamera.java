@@ -378,10 +378,10 @@ public class RealCamera implements Camera
 		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
 		blocked = bounds;
 
-		char obstacle[][] = new char[blocked.height()][blocked.width()];
+		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
-			for(int x = 0; x < blocked.width(); ++x)//          v
-				obstacle[y][x] = blocked.get(blocked.height()-(y+1), x)[0] == 0.0 ? 'O' : ' ';
+			for(int x = 0; x < blocked.width(); ++x)
+				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
 		map = new Map(obstacle, pixelSize);
 
 		showStep("obstacleMask.png", blocked, 255);

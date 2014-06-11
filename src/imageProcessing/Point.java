@@ -22,4 +22,8 @@ public class Point {
 		this.pixel_x = pixel_x;
 		this.pixel_y = pixel_y;
 	}
+	public Point convert()
+	{
+		return new Point(x, y, pixel_x, 480-1-pixel_y);
+	}
 }
