@@ -272,7 +272,7 @@ public class RealCamera implements Camera
 		int xAvg = (int)(left.x+right.x);
 		int yAvg = (int)(left.y+right.y);
 		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
-	}//asddasda
+	}
 	private Mat cornerBasedDetection(Mat image)
 	{
 		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
@@ -398,7 +398,7 @@ public class RealCamera implements Camera
 		Mat image = getImage();
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
-		findRobot(image, "src/imgInOut/FrontPink.png", "src/imgInOut/Back.png");
+		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
 	}
 
 	public void findBalls(Mat image, String templFileName)
