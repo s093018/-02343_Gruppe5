@@ -43,12 +43,9 @@ public class FindingSequence {
 
 	public void drive (ArrayList<DriverInstructions> instructions, boolean closeToWall) {
 
-		for(DriverInstructions di : instructions) {
-			System.out.println("Instructions: heading="+di.getHeading()+", lenght="+di.getLength());
-		}
 		for(int i = 0; i < instructions.size(); i++) {	
 			boolean done = false;
-			
+
 			/* turn robot heading or drive forward */
 			if (i == 0) {
 
