@@ -27,10 +27,10 @@ public class Board {
 		//			}
 		//		}
 
-		grid = new Field[map.length][map[0].length];
+		grid = new Field[map[0].length][map.length];
 
-		for (int i = 0 ; i < map.length ; ++i) {
-			for (int j = 0 ; j < map[i].length ; ++j) {
+		for (int i = 0 ; i < map[0].length ; ++i) {
+			for (int j = 0 ; j < map.length ; ++j) {
 				grid[i][j] = new Field(i, j, map[i][j]);
 			}
 		}
