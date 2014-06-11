@@ -380,7 +380,7 @@ public class RealCamera implements Camera
 
 		char obstacle[][] = new char[blocked.height()][blocked.width()];
 		for(int y = 0; y < blocked.height(); ++y)
-			for(int x = 0; x < blocked.width(); ++x)
+			for(int x = 0; x < blocked.width(); ++x)//          v
 				obstacle[y][x] = blocked.get(blocked.height()-(y+1), x)[0] == 0.0 ? 'O' : ' ';
 		map = new Map(obstacle, pixelSize);
 
