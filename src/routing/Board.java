@@ -97,7 +97,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "N";
+						shortest_direction = "S";
 					}
 					done = true;
 				}
@@ -117,7 +117,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "NE";
+						shortest_direction = "SW";
 					}
 					done = true;
 				}
@@ -136,7 +136,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "E";
+						shortest_direction = "W";
 					}
 					done = true;
 				}
@@ -156,7 +156,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "SE";
+						shortest_direction = "NW";
 					}
 					done = true;
 				}
@@ -175,7 +175,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "S";
+						shortest_direction = "N";
 					}
 					done = true;
 				}
@@ -195,7 +195,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "SW";
+						shortest_direction = "NE";
 					}
 					done = true;
 				}
@@ -215,7 +215,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "W";
+						shortest_direction = "E";
 					}
 					done = true;
 				}
@@ -235,7 +235,7 @@ public class Board {
 				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 					if(temp_dist < shortest_dist || shortest_dist == 0){
 						shortest_dist = temp_dist;
-						shortest_direction = "NW";
+						shortest_direction = "SE";
 					}
 					done = true;
 				}
