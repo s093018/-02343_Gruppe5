@@ -413,6 +413,7 @@ public class RealCamera implements Camera
 		frontPoint = new Point((int)x2,(int)y2, pixelSize);
 		backPoint = new Point((int)x1,(int)y1, pixelSize);
 		
+		System.out.println("x1: "+x1+", x2: "+x2+", y1: "+y1+", y2: "+y2);
 		System.out.println("gradtal: "+Math.atan2(y2-y1, x2-x1));
 		//Spørg Rasmus om dette er korrekt Math.atan2(y1-y2, x2-x1)
 /*		Mat rpos = image.clone();
