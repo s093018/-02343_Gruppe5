@@ -72,9 +72,9 @@ public class RealCamera implements Camera
 	{
 		if(settings.showSteps)
 		{
-			Core.flip(image, image, 1);
+			Core.flip(image, image, 0);
 			saveImage(filename, image, scaling);
-			Core.flip(image, image, 1);
+			Core.flip(image, image, 0);
 		}
 	}
 	private Mat getImage()
@@ -88,7 +88,7 @@ public class RealCamera implements Camera
 			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 			Highgui.imwrite("frame.png", frame);
 			frame = Highgui.imread("frame.png");
-			Core.flip(frame, frame, 1);
+			Core.flip(frame, frame, 0);
 			return frame;
 		}
 	}
@@ -362,7 +362,7 @@ public class RealCamera implements Camera
 		if(settings.testMode)
 		{
 			testImage = Highgui.imread(settings.testImageFile);
-			Core.flip(testImage,  testImage, 1);
+			Core.flip(testImage,  testImage, 0);
 		}
 		else capture = new VideoCapture(0);
 
