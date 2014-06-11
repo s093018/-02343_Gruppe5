@@ -1,7 +1,5 @@
 package imageProcessing;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.Core.MinMaxLocResult;
@@ -32,49 +29,13 @@ public class RealCamera implements Camera
 	private double pixelSize = 0.35;//cm/pixel
 	private double floorColor[];
 
-
-	private boolean compareColors(double[] a, double[] b)
-	{
-		for(int i = 0; i < 3; ++i)
-			if(a[i] != b[i])
-				return false;
-		return true;
-	}
-	private Mat replaceColor(Mat image, double[] source, double[] dest)
-	{
-		Mat result = image.clone();
-		for(int j = 0; j < image.rows(); ++j)
-			for(int i = 0; i < image.cols(); ++i)
-				if(compareColors(image.get(j, i), source))
-					result.put(j, i, dest);
-		return result;
-	}
-	private void saveImage(String filename, Mat image, double scaling)
-	{
-		if(image.get(0, 0).length == 1)
-		{
-			Mat scaledImage = image.mul(Mat.ones(image.size(), image.type()), scaling);
-			List<Mat> layers = new ArrayList<Mat>();
-			layers.add(scaledImage.clone());
-			layers.add(scaledImage.clone());
-			layers.add(scaledImage.clone());
-			Mat result = new Mat();
-			Core.merge(layers, result);
-			Highgui.imwrite("src/imgInOut/" + filename, result);
-		}
-		else
-		{
-			Mat scaler = new Mat(image.size(), image.type(), new Scalar(scaling, scaling, scaling, 255));
-			Highgui.imwrite("src/imgInOut/" + filename, scaler.mul(image));
-		}
-	}
 	private void showStep(String filename, Mat image, double scaling)
 	{
 		if(settings.showSteps)
 		{
-			Core.flip(image, image, 1);
-			saveImage(filename, image, scaling);
-			Core.flip(image, image, 1);
+			Core.flip(image, image, 0);
+			Proc.saveImage(filename, image, scaling);
+			Core.flip(image, image, 0);
 		}
 	}
 	private Mat getImage()
@@ -88,7 +49,7 @@ public class RealCamera implements Camera
 			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 			Highgui.imwrite("frame.png", frame);
 			frame = Highgui.imread("frame.png");
-			Core.flip(frame, frame, 1);
+			Core.flip(frame, frame, 0);
 			return frame;
 		}
 	}
@@ -161,28 +122,6 @@ public class RealCamera implements Camera
 		Core.merge(layers, result);
 		return result;
 	}
-	private Mat norm(Mat image)
-	{
-		List<Mat> layers = new ArrayList<Mat>();
-		layers.add(new Mat());
-		layers.add(new Mat());
-		layers.add(new Mat());
-		Core.split(image, layers);
-
-		List<Mat> newLayers = new ArrayList<Mat>();
-		newLayers.add(new Mat());
-		newLayers.add(new Mat());
-		newLayers.add(new Mat());
-
-		Mat divisor = brightness(layers);
-		Core.divide(layers.get(0), divisor, newLayers.get(0), 64);
-		Core.divide(layers.get(1), divisor, newLayers.get(1), 64);
-		Core.divide(layers.get(2), divisor, newLayers.get(2), 64);
-		Mat result = new Mat();
-		Core.merge(newLayers, result);
-
-		return result;
-	}
 	private Mat smooth(Mat image)
 	{
 		Mat result = new Mat();
@@ -204,26 +143,6 @@ public class RealCamera implements Camera
 		Scalar max = new Scalar(floorColor[0] * updiff, floorColor[1] * updiff, floorColor[2] * updiff, 255);
 		Imgproc.floodFill(cleared, mask, settings.floodFillOrigin, new Scalar(255, 255, 255, 255), null, min, max, Imgproc.FLOODFILL_FIXED_RANGE | Imgproc.FLOODFILL_MASK_ONLY);
 		return mask.submat(1, mask.height()-1, 1, mask.width()-1);
-	}
-	private Mat canny(Mat image)
-	{
-		Mat UMat = new Mat();
-		image.convertTo(image, CvType.CV_8U);
-		Mat edges = new Mat();
-		Imgproc.Canny(image, edges, 200, 50);
-		return show(edges);
-	}
-	private Mat show(Mat mask)
-	{
-		List<Mat> layers = new ArrayList<Mat>();
-		layers.add(new Mat());
-		layers.add(new Mat());
-		layers.add(new Mat());
-		for(Mat m : layers)
-			mask.copyTo(m);
-		Mat result = new Mat();
-		Core.merge(layers, result);
-		return result;
 	}
 
 	private Mat floodFillDetection(Mat image)
@@ -250,7 +169,7 @@ public class RealCamera implements Camera
 	{
 		//Build prototype
 		double[] blue = {255.0, 0.0, 0.0};
-		Mat prototype = replaceColor(Highgui.imread(settings.cornerPrototypes[quadrant-1]), blue, floorColor);
+		Mat prototype = Proc.replaceColor(Highgui.imread(settings.cornerPrototypes[quadrant-1]), blue, floorColor);
 		showStep("adjustedprototype.png", prototype, 1.0);
 
 		//Select quadrant
@@ -278,7 +197,7 @@ public class RealCamera implements Camera
 		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
 		Mat blurred = smooth(image);
 		//New central obstacle is same color as bounds, so black it out while looking for corners
-		Core.circle(blurred, settings.floodFillOrigin, 100, new Scalar(0, 0, 0), -1);
+		Core.circle(blurred, settings.center, 100, new Scalar(0, 0, 0), -1);
 		Mat marked = image.clone();
 
 		List<org.opencv.core.Point> points = new ArrayList<org.opencv.core.Point>();
@@ -288,19 +207,21 @@ public class RealCamera implements Camera
 			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
 		}
 
-		goals = new ArrayList<Goal>();
-		goals.add(getGoal(points.get(1), points.get(2)));
-		goals.add(getGoal(points.get(3), points.get(0)));
-		for(Goal g : goals)
-		{
-			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
-		}
-
-		showStep("corners.png", marked, 1.0);
+		//TODO: Recover from malplaced corner by mirroring
 		
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
 		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
+
+		//TODO: Estimate pixel size
+
+		goals = new ArrayList<Goal>();
+		goals.add(getGoal(points.get(1), points.get(2)));
+		goals.add(getGoal(points.get(3), points.get(0)));
+
+		for(Goal g : goals)
+			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
+		showStep("corners.png", marked, 1.0);
 
 		return course;
 	}
@@ -349,12 +270,6 @@ public class RealCamera implements Camera
 		showStep("centralObstacleMask.png", centralMask, 255);
 		return centralMask;
 	}
-	private double estimatePixelSize(Mat image, Mat bounds)
-	{
-		//TODO: Find red+green dots, divide 10 by pixel distance
-		//Alternatively, use size of non-blocked area (ignoring central obstacle)
-		return 0.35;
-	}
 	public RealCamera()
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -362,7 +277,7 @@ public class RealCamera implements Camera
 		if(settings.testMode)
 		{
 			testImage = Highgui.imread(settings.testImageFile);
-			Core.flip(testImage,  testImage, 1);
+			Core.flip(testImage,  testImage, 0);
 		}
 		else capture = new VideoCapture(0);
 
@@ -373,7 +288,6 @@ public class RealCamera implements Camera
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
-		pixelSize = estimatePixelSize(image, bounds);
 
 		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
 		blocked = bounds;

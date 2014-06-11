@@ -15,6 +15,7 @@ public class Configuration
 {
 	public final org.opencv.core.Point NW;
 	public final org.opencv.core.Point SE;
+	public final org.opencv.core.Point center;
 	public final org.opencv.core.Point floodFillOrigin;
 	public final boolean testMode;
 	public final String testImageFile;
@@ -37,6 +38,7 @@ public class Configuration
 		Properties props = load(filename);
 		NW = getPoint(props, "NW", new org.opencv.core.Point(160, 120));
 		SE = getPoint(props, "SE", new org.opencv.core.Point(480, 360));
+		center = getPoint(props, "center", new org.opencv.core.Point(320, 240));
 		testMode = getInt(props, "testMode", 0) != 0;
 		testImageFile = testMode ? getString(props, "testImageFile", "src/imgInOut/newTESTDATA.png") : null;
 		showSteps = getInt(props, "showSteps", 1) != 0;
