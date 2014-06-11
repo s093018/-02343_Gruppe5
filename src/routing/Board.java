@@ -27,10 +27,10 @@ public class Board {
 		//			}
 		//		}
 
-		grid = new Field[map[0].length][map.length];
+		grid = new Field[map.length][map[0].length];
 
-		for (int i = 0 ; i < map[0].length ; ++i) {
-			for (int j = 0 ; j < map.length ; ++j) {
+		for (int i = 0 ; i < map.length ; ++i) {
+			for (int j = 0 ; j < map[0].length ; ++j) {
 				grid[i][j] = new Field(i, j, map[i][j]);
 			}
 		}
@@ -422,33 +422,26 @@ public class Board {
 	}
 
 	public void fillInBalls(List<Point> balls) {
-		for(Point point: balls)
+		for(Point point: balls) {
+			System.out.print("before: "+point.pixel_x+","+point.pixel_y);
+			point = point.convert();
+			System.out.println(" after: "+point.pixel_x+","+point.pixel_y);
 			grid[point.pixel_x][point.pixel_y].setValue('B');
+		}
 	}
 
 	public void fillInRobotPosition(Point robotPosition) {
+		robotPosition = robotPosition.convert();
 		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('R');	
 	}
 
 	public void fillInGoals(List<Goal> goals) {
 		for(Goal goal: goals){
-			System.out.println("GOAL: x="+goal.center.pixel_x+", y="+goal.center.pixel_y);
-			grid[goal.center.pixel_x][goal.center.pixel_y].setValue('G');
+			Point tempPoint = goal.center.convert();
+			System.out.println("GOAL: x="+tempPoint.pixel_x+", y="+tempPoint.pixel_y);
+			
+			grid[tempPoint.pixel_x][tempPoint.pixel_y].setValue('G');
 		}
-	}
-
-	public void clearBalls(List<Point> balls) {
-		for(Point point: balls)
-			grid[point.pixel_x][point.pixel_y].setValue(' ');
-	}
-
-	public void clearRobotPosition(Point robotPosition) {
-		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue(' ');
-	}
-
-	public void clearGoals(List<Goal> goals) {
-		for(Goal goal: goals)
-			grid[goal.center.pixel_x][goal.center.pixel_y].setValue(' ');
 	}
 
 	public Field getField(int x, int y) {

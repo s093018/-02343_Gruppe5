@@ -40,13 +40,16 @@ public class Controller {
 			map = realCamera.getMap().obstacle;
 			while(!endGame) {
 				realCamera.update();
-				board = new Board(map);
 				System.out.println("map dimension: x="+map.length+", y="+map[0].length);
+				board = new Board(map);
 				System.out.println("board dimension: x="+board.getGrid().length+", y="+board.getGrid()[0].length);
-				Field frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
-				board.setField(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, frontField);
-				Field backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
-				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, backField);
+				Point tempPoint = realCamera.frontPoint.convert();
+				Field frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
+				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
+				tempPoint = realCamera.backPoint.convert();
+				Field backField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'Y');
+				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
+				
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
