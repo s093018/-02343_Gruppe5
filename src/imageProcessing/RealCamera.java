@@ -192,9 +192,11 @@ public class RealCamera implements Camera
 		int yAvg = (int)(left.y+right.y);
 		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
 	}
-	private double getDistance(Point a, Point b)
+	private double getDistance(org.opencv.core.Point a, org.opencv.core.Point b)
 	{
-		return 0.0;
+		double dx = a.x - b.x;
+		double dy = a.y - b.y;
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 	private Mat cornerBasedDetection(Mat image)
 	{
@@ -217,8 +219,10 @@ public class RealCamera implements Camera
 		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
 		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
 
-		//TODO: Estimate pixel size
-		//points.get(0)
+		//Estimate pixel size
+		double diagonal = (getDistance(points.get(0), points.get(2)) + getDistance(points.get(1), points.get(3)))/2;
+		pixelSize = 216.33 / diagonal;
+		System.out.println("Estimated pixel size: " + pixelSize + "cm/pixel");
 
 		goals = new ArrayList<Goal>();
 		goals.add(getGoal(points.get(1), points.get(2)));
