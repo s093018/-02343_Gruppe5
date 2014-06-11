@@ -423,9 +423,7 @@ public class Board {
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls) {
-			System.out.print("before: "+point.pixel_x+","+point.pixel_y);
 			point = point.convert();
-			System.out.println(" after: "+point.pixel_x+","+point.pixel_y);
 			grid[point.pixel_x][point.pixel_y].setValue('B');
 		}
 	}
@@ -437,9 +435,7 @@ public class Board {
 
 	public void fillInGoals(List<Goal> goals) {
 		for(Goal goal: goals){
-			Point tempPoint = goal.center.convert();
-			System.out.println("GOAL: x="+tempPoint.pixel_x+", y="+tempPoint.pixel_y);
-			
+			Point tempPoint = goal.center.convert();	
 			grid[tempPoint.pixel_x][tempPoint.pixel_y].setValue('G');
 		}
 	}

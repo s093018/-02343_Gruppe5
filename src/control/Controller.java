@@ -28,7 +28,7 @@ public class Controller {
 	public Controller () {
 		this.realCamera = new RealCamera();
 		try {
-					robotControl = new robot.Control();
+			robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -40,21 +40,19 @@ public class Controller {
 			map = realCamera.getMap().obstacle;
 			while(!endGame) {
 				realCamera.update();
-				System.out.println("map dimension: x="+map.length+", y="+map[0].length);
 				board = new Board(map);
-				System.out.println("board dimension: x="+board.getGrid().length+", y="+board.getGrid()[0].length);
 				Point tempPoint = realCamera.frontPoint.convert();
 				Field frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
 				tempPoint = realCamera.backPoint.convert();
 				Field backField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'Y');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
-				
+
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);			
 				board.fillInGoals(realCamera.getGoals());
 				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-	//			board = board.rotate(board);
+				//			board = board.rotate(board);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
 
 				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
@@ -72,7 +70,7 @@ public class Controller {
 					path = bfs.findPath(closeBalls);
 
 					System.out.println("Heading: "+board.radianToDegree(realCamera.getRobot().heading));
-					
+
 					String filepath = "/Users/Christian/Desktop/outputPath.txt";
 					File f = new File(filepath);
 					FileWriter fw = null;
@@ -81,17 +79,17 @@ public class Controller {
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-									fs.shutdown();
+						fs.shutdown();
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-												fs.shutdown();
+																fs.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
 					}
-					
+								
 					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
 					if(path != null) {
@@ -118,11 +116,11 @@ public class Controller {
 				}
 			} 
 
-						fs.shutdown();
+								fs.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
-					fs.shutdown();
+						fs.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
 	}
