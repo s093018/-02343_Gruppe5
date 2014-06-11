@@ -192,6 +192,10 @@ public class RealCamera implements Camera
 		int yAvg = (int)(left.y+right.y);
 		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
 	}
+	private double getDistance(Point a, Point b)
+	{
+		return 0.0;
+	}
 	private Mat cornerBasedDetection(Mat image)
 	{
 		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
@@ -214,6 +218,7 @@ public class RealCamera implements Camera
 		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
 
 		//TODO: Estimate pixel size
+		//points.get(0)
 
 		goals = new ArrayList<Goal>();
 		goals.add(getGoal(points.get(1), points.get(2)));
