@@ -488,12 +488,11 @@ public class RealCamera implements Camera
 		}
 		//x1,y1 back
 		//x2, y2 front
-		frontPoint = new Point((int)x2,(int)y2, pixelSize);
-		backPoint = new Point((int)x1,(int)y1, pixelSize);
+		frontPoint = new Point((int)y2,(int)x2, pixelSize);
+		backPoint = new Point((int)y1,(int)x1, pixelSize);
 		
 		System.out.println("x1: "+x1+", x2: "+x2+", y1: "+y1+", y2: "+y2);
 		System.out.println("gradtal: "+Math.atan2(y2-y1, x2-x1));
-		//Spørg Rasmus om dette er korrekt Math.atan2(y1-y2, x2-x1)
 /*		Mat rpos = image.clone();
 		Core.circle(rpos, new org.opencv.core.Point((int)((x1+x2)/2), (int)((y1+y2)/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
 		showStep("rpos.png", rpos, 1);
