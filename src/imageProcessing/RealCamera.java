@@ -399,7 +399,7 @@ public class RealCamera implements Camera
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
-	}
+	}//gr
 
 	public void findBalls(Mat image, String templFileName)
 	{
