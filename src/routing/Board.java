@@ -270,7 +270,7 @@ public class Board {
 		ArrayList<String> directions = new ArrayList<String>();
 		
 		for(int i = 0; i < goals.size(); i++){
-			directions.add(degreeToDirection((radianToDegree(goals.get(i).heading))));
+			directions.add(degreeToDirection((radianToDegreePositive(goals.get(i).heading))));
 			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
 			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
 
@@ -478,10 +478,12 @@ public class Board {
 		return startY;
 	}
 	
-	public int radianToDegree(double radian) {
+	public int radianToDegreePositive(double radian) {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;
 		result *=45;
+		if(result < 0)
+			result = 360 + result;
 		return result;
 	}
 	

@@ -66,7 +66,7 @@ public class Controller {
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
 
-					System.out.println("Heading: "+board.radianToDegree(realCamera.getRobot().heading));
+					System.out.println("Heading: "+board.radianToDegreePositive(realCamera.getRobot().heading));
 					
 					String filepath = "/Users/Christian/Desktop/outputPath.txt";
 					File f = new File(filepath);
