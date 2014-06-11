@@ -68,7 +68,7 @@ public class FindingSequence {
 				}
 
 				/* open arms */
-				if(i == instructions.size()-1) {
+				if(i == instructions.size()-2) {
 					done = false;
 					while(!done) {
 						done = robotControl.open();
@@ -95,7 +95,7 @@ public class FindingSequence {
 				}
 
 				/* open arms */
-				if(i == instructions.size()-1) {
+				if(i == instructions.size()-2) {
 					done = false;
 					while(!done) {
 						done = robotControl.open();
@@ -149,7 +149,7 @@ public class FindingSequence {
 
 				/* open arms */
 				done = false;
-				if(i == instructions.size()-1) {
+				if(i == instructions.size()-2) {
 					while(!done) {
 						done = robotControl.open();
 					}
@@ -174,7 +174,7 @@ public class FindingSequence {
 				}
 				done = false;
 				/* open arms */
-				if(i == instructions.size()-1) {
+				if(i == instructions.size()-2) {
 					while(!done) {
 						done = robotControl.open();
 					}
