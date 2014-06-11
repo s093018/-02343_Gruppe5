@@ -42,6 +42,11 @@ public class FindingSequence {
 	}
 
 	public void drive (ArrayList<DriverInstructions> instructions, boolean closeToWall) {
+		int temp = 0;
+		for(DriverInstructions di : instructions) {
+			System.out.println("Instruktion "+temp+": heading="+di.getHeading()+", length="+di.getLength());
+			temp++;
+		}
 
 		for(int i = 0; i < instructions.size(); i++) {	
 			boolean done = false;
@@ -107,7 +112,7 @@ public class FindingSequence {
 		/* close arms */
 		boolean done = false;
 		if(robotControl.getIsOpen()) { 
-			
+
 			while(!done) {
 				done = robotControl.close();
 			}
@@ -204,7 +209,7 @@ public class FindingSequence {
 
 		}
 	}
-	
+
 	public void shutdown () {
 		robotControl.shutdown();
 	}

@@ -85,7 +85,8 @@ public class Controller {
 							//					fs.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
-					} 
+					}
+					System.out.println("board dimension: x="+board.getGrid().length+", y="+board.getGrid()[0].length);
 					/*
 					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
