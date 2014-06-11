@@ -494,7 +494,7 @@ public class RealCamera implements Camera
 		System.out.println("x1: "+x1+", x2: "+x2+", y1: "+y1+", y2: "+y2);
 		System.out.println("gradtal: "+Math.atan2(y2-y1, x2-x1));
 		//Spørg Rasmus om dette er korrekt Math.atan2(y1-y2, x2-x1)
-/*		Mat rpos = image.clone();
+/*		Mat rpos = image.clone();//
 		Core.circle(rpos, new org.opencv.core.Point((int)((x1+x2)/2), (int)((y1+y2)/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
 		showStep("rpos.png", rpos, 1);
 */		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
