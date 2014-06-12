@@ -30,6 +30,8 @@ public class RealCamera implements Camera
 	private double pixelSize = 0.35;//cm/pixel
 	private double floorColor[];
 
+	private int updates = 0;
+
 	private void showStep(String filename, Mat image, double scaling)
 	{
 		if(settings.showSteps)
@@ -208,7 +210,7 @@ public class RealCamera implements Camera
 		Mat centralRect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
 		Core.rectangle(centralRect, settings.NW, settings.SE, new Scalar(1, 1, 1, 1), Core.FILLED);
 		Mat intensity = new Mat();
-		Imgproc.matchTemplate(smooth(image).mul(centralRect), detector, intensity, Imgproc.TM_SQDIFF);
+		Imgproc.matchTemplate(image.mul(centralRect), detector, intensity, Imgproc.TM_SQDIFF);
 		MinMaxLocResult extrema = Core.minMaxLoc(intensity);
 		org.opencv.core.Point maximum = new org.opencv.core.Point(extrema.minLoc.x + size / 2, extrema.minLoc.y + size / 2);
 
@@ -269,6 +271,7 @@ public class RealCamera implements Camera
 
 		//Ensure image and template have the same type (converTo() doesn't work).
 		Mat image = getImage();
+		showStep("update" + updates++, image, 1);
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
