@@ -47,6 +47,7 @@ public class RealCamera implements Camera
 		else
 		{
 			Mat frame = new Mat();
+			capture.grab();
 			capture.retrieve(frame);
 
 			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
