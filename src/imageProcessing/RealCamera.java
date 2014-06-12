@@ -251,7 +251,7 @@ public class RealCamera implements Camera
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
-		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
+		Mat blocked = bounds;//.mul(detectCentralObstacle(image), 255);
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
@@ -271,7 +271,8 @@ public class RealCamera implements Camera
 
 		//Ensure image and template have the same type (converTo() doesn't work).
 		Mat image = getImage();
-		showStep("update" + updates++, image, 1);
+		showStep("update" + updates++ +".png", image, 1);
+		System.out.println("T = " + System.currentTimeMillis());
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
