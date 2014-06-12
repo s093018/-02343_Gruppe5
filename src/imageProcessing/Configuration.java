@@ -49,10 +49,10 @@ public class Configuration
 		centralObstacleColor = getScalar(props, "centralObstacleColor", new Scalar(37, 37, 90, 255));
 		woodTreshold = getDouble(props, "woodTreshold", 50.0);
 		cornerPrototypes = new String[4];
-		cornerPrototypes[0] = getString(props, "corner1", "src/imgInOut/corner.png");
-		cornerPrototypes[1] = getString(props, "corner2", "src/imgInOut/corner.png");
-		cornerPrototypes[2] = getString(props, "corner3", "src/imgInOut/corner.png");
-		cornerPrototypes[3] = getString(props, "corner4", "src/imgInOut/corner.png");
+		cornerPrototypes[0] = getString(props, "corner1", "src/imgInOut/normalizedcorner.png");
+		cornerPrototypes[1] = getString(props, "corner2", "src/imgInOut/normalizedcorner.png");
+		cornerPrototypes[2] = getString(props, "corner3", "src/imgInOut/normalizedcorner.png");
+		cornerPrototypes[3] = getString(props, "corner4", "src/imgInOut/normalizedcorner.png");
 		floodFillUpdiff = getDouble(props, "floodFillUpdiff", 2.0);
 		floodFillLodiff = getDouble(props, "floodFillLodiff", 0.25);
 //		rectangleIntuition = getInt(props, "rectangleIntuition", 1);

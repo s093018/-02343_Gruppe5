@@ -28,7 +28,6 @@ public class RealCamera implements Camera
 	private Mat testImage;
 
 	private double pixelSize = 0.35;//cm/pixel
-	private double floorColor[];
 
 	private int updates = 0;
 
@@ -65,7 +64,7 @@ public class RealCamera implements Camera
 		Imgproc.bilateralFilter(image, result, -1, 180, 4);
 		return result;
 	}
-	private Mat floodFill(Mat image, double lodiff, double updiff)
+/*	private Mat floodFill(Mat image, double lodiff, double updiff)
 	{
 		//Remove central obstacle
 		Mat cleared = new Mat();
@@ -99,13 +98,13 @@ public class RealCamera implements Camera
 		result.submat(template.height()/2, template.height()/2 + thresh.height(), template.width()/2, template.width()/2 + thresh.width()).setTo(thresh);
 		//TODO: Floodfill to select outermost structure to avoid robot being seen as obstacle
 		return result;
-	}
-	private org.opencv.core.Point findCorner(Mat image, int quadrant)
+	}*/
+	private org.opencv.core.Point findCorner(Mat image, int quadrant, double[] floorColor)
 	{
 		//Build prototype
 		double[] blue = {255.0, 0.0, 0.0};
 		Mat prototype = Proc.replaceColor(Highgui.imread(settings.cornerPrototypes[quadrant-1]), blue, floorColor);
-		showStep("adjustedprototype.png", prototype, 1.0);
+		showStep("adjustedprototype" + quadrant + ".png", prototype, 1.0);
 
 		//Select quadrant
 		int width = image.width()/2;
@@ -121,7 +120,7 @@ public class RealCamera implements Camera
 		org.opencv.core.Point origin = Core.minMaxLoc(match).minLoc;
 		return new org.opencv.core.Point(xOff + origin.x + prototype.width()/2, yOff + origin.y + prototype.height()/2);
 	}
-	private Goal getGoal(org.opencv.core.Point left, org.opencv.core.Point right)
+	private Goal makeGoal(org.opencv.core.Point left, org.opencv.core.Point right)
 	{
 		int xAvg = (int)(left.x+right.x);
 		int yAvg = (int)(left.y+right.y);
@@ -151,16 +150,19 @@ public class RealCamera implements Camera
 	}*/
 	private Mat cornerBasedDetection(Mat image)
 	{
-		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
-		Mat blurred = smooth(image);
-		//New central obstacle is same color as bounds, so black it out while looking for corners
-		Core.circle(blurred, settings.center, 100, new Scalar(0, 0, 0), -1);
 		Mat marked = image.clone();
+		Mat processed = Proc.norm(smooth(image));
+		showStep("processed.png", processed, 1);
 
+		//New central obstacle is same color as bounds, so black it out while looking for corners
+		Core.circle(processed, settings.center, 100, new Scalar(0, 0, 0), -1);
+
+		//Find corners
+		double[] floorColor = Proc.estimateFloorColor(processed, settings.NW, settings.SE);
 		List<org.opencv.core.Point> points = new ArrayList<org.opencv.core.Point>();
 		for(int i = 1; i < 5; ++i)
 		{
-			points.add(findCorner(blurred, i));
+			points.add(findCorner(processed, i, floorColor));
 			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
 		}
 
@@ -168,6 +170,7 @@ public class RealCamera implements Camera
 		
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
+		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
 		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
 
 		//Estimate pixel size
@@ -176,8 +179,8 @@ public class RealCamera implements Camera
 		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
 
 		goals = new ArrayList<Goal>();
-		goals.add(getGoal(points.get(1), points.get(2)));
-		goals.add(getGoal(points.get(3), points.get(0)));
+		goals.add(makeGoal(points.get(1), points.get(2)));
+		goals.add(makeGoal(points.get(3), points.get(0)));
 
 		for(Goal g : goals)
 			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
@@ -189,12 +192,12 @@ public class RealCamera implements Camera
 	{
 		switch(strategy)
 		{
-		case 0: return floodFillDetection(image);
+//		case 0: return floodFillDetection(image);
 		case 1: return cornerBasedDetection(image);
-		case 2: return prototypeBoundsDetection(image);
+//		case 2: return prototypeBoundsDetection(image);
 		default:
-			System.out.println("detectBounds(): Unknown strategy (" + strategy + "). Using floodFillDetection");
-			return floodFillDetection(image);
+			System.out.println("detectBounds(): Unknown strategy (" + strategy + "). Using cornerBasedDetection");
+			return cornerBasedDetection(image);
 		}
 	}
 	private Mat findCentralObstacle(Mat image)
@@ -247,8 +250,6 @@ public class RealCamera implements Camera
 
 		Mat image = getImage();
 		showStep("input.png", image, 1.0);
-
-		floorColor = Proc.estimateFloorColor(image, settings.NW, settings.SE);
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
