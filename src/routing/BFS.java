@@ -300,21 +300,21 @@ public class BFS {
 			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 0 && tmpY == 1) {
-				result.add(180); //
-			} else if(tmpX == -1 && tmpY == 0) {
 				result.add(90); //
-			} else if(tmpX == 0 && tmpY == -1) {
+			} else if(tmpX == -1 && tmpY == 0) {
 				result.add(0); //
-			} else if(tmpX == 1 && tmpY == 0) {
+			} else if(tmpX == 0 && tmpY == -1) {
 				result.add(270); //
+			} else if(tmpX == 1 && tmpY == 0) {
+				result.add(180); //
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add(135); //
+				result.add(45); //
 			} else if(tmpX == 1 && tmpY == 1) {
-				result.add(225);
+				result.add(135);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add(315); //
+				result.add(225); //
 			} else if(tmpX == -1 && tmpY == -1) {
-				result.add(45);
+				result.add(315);
 			}
 
 //			if(tmpX == 0 && tmpY == 1) {
