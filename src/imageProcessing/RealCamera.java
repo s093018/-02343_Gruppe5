@@ -56,7 +56,7 @@ public class RealCamera implements Camera
 	}
 	private Mat smooth(Mat image)
 	{
-		Mat result = new Mat();
+		Mat result = new Mat();//
 //		Imgproc.GaussianBlur(image, result, new Size(5, 5), 1);
 //		Imgproc.medianBlur(image, result, 5);
 		Imgproc.bilateralFilter(image, result, -1, 180, 4);
