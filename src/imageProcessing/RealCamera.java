@@ -1,6 +1,7 @@
 package imageProcessing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -52,75 +53,6 @@ public class RealCamera implements Camera
 			Core.flip(frame, frame, 0);
 			return frame;
 		}
-	}
-	private double[] estimateFloorColor(Mat image)
-	{
-		Mat rect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
-		Core.rectangle(rect, settings.NW, settings.SE, new Scalar(1, 1, 1, 1));
-		double floorRectSize = Core.sumElems(rect).val[0];
-		double sumColor[] = Core.sumElems(image.mul(rect)).val;
-		double averageColor[] = {sumColor[0] / floorRectSize, sumColor[1] / floorRectSize, sumColor[2] / floorRectSize};
-		return averageColor;
-	}
-	private Mat colorDistance(List<Mat> layers)
-	{
-		List<Mat> newLayers = new ArrayList<Mat>();
-		for(int i = 0; i < 3; ++i)
-		{
-			newLayers.add(new Mat());
-			org.opencv.core.Core.multiply(layers.get(i), layers.get(i), newLayers.get(i));
-		}
-		Mat temp = new Mat();
-		Mat sum = new Mat();
-		org.opencv.core.Core.add(newLayers.get(0), newLayers.get(1), temp);
-		org.opencv.core.Core.add(newLayers.get(2), temp, sum);
-		Mat result = new Mat();
-		org.opencv.core.Core.sqrt(sum, result);
-		return result;
-	}
-	private Mat flatDivisor(List <Mat> layers)
-	{
-		Mat temp = new Mat();
-		Mat sum = new Mat();
-		Core.add(layers.get(0), layers.get(1), temp);
-		Core.add(layers.get(2), temp, sum);
-		return sum;
-	}
-	private Mat brightness(List <Mat> layers)
-	{
-		Mat result = new Mat();
-		Mat temp = new Mat();
-		Core.merge(layers, temp);
-		Imgproc.cvtColor(temp, result, Imgproc.COLOR_RGB2GRAY);
-		return result;
-	}
-	Mat merge(Mat b, Mat g, Mat r)
-	{
-		List<Mat> newLayers = new ArrayList<Mat>();
-		newLayers.add(b);
-		newLayers.add(g);
-		newLayers.add(r);
-		Mat result = new Mat();
-		Core.merge(newLayers, result);
-		return result;
-	}
-	List<Mat> split(Mat image)
-	{
-		List<Mat> layers = new ArrayList<Mat>();
-		layers.add(new Mat());
-		layers.add(new Mat());
-		layers.add(new Mat());
-		Core.split(image, layers);
-		return layers;
-	}
-	Mat select(Mat image, Mat mask)
-	{
-		List<Mat> layers = split(image);
-		for(Mat m : layers)
-			m.mul(mask);
-		Mat result = new Mat();
-		Core.merge(layers, result);
-		return result;
 	}
 	private Mat smooth(Mat image)
 	{
@@ -191,13 +123,29 @@ public class RealCamera implements Camera
 		int xAvg = (int)(left.x+right.x);
 		int yAvg = (int)(left.y+right.y);
 		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
-	}
-	private double getDistance(org.opencv.core.Point a, org.opencv.core.Point b)
+	}/*
+	private double dev(org.opencv.core.Point a, org.opencv.core.Point b, org.opencv.core.Point c)
 	{
-		double dx = a.x - b.x;
-		double dy = a.y - b.y;
-		return Math.sqrt(dx*dx + dy*dy);
+		double dot = (a.x - b.x)*(b.x - c.x) + (a.y - b.y)*(b.y - c.y);
+		return Math.abs(dot)/Proc.distance(a, b)*Proc.distance(b, c);
 	}
+	private List<org.opencv.core.Point> symmetrify(List<org.opencv.core.Point> points)
+	{
+		double[] deviation = {};
+		double maxDev = ;
+		if(maxDev > settings.maxTolerance)
+		{
+			for(int i = 0; i < 4; ++i)
+			{
+				if(deviation[i] = maxDev)
+				{
+					
+					return ;
+				}
+			}
+		}
+		return points;
+	}*/
 	private Mat cornerBasedDetection(Mat image)
 	{
 		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
@@ -220,7 +168,7 @@ public class RealCamera implements Camera
 		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
 
 		//Estimate pixel size
-		double diagonal = (getDistance(points.get(0), points.get(2)) + getDistance(points.get(1), points.get(3)))/2;
+		double diagonal = (Proc.distance(points.get(0), points.get(2)) + Proc.distance(points.get(1), points.get(3)))/2;
 		pixelSize = 216.33 / diagonal;
 		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
 
@@ -254,17 +202,21 @@ public class RealCamera implements Camera
 	{
 		int size = settings.centralObstacleSize;
 		Scalar tolerance = settings.centralObstacleTolerance;
-		//Look for reddest point in central area
+		//Look for whitest (or whatever) point in central area
 		Mat detector = new Mat(new Size(size, size), image.type());
 		detector.setTo(settings.centralObstacleColor);
 		Mat centralRect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
 		Core.rectangle(centralRect, settings.NW, settings.SE, new Scalar(1, 1, 1, 1), Core.FILLED);
 		Mat intensity = new Mat();
-		Imgproc.matchTemplate(image.mul(centralRect), detector, intensity, Imgproc.TM_CCORR);
+		Imgproc.matchTemplate(image.mul(centralRect), detector, intensity, Imgproc.TM_SQDIFF);
 		MinMaxLocResult extrema = Core.minMaxLoc(intensity);
-		org.opencv.core.Point maximum = new org.opencv.core.Point(extrema.maxLoc.x + size / 2, extrema.maxLoc.y + size / 2);
+		org.opencv.core.Point maximum = new org.opencv.core.Point(extrema.minLoc.x + size / 2, extrema.minLoc.y + size / 2);
 
 		showStep("centralObstacleIntensity.png", intensity, 1.0 / (size*size*255*3));
+
+		Mat redPoint = image.clone();
+		Core.circle(redPoint, maximum, 6, new Scalar(0, 0, 255, 255));
+		showStep("obstacleorigin.png", redPoint, 1);
 
 		//Floodfill using original image, since intensity map has softened corners 
 		Mat obstacleMask = new Mat(new Size(image.width() + 2, image.height() + 2), CvType.CV_8U);
@@ -293,13 +245,11 @@ public class RealCamera implements Camera
 		Mat image = getImage();
 		showStep("input.png", image, 1.0);
 
-		floorColor = estimateFloorColor(image);
+		floorColor = Proc.estimateFloorColor(image, settings.NW, settings.SE);
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
-
 		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
-		blocked = bounds;
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
@@ -309,6 +259,7 @@ public class RealCamera implements Camera
 
 		showStep("obstacleMask.png", blocked, 255);
 
+		showStep("normalized.png", Proc.norm(image), 1);
 		//Find initial position of balls + robot
 		update();
 	}

@@ -31,8 +31,6 @@ public class Configuration
 	public final double floodFillUpdiff;
 	public final double floodFillLodiff;
 
-	//FIXME: getX methods printing "bad" instead of "missing" 
-
 	public Configuration(String filename)
 	{
 		Properties props = load(filename);
@@ -57,6 +55,8 @@ public class Configuration
 		cornerPrototypes[3] = getString(props, "corner4", "src/imgInOut/corner.png");
 		floodFillUpdiff = getDouble(props, "floodFillUpdiff", 2.0);
 		floodFillLodiff = getDouble(props, "floodFillLodiff", 0.25);
+//		rectangleIntuition = getInt(props, "rectangleIntuition", 1);
+//		rectangle
 	}
 	private Properties load(String filename)
 	{
@@ -75,17 +75,19 @@ public class Configuration
 	private static int []extractInts(String value, int count) throws NullPointerException, NumberFormatException
 	{
 		if(value == null) throw new NullPointerException();
-		String []fragments = value.split(",", count);
+		String []fragments = value.split(",", count+1);
 		int []ints = new int[fragments.length];
+		System.out.print(">");
 		for(int i = 0; i < ints.length; ++i)
 		{
+			System.out.print(".");
 			ints[i] = Integer.valueOf(fragments[i].trim());
 		}
+		System.out.println("!");
 		return ints;
 	}
 	private static Mat getImage(Properties props, String key, String defaultFile)
 	{
-		//BUG: imread doesn't return NULL when a file is missing, just an empty Mat
 		String filename = props.getProperty(key);
 		if(filename == null)
 		{
@@ -93,44 +95,53 @@ public class Configuration
 			filename = defaultFile;
 		}
 		Mat image = Highgui.imread(filename);
+		if(image.width() == 0)//imread doesn't return NULL when a file is missing, just an 0x0 Mat
 		{
 			System.out.println("Cannot open " + filename + "!");
 			if(!filename.equalsIgnoreCase(defaultFile))
 			{
 				image = Highgui.imread(defaultFile);
-				if(image != null) System.out.println("Using default file: " + filename + ".");
+				if(image.width() != 0) System.out.println("Using default file: " + filename + ".");
 				else System.out.println("Cannot open default file" + filename + "!");
 			} 
 		}
-		if(image == null) System.out.println("Warning: no value for " + key);
+		if(image.width() == 0) System.out.println("Warning: no value for " + key);
 		else image.convertTo(image, CvType.CV_32F);
 		return image;
 	}
 	private static int getInt(Properties props, String key, int defaultValue)
 	{
-		try
+		String value = props.getProperty(key);
+		if(value != null)
 		{
-			return Integer.valueOf(props.getProperty(key));
+			try
+			{
+				return Integer.valueOf(value);
+			}
+			catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
 		}
-		catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
-		catch (NullPointerException npe){System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");}
+		else System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");
 		return defaultValue;
 	}
 	private static double getDouble(Properties props, String key, double defaultValue)
 	{
-		try
+		String value = props.getProperty(key);
+		if(value != null)
 		{
 			try
 			{
-				return Double.valueOf(props.getProperty(key));
+				try
+				{
+					return Double.valueOf(value);
+				}
+				catch(NumberFormatException nfe)//Allow for omitting periods
+				{
+					return Integer.valueOf(value);
+				}
 			}
-			catch(NumberFormatException nfe)//Allow for omitting periods
-			{
-				return Integer.valueOf(props.getProperty(key));
-			}
+			catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
 		}
-		catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
-		catch (NullPointerException npe){System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");}
+		else System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");
 		return defaultValue;
 	}
 	private static String getString(Properties props, String key, String defaultValue)
