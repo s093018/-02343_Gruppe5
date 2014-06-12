@@ -505,4 +505,18 @@ public class Board {
 	//        Board board = new Board(newGrid);
 	//        return board;
 	//    }
+	
+	public int radianToDegree1(double radian) {
+		
+		int result = (int)Math.toDegrees(radian);
+		
+		if (result < 0) {
+			result = result + 360;
+		} else if (result > 0){
+			
+		}
+			
+		
+		return result;
+	}
 }
