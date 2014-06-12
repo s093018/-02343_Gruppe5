@@ -54,8 +54,8 @@ public class FindingSequence {
 			/* turn robot heading or drive forward */
 			if (i == 0) {
 
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
-
+				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree1(robotHeading)); 
+				System.out.println("turn: "+turn);
 				if(turn < 0) {
 					while (!done) {
 						done = robotControl.turnLeft(Math.abs(turn));
@@ -77,7 +77,6 @@ public class FindingSequence {
 				}
 
 				done = false;
-				System.out.println("Length: "+(int) (instructions.get(i).getLength()*pixelSize));
 				while (!done) { 
 					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
 				}
@@ -135,7 +134,7 @@ public class FindingSequence {
 
 			/* turn robot heading or drive forward */
 			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree(robotHeading)); 
+				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree1(robotHeading)); 
 				if(turn < 0) {
 					while (!done) {
 						done = robotControl.turnLeft(Math.abs(turn));
@@ -223,11 +222,24 @@ public class FindingSequence {
 	//			}
 	//		}
 	//	}
-
+	/**
+	 * 
+	 * @param double radian
+	 * @return int result
+	 * 
+	 * finds degree in 45degree-interval
+	 */
 	public int radianToDegree(double radian) {
 		double degree = (radian*180)/Math.PI;
 		int result = (int)(degree + 22.5)/45;
 		result *=45;
+		return result;
+	}
+	
+	public int radianToDegree1(double radian) {
+		
+		int result = (int)Math.toDegrees(radian);
+		
 		return result;
 	}
 
