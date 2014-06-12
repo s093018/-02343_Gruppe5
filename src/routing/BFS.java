@@ -117,9 +117,9 @@ public class BFS {
 			 *	North child
 			 * 	Boundary check.
 			 */
-			if(current.getX() - 1 >= 0) {               
+			if(current.getY() + 1 < grid[0].length) {               
 				// Get North Field
-				N = (grid[current.getX() - 1][current.getY()]);
+				N = (grid[current.getX()][current.getY() + 1]);
 				// Check if the value of the Field is not an obstacle and that the Field has not been visited.
 				if (N.getValue() != obstacle && N.getValue() != fakeObstacle && !N.isMarked()) {  
 					// Set it as visited.
@@ -141,8 +141,8 @@ public class BFS {
 			 *  Add the found Field to queue.
 			 */
 
-			if (current.getX() + 1 <= grid.length) {
-				S = (grid[current.getX() + 1][current.getY()]);             
+			if (current.getY() - 1 >= 0) {
+				S = (grid[current.getX()][current.getY() - 1]);             
 				if (S.getValue() != obstacle && S.getValue() != fakeObstacle && !S.isMarked()) {        
 					S.setMark();
 					current.setParent(S);
@@ -160,8 +160,8 @@ public class BFS {
 			 *  Add Field to queue.
 			 */	
 
-			if (current.getY() + 1 < grid[0].length) {               
-				E = (grid[current.getX()][current.getY() + 1]);
+			if (current.getX() + 1 < grid.length) {               
+				E = (grid[current.getX() + 1][current.getY()]);
 				if (E.getValue() != obstacle && E.getValue() != fakeObstacle && !E.isMarked()) {     
 					E.setMark();
 					current.setParent(E);
@@ -178,8 +178,8 @@ public class BFS {
 			 *  5. Store parent's information.
 			 *  6. Add Field to queue.
 			 */
-			if (current.getY() - 1 >= 0) {               
-				W = (grid[current.getX()][current.getY() - 1]);
+			if (current.getX() - 1 >= 0) {               
+				W = (grid[current.getX() - 1][current.getY()]);
 				if (W.getValue() != obstacle && W.getValue() != fakeObstacle && !W.isMarked()) {        
 					W.setMark();
 					current.setParent(W);
@@ -196,8 +196,8 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() + 1 <= grid[0].length) {
-				NE = (grid[current.getX() + 1][current.getY() - 1]);
+			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
+				NE = (grid[current.getX() + 1][current.getY() + 1]);
 				if (NE.getValue() != obstacle && NE.getValue() != fakeObstacle && !NE.isMarked()) {
 					NE.setMark();
 					current.setParent(NE);
@@ -215,8 +215,8 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-				NW = (grid[current.getX() - 1][current.getY() - 1]);
+			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
+				NW = (grid[current.getX() - 1][current.getY() + 1]);
 				if (NW.getValue() != obstacle && NW.getValue() != fakeObstacle && !NW.isMarked()) {
 					NW.setMark();
 					current.setParent(NW);
@@ -234,8 +234,8 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() + 1 <= grid.length && current.getY() + 1 <= grid[0].length) {               
-				SE = (grid[current.getX() + 1][current.getY() + 1]);
+			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
+				SE = (grid[current.getX() + 1][current.getY() - 1]);
 				if (SE.getValue() != obstacle && SE.getValue() != fakeObstacle && !SE.isMarked()) {
 					SE.setMark();
 					current.setParent(SE);
@@ -253,8 +253,8 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() + 1 <= grid.length && current.getY() - 1 >= 0) {
-				SW = (grid[current.getX() + 1][current.getY() - 1]);
+			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
+				SW = (grid[current.getX() - 1][current.getY() - 1]);
 				if (SW.getValue() != obstacle && SW.getValue() != fakeObstacle && !SW.isMarked()) {
 					SW.setMark();
 					current.setParent(SW);
@@ -300,23 +300,23 @@ public class BFS {
 			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 0 && tmpY == 1) {
-				result.add(270);
+				result.add(180); //
 			} else if(tmpX == -1 && tmpY == 0) {
-				result.add(0);
+				result.add(90); //
 			} else if(tmpX == 0 && tmpY == -1) {
-				result.add(90);
+				result.add(0); //
 			} else if(tmpX == 1 && tmpY == 0) {
-				result.add(180);
+				result.add(270); //
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add(315);
+				result.add(135); //
 			} else if(tmpX == 1 && tmpY == 1) {
 				result.add(225);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add(135);
+				result.add(315); //
 			} else if(tmpX == -1 && tmpY == -1) {
 				result.add(45);
 			}
-			
+
 //			if(tmpX == 0 && tmpY == 1) {
 //				result.add(270);
 //			} else if(tmpX == -1 && tmpY == 0) {
