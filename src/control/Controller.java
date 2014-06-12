@@ -22,7 +22,7 @@ public class Controller {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS = 0;
+	private final int MAX_NO_BALLS = 2;
 	private List<Point> closeBalls;
 
 	public Controller () {
@@ -37,10 +37,16 @@ public class Controller {
 
 		try {
 			System.out.println("Started!");
-			map = realCamera.getMap().obstacle;
+//			map = realCamera.getMap().obstacle;
+//				board = new Board(map);
+//				board.fillInGoals(realCamera.getGoals());
+//				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
+//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 			while(!endGame) {
 				realCamera.update();
+				map = realCamera.getMap().obstacle;
 				board = new Board(map);
+				
 				Point tempPoint = realCamera.frontPoint.convert();
 				Field frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
@@ -49,13 +55,13 @@ public class Controller {
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
 
 				board.fillInBalls(realCamera.getBalls());
-				board.fillInRobotPosition(realCamera.getRobot().position);			
+				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
-				//	board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-				//			board = board.rotate(board);
+				
+//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
+	//			board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 
-				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 
 				if(ballCount <= MAX_NO_BALLS) {
 
@@ -68,6 +74,7 @@ public class Controller {
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
+					
 					System.out.println("Heading in radian: "+realCamera.getRobot().heading);
 					System.out.println("Heading: "+board.radianToDegree1(realCamera.getRobot().heading));
 
@@ -98,8 +105,12 @@ public class Controller {
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
-				} else {
-					/** Drive to goal and release balls **/
+					if(ballCount == MAX_NO_BALLS) {
+						endGame = true;
+					}
+					
+				}/* else {
+					/** Drive to goal and release balls **//*
 
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
@@ -111,8 +122,10 @@ public class Controller {
 
 					ballCount = 0;
 					endGame = true;
-				}
-				endGame = true;
+				}*/
+				
+				
+			
 			}
 
 

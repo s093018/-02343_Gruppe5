@@ -55,15 +55,15 @@ public class FindingSequence {
 			if (i == 0) {
 
 				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree1(robotHeading)); 
-				System.out.println("turn: "+turn);
+				System.out.println("turn 1: "+turn);
 				if(turn < 0) {
 					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
+						done = robotControl.turnRight(Math.abs(turn));
 					}
 
 				} else if(turn > 0) {
 					while (!done) {
-						done = robotControl.turnRight(turn);
+						done = robotControl.turnLeft(turn);
 					}
 				}
 
@@ -83,13 +83,14 @@ public class FindingSequence {
 
 			} else {
 				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
+				System.out.println("turn"+(i+1)+": "+turn);
 				if(turn < 0) {
 					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
+						done = robotControl.turnRight(Math.abs(turn));
 					}
 				} else if(turn > 0) {
 					while (!done) {
-						done = robotControl.turnRight(turn);
+						done = robotControl.turnLeft(turn);
 					}
 				}
 
