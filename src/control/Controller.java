@@ -24,10 +24,11 @@ public class Controller {
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS = 2;
 	private List<Point> closeBalls;
+	int ballsOnTrack;
 
 	public Controller () {
-		this.realCamera = new RealCamera();
 		try {
+			this.realCamera = new RealCamera();
 			robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
@@ -42,9 +43,9 @@ public class Controller {
 //				board.fillInGoals(realCamera.getGoals());
 //				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 //				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
+			map = realCamera.getMap().obstacle;
+			
 			while(!endGame) {
-				realCamera.update();
-				map = realCamera.getMap().obstacle;
 				board = new Board(map);
 				
 				Point tempPoint = realCamera.frontPoint.convert();
@@ -61,8 +62,8 @@ public class Controller {
 //				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
 	//			board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-
-
+				ballsOnTrack = realCamera.getBalls().size();
+				
 				if(ballCount <= MAX_NO_BALLS) {
 
 					Iterator<Point> it = closeBalls.iterator();
@@ -102,12 +103,9 @@ public class Controller {
 					if(path != null) {
 						di = fs.sequence(path);
 						fs.drive(di, bfs.getCloseToWall());
-						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
-					if(ballCount == MAX_NO_BALLS) {
-						endGame = true;
-					}
+
 					
 				}/* else {
 					/** Drive to goal and release balls **//*
@@ -125,7 +123,23 @@ public class Controller {
 				}*/
 				
 				
-			
+			 realCamera.update();
+			 if(ballsOnTrack - realCamera.getBalls().size() == 1) {
+				 ballCount++;
+			 }
+			 
+//				if(realCamera.getBalls().size() == 0) {
+//					bfs = new BFS(board.getGrid(), 'G');
+//					path = bfs.findPath(closeBalls);
+//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+//
+//					di = fs.sequence(path);
+//
+//					fs.goalDrive(di);
+//
+//					ballCount = 0;
+//					endGame = true;
+//				}
 			}
 
 
