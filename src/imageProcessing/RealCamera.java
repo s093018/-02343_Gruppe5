@@ -208,7 +208,7 @@ public class RealCamera implements Camera
 		Mat centralRect = new Mat(image.size(), image.type(), new Scalar(0, 0, 0, 0));
 		Core.rectangle(centralRect, settings.NW, settings.SE, new Scalar(1, 1, 1, 1), Core.FILLED);
 		Mat intensity = new Mat();
-		Imgproc.matchTemplate(image.mul(centralRect), detector, intensity, Imgproc.TM_SQDIFF);
+		Imgproc.matchTemplate(smooth(image).mul(centralRect), detector, intensity, Imgproc.TM_SQDIFF);
 		MinMaxLocResult extrema = Core.minMaxLoc(intensity);
 		org.opencv.core.Point maximum = new org.opencv.core.Point(extrema.minLoc.x + size / 2, extrema.minLoc.y + size / 2);
 

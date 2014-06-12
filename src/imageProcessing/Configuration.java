@@ -77,13 +77,10 @@ public class Configuration
 		if(value == null) throw new NullPointerException();
 		String []fragments = value.split(",", count+1);
 		int []ints = new int[fragments.length];
-		System.out.print(">");
 		for(int i = 0; i < ints.length; ++i)
 		{
-			System.out.print(".");
 			ints[i] = Integer.valueOf(fragments[i].trim());
 		}
-		System.out.println("!");
 		return ints;
 	}
 	private static Mat getImage(Properties props, String key, String defaultFile)
