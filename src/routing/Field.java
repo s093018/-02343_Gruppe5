@@ -15,7 +15,7 @@ package routing;
  */
 public class Field {
 	
-	private boolean  marked;
+	private boolean  visited;
 	private char      value;
 	private Field    parent;
 	private int        x, y;
@@ -27,7 +27,7 @@ public class Field {
 	 *   must be specified.
 	 */
 	public Field(int x, int y, char c) {
-		marked = false;
+		visited = false;
 		parent =  null;
 		this.value = c;
 		this.x = x; 
@@ -51,15 +51,15 @@ public class Field {
 	/**
 	 * A public method that changes marked value of the Field that invokes it.
 	 */
-	public void setMark() {
-		marked = true;
+	public void visit() {
+		visited = true;
 	}
 
 	/**
 	 * A public method that returns the marked value of the Field that invokes it.
 	 */
-	public boolean isMarked() {
-		return this.marked;
+	public boolean isVisited() {
+		return this.visited;
 	}
 
 	/**
