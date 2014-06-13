@@ -3,7 +3,7 @@ package imageProcessing;
 public class Point {
 	public final double x, y;//Spatial position
 	public final int pixel_x, pixel_y;//Position on the image
-	public String pathDirection; 
+	public String pathDirection = ""; 
 		
 	public void setPathDirection(String pathDirection) {
 		this.pathDirection = pathDirection;
@@ -24,6 +24,14 @@ public class Point {
 	}
 	public Point convert()
 	{
-		return new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
+		Point newPoint = new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
+		newPoint.setPathDirection(pathDirection);
+
+		if(pathDirection.contains("N"))
+			newPoint.setPathDirection(pathDirection.replace('N', 'S'));
+		else if(pathDirection.contains("S"))
+			newPoint.setPathDirection(pathDirection.replace('S', 'N'));
+
+		return newPoint;
 	}
 }
