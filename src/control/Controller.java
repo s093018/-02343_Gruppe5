@@ -122,7 +122,7 @@ public class Controller {
 					ballCount = 0;
 					endGame = true;
 				}*/
-
+				realCamera.update();
 					if(ballCount == 2) {
 						endGame = true;
 					}
@@ -145,7 +145,6 @@ public class Controller {
 					//				}
 				}
 			
-
 					fs.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
