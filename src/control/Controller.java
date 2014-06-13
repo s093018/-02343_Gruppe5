@@ -24,12 +24,13 @@ public class Controller {
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS = 2;
 	private List<Point> closeBalls;
+	File f;
 	int ballsOnTrack;
 
 	public Controller () {
 		try {
 			this.realCamera = new RealCamera();
-			robotControl = new robot.Control();
+					robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
@@ -38,16 +39,11 @@ public class Controller {
 
 		try {
 			System.out.println("Started!");
-//			map = realCamera.getMap().obstacle;
-//				board = new Board(map);
-//				board.fillInGoals(realCamera.getGoals());
-//				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 			map = realCamera.getMap().obstacle;
-			
+
 			while(!endGame) {
 				board = new Board(map);
-				
+
 				Point tempPoint = realCamera.frontPoint.convert();
 				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
@@ -58,12 +54,12 @@ public class Controller {
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
-				
-//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
+
+				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 5);
-	//			board.fakeWallsBuild(realCamera.getRobot().robotWidth);
+				//			board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 				ballsOnTrack = realCamera.getBalls().size();
-				
+
 				if(ballCount <= MAX_NO_BALLS) {
 
 					Iterator<Point> it = closeBalls.iterator();
@@ -75,38 +71,43 @@ public class Controller {
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
-					
-					System.out.println("Heading in radian: "+realCamera.getRobot().heading);
+
 					System.out.println("Heading: "+board.radianToDegree1(realCamera.getRobot().heading));
 
 					String filepath = "/Users/Christian/Desktop/outputPath.txt";
-					File f = new File(filepath);
+					if(f != null) {
+						if(f.exists()) {
+							f.delete();
+						}
+					}
+					f = new File(filepath);
 					FileWriter fw = null;
 					try  {
 						fw =  new  FileWriter(f);
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-						fs.shutdown();
+								fs.shutdown();
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							fs.shutdown();
+									fs.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
 					}
 
-					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+										fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
 					if(path != null) {
 						di = fs.sequence(path);
 						fs.drive(di, bfs.getCloseToWall());
+						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
 
-					
+
 				}/* else {
 					/** Drive to goal and release balls **//*
 
@@ -121,33 +122,35 @@ public class Controller {
 					ballCount = 0;
 					endGame = true;
 				}*/
-				
-				
-			 realCamera.update();
-			 if(ballsOnTrack - realCamera.getBalls().size() == 1) {
-				 ballCount++;
-			 }
-			 
-//				if(realCamera.getBalls().size() == 0) {
-//					bfs = new BFS(board.getGrid(), 'G');
-//					path = bfs.findPath(closeBalls);
-//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-//
-//					di = fs.sequence(path);
-//
-//					fs.goalDrive(di);
-//
-//					ballCount = 0;
-//					endGame = true;
-//				}
-			}
 
+					if(ballCount == 2) {
+						endGame = true;
+					}
+					//			 realCamera.update();
+					//			 if(ballsOnTrack - realCamera.getBalls().size() == 1) {
+					//				 ballCount++;
+					//			 }
 
-			fs.shutdown();
+					//				if(realCamera.getBalls().size() == 0) {
+					//					bfs = new BFS(board.getGrid(), 'G');
+					//					path = bfs.findPath(closeBalls);
+					//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					//
+					//					di = fs.sequence(path);
+					//
+					//					fs.goalDrive(di);
+					//
+					//					ballCount = 0;
+					//					endGame = true;
+					//				}
+				}
+			
+
+					fs.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
-			fs.shutdown();
+				fs.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
 	}
