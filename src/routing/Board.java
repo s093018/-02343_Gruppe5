@@ -414,7 +414,7 @@ public class Board {
 						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
 							grid[i][j-pixelRadius].setValue('F');
 						}
-						// tilføj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
+						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 					}
 				}
 			}
@@ -476,6 +476,17 @@ public class Board {
 		return result;
 	}
 
+	public void clearBalls(List<Point> balls) {
+		for(Point ball : balls) {
+			grid[ball.pixel_x][ball.pixel_x].setValue(' ');
+		}
+	}
+	
+	public void clearRobot(Point robotPos) {
+		grid[robotPos.pixel_x][robotPos.pixel_y].setValue(' ');
+	}
+	
+	
 	// Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
 	/**
 	 * degree should be positive, if not may throw ArrayIndexOutOfBoundsException.
@@ -495,7 +506,7 @@ public class Board {
 	//        int jj = 0;
 	//        for(int i=0; i < oldBoard.getGrid()[0].length; i++){
 	//            for(int j = oldBoard.getGrid().length-1; j >= 0; j--){
-	//                System.out.print(ii+","+jj+" på "+i+","+j);
+	//                System.out.print(ii+","+jj+" p "+i+","+j);
 	//                newGrid[ii][jj] = oldBoard.getGrid()[i][j].getValue();
 	//                jj++;
 	//            }

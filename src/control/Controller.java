@@ -51,7 +51,8 @@ public class Controller {
 				tempPoint = realCamera.backPoint.convert();
 				backField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'Y');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
-
+		
+				
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
@@ -123,6 +124,12 @@ public class Controller {
 					ballCount = 0;
 					endGame = true;
 				}*/
+				
+				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
+				board.getField(backField.getX(), backField.getY()).setValue(' ');
+				board.clearRobot(realCamera.getRobot().position);
+				board.clearBalls(realCamera.getBalls());
+				
 				realCamera.update();
 				iterations++;
 					if(ballCount == 2) {
