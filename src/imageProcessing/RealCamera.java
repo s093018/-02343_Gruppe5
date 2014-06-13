@@ -35,6 +35,7 @@ public class RealCamera implements Camera
 	{
 		if(settings.showSteps)
 		{
+			System.out.println("Dumping " + filename);
 			Core.flip(image, image, 0);
 			Proc.saveImage("src/imgDump/" + filename, image, scaling);
 			Core.flip(image, image, 0);
@@ -42,19 +43,19 @@ public class RealCamera implements Camera
 	}
 	private Mat getImage()
 	{
-		if(settings.testMode) return testImage;
+		Mat frame;
+		if(settings.testMode) frame = testImage.clone();
 		else
 		{
-			Mat frame = new Mat();
+			frame = new Mat();
 			capture.grab();
 			capture.retrieve(frame);
-
-			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
-			Highgui.imwrite("src/imgDump/input.png", frame);
-			frame = Highgui.imread("input.png");
-			Core.flip(frame, frame, 0);
-			return frame;
 		}
+		//Ensure image and loaded templates have the same type (convertTo() doesn't work).
+		Highgui.imwrite("src/imgDump/input.png", frame);
+		frame = Highgui.imread("src/imgDump/input.png");
+		Core.flip(frame, frame, 0);
+		return frame;
 	}
 	private Mat smooth(Mat image)
 	{
@@ -241,18 +242,15 @@ public class RealCamera implements Camera
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		if(settings.testMode)
-		{
-			testImage = Highgui.imread(settings.testImageFile);
-			Core.flip(testImage,  testImage, 0);
-		}
+		if(settings.testMode) testImage = Highgui.imread(settings.testImageFile);
 		else capture = new VideoCapture(0);
 
 		Mat image = getImage();
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
-		Mat blocked = bounds;//.mul(detectCentralObstacle(image), 255);
+		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
+		blocked = bounds;
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)

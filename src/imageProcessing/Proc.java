@@ -46,7 +46,7 @@ public class Proc
 			layers.add(scaledImage.clone());
 			Mat result = new Mat();
 			Core.merge(layers, result);
-			Highgui.imwrite("src/imgInOut/" + filename, result);
+			Highgui.imwrite(filename, result);
 		}
 		else
 		{
