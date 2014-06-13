@@ -425,19 +425,19 @@ public class Board {
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls) {
-			point = point.convert();
+		//	point = point.convert();
 			grid[point.pixel_x][point.pixel_y].setValue('B');
 		}
 	}
 
 	public void fillInRobotPosition(Point robotPosition) {
-		robotPosition = robotPosition.convert();
+	//	robotPosition = robotPosition.convert();
 		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('R');	
 	}
 
 	public void fillInGoals(List<Goal> goals) {
 		for(Goal goal: goals){
-			Point tempPoint = goal.center.convert();	
+			Point tempPoint = goal.center;	
 			grid[tempPoint.pixel_x][tempPoint.pixel_y].setValue('G');
 		}
 	}

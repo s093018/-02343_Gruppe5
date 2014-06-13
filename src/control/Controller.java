@@ -48,10 +48,10 @@ public class Controller {
 				realCamera.update();
 				board = new Board(map);
 
-				Point tempPoint = realCamera.frontPoint.convert();
+				Point tempPoint = realCamera.frontPoint;
 				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
-				tempPoint = realCamera.backPoint.convert();
+				tempPoint = realCamera.backPoint;
 				backField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'Y');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
 
