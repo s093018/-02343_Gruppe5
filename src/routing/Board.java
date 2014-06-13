@@ -246,6 +246,10 @@ public class Board {
 	}
 
 	public void buildObstacleAroundBall(Point ball, int pixelRadius){
+			String pathDirection = ball.pathDirection;
+			ball = ball.convert();
+			ball.pathDirection = pathDirection;
+			
 		List<Field> buildObstacles = new ArrayList<Field>();
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
