@@ -24,10 +24,10 @@ public class RealCamera implements Camera
 	public Point frontPoint, backPoint;
 
 	private VideoCapture capture;
-	private Configuration settings = new Configuration("src/imgInOut/settings.cfg");
+	private Configuration settings = new Configuration("settings.cfg");
 	private Mat testImage;
 
-	private double pixelSize = 0.35;//cm/pixel
+	private double pixelSize;//cm/pixel
 
 	private int updates = 0;
 
@@ -36,7 +36,7 @@ public class RealCamera implements Camera
 		if(settings.showSteps)
 		{
 			Core.flip(image, image, 0);
-			Proc.saveImage(filename, image, scaling);
+			Proc.saveImage("src/imgDump/" + filename, image, scaling);
 			Core.flip(image, image, 0);
 		}
 	}
@@ -50,8 +50,8 @@ public class RealCamera implements Camera
 			capture.retrieve(frame);
 
 			//Ensure image and loaded templates have the same type (convertTo() doesn't work).
-			Highgui.imwrite("frame.png", frame);
-			frame = Highgui.imread("frame.png");
+			Highgui.imwrite("src/imgDump/input.png", frame);
+			frame = Highgui.imread("input.png");
 			Core.flip(frame, frame, 0);
 			return frame;
 		}
@@ -249,7 +249,6 @@ public class RealCamera implements Camera
 		else capture = new VideoCapture(0);
 
 		Mat image = getImage();
-		showStep("input.png", image, 1.0);
 
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
@@ -274,7 +273,6 @@ public class RealCamera implements Camera
 		//Ensure image and template have the same type (converTo() doesn't work).
 		Mat image = getImage();
 		showStep("update" + updates++ +".png", image, 1);
-		System.out.println("T = " + System.currentTimeMillis());
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");

@@ -51,7 +51,7 @@ public class Proc
 		else
 		{
 			Mat scaler = new Mat(image.size(), image.type(), new Scalar(scaling, scaling, scaling, 255));
-			Highgui.imwrite("src/imgInOut/" + filename, scaler.mul(image));
+			Highgui.imwrite(filename, scaler.mul(image));
 		}
 	}
 	public static double distance(org.opencv.core.Point a, org.opencv.core.Point b)
