@@ -278,7 +278,7 @@ public class RealCamera implements Camera
 		showStep("update" + update +".png", image, 1);
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
-		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
+		findRobot(image.clone(), "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
 	}
 
 	public void findBalls(Mat image, String templFileName)
