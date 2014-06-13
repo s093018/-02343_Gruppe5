@@ -43,6 +43,7 @@ public class Controller {
 			map = realCamera.getMap().obstacle;
 
 			while(!endGame) {
+				realCamera.update();
 				board = new Board(map);
 
 				Point tempPoint = realCamera.frontPoint.convert();
@@ -136,12 +137,12 @@ public class Controller {
 				board.clearRobot(realCamera.getRobot().position);
 				board.clearBalls(realCamera.getBalls());
 				
-				realCamera.update();
+				
 				iterations++;
 					if(ballCount == 2) {
 						endGame = true;
 					}
-					//			 realCamera.update();
+								 realCamera.update();
 					//			 if(ballsOnTrack - realCamera.getBalls().size() == 1) {
 					//				 ballCount++;
 					//			 }
