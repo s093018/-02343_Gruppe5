@@ -478,7 +478,7 @@ public class Board {
 
 	public void clearBalls(List<Point> balls) {
 		for(Point ball : balls) {
-			grid[ball.pixel_x][ball.pixel_x].setValue(' ');
+			grid[ball.pixel_x][ball.pixel_y].setValue(' ');
 		}
 	}
 	

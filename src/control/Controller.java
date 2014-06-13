@@ -54,6 +54,12 @@ public class Controller {
 		
 				
 				board.fillInBalls(realCamera.getBalls());
+				int temp = 0;
+				for (Point p : realCamera.getBalls()) {
+					System.out.println("Bold "+temp+": ("+p.pixel_x+","+p.pixel_y+")" );
+					temp++;
+				}
+				
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
