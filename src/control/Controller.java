@@ -41,7 +41,9 @@ public class Controller {
 		try {
 			System.out.println("Started!");
 			map = realCamera.getMap().obstacle;
-
+			for(int i = 0; i < 480; ++i)
+				System.out.print(" " + map[345][i]);
+			System.out.println();
 			while(!endGame) {
 				realCamera.update();
 				board = new Board(map);
