@@ -30,6 +30,7 @@ public class Configuration
 	public final String cornerPrototypes[];
 	public final double floodFillUpdiff;
 	public final double floodFillLodiff;
+	public final boolean ignoreCentralObstacle;
 
 	public Configuration(String filename)
 	{
@@ -55,6 +56,7 @@ public class Configuration
 		cornerPrototypes[3] = getString(props, "corner4", "src/imgInOut/normalizedcorner.png");
 		floodFillUpdiff = getDouble(props, "floodFillUpdiff", 2.0);
 		floodFillLodiff = getDouble(props, "floodFillLodiff", 0.25);
+		ignoreCentralObstacle = getInt(props, "ignoreCentralObstacle", 0) != 0;
 //		rectangleIntuition = getInt(props, "rectangleIntuition", 1);
 //		rectangle
 		System.out.println();

@@ -48,8 +48,10 @@ public class RealCamera implements Camera
 		else
 		{
 			frame = new Mat();
-			capture.grab();
-			capture.retrieve(frame);
+			if(!capture.grab())
+				System.out.println("IMAGE GRAB FAILED!");
+			if(!capture.retrieve(frame))
+				System.out.println("IMAGE RETRIEVE FAILED!");
 		}
 		//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 		Highgui.imwrite("src/imgDump/input.png", frame);
@@ -250,7 +252,8 @@ public class RealCamera implements Camera
 		//Find obstacles
 		Mat bounds = detectBounds(image, settings.boundsStrategy);
 		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
-		blocked = bounds;
+		if(settings.ignoreCentralObstacle)
+			blocked = bounds;
 
 		char obstacle[][] = new char[blocked.width()][blocked.height()];
 		for(int y = 0; y < blocked.height(); ++y)
