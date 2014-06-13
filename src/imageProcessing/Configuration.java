@@ -57,6 +57,7 @@ public class Configuration
 		floodFillLodiff = getDouble(props, "floodFillLodiff", 0.25);
 //		rectangleIntuition = getInt(props, "rectangleIntuition", 1);
 //		rectangle
+		System.out.println();
 	}
 	private Properties load(String filename)
 	{

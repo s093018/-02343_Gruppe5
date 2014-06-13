@@ -8,7 +8,7 @@ public class Robot
 	public final double robotWidth;
 	
 	public Robot(Point position, double heading, double pixelLength, double pixelWidth) {
-		System.out.println("robot:" + position.x + ", " + position.y + ", " + heading);
+		System.out.println("Robot at: (" + position.x + ", " + position.y + "), heading: " + heading);
 		this.heading = heading;
 		this.position = position;
 		this.robotLength = pixelLength;

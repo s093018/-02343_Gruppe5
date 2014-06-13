@@ -29,13 +29,13 @@ public class RealCamera implements Camera
 
 	private double pixelSize;//cm/pixel
 
+	private long startTime = System.currentTimeMillis();
 	private int updates = 0;
 
 	private void showStep(String filename, Mat image, double scaling)
 	{
 		if(settings.showSteps)
 		{
-			System.out.println("Dumping " + filename);
 			Core.flip(image, image, 0);
 			Proc.saveImage("src/imgDump/" + filename, image, scaling);
 			Core.flip(image, image, 0);
@@ -260,7 +260,6 @@ public class RealCamera implements Camera
 
 		showStep("obstacleMask.png", blocked, 255);
 
-		showStep("normalized.png", Proc.norm(image), 1);
 		//Find initial position of balls + robot
 		update();
 	}
@@ -270,7 +269,10 @@ public class RealCamera implements Camera
 
 		//Ensure image and template have the same type (converTo() doesn't work).
 		Mat image = getImage();
-		showStep("update" + updates++ +".png", image, 1);
+
+		String update = String.format("%05d", updates++);
+		System.out.println("Update " + update + " at " + (System.currentTimeMillis() - startTime) + " ms.");
+		showStep("update" + update +".png", image, 1);
 
 		findBalls(image.clone(), "src/imgInOut/Template.png");
 		findRobot(image, "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
@@ -285,14 +287,8 @@ public class RealCamera implements Camera
 		Mat result = new Mat(result_rows, result_cols, CvType.CV_32F);
 
 		int matchingMethod = 1;
-		boolean derp = true;
 		while(true) {
 			Imgproc.matchTemplate(image, templ, result, matchingMethod);
-			if(derp)
-			{
-				derp = false;
-				showStep("ballintensity.png", result, 255.0/(templ.width()*templ.height()));
-			}
 
 			MinMaxLocResult mmlr = Core.minMaxLoc(result);
 
@@ -304,7 +300,6 @@ public class RealCamera implements Camera
 			}
 
 			double thresholdMatch = 0.25;
-			System.out.println("TEST");
 			if(mmlr.minVal < thresholdMatch) {
 				Core.circle(image, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
@@ -314,6 +309,7 @@ public class RealCamera implements Camera
 				break;
 			}
 		}
+		System.out.println("Found " + balls.size() + " balls.");
 		showStep("billede3.png", image, 1);
 	}
 
@@ -343,7 +339,6 @@ public class RealCamera implements Camera
 
 			org.opencv.core.Point matchLoc = mmlr.minLoc;
 
-			System.out.println(i);
 			if(i == 0){
 				Core.circle(image1, new org.opencv.core.Point(matchLoc.x + (templ.cols()/2),
 						matchLoc.y + (templ.rows()/2)), 6, new Scalar(0, 0, 255), -1); // -1 = fill)
@@ -366,8 +361,8 @@ public class RealCamera implements Camera
 		frontPoint = new Point((int)x2,(int)y2, pixelSize);
 		backPoint = new Point((int)x1,(int)y1, pixelSize);
 		
-		System.out.println("Front: " + x2 + ", " + y2);
-		System.out.println("Back:  " + x1 + ", " + y1);
+		System.out.println("Robot front: " + (int)x2 + ", " + (int)y2 + " px");
+		System.out.println("Robot back:  " + (int)x1 + ", " + (int)y1 + " px");
 		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
 	}
 
