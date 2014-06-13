@@ -366,8 +366,8 @@ public class RealCamera implements Camera
 		frontPoint = new Point((int)x2,(int)y2, pixelSize);
 		backPoint = new Point((int)x1,(int)y1, pixelSize);
 		
-		System.out.println("Front: " + x1 + ", " + y1);
-		System.out.println("Back:  " + x2 + ", " + y2);
+		System.out.println("Front: " + x2 + ", " + y2);
+		System.out.println("Back:  " + x1 + ", " + y1);
 		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
 	}
 
