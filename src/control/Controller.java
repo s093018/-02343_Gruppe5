@@ -26,7 +26,8 @@ public class Controller {
 	private List<Point> closeBalls;
 	File f;
 	int ballsOnTrack;
-
+	int iterations = 0;
+	
 	public Controller () {
 		try {
 			this.realCamera = new RealCamera();
@@ -74,12 +75,12 @@ public class Controller {
 
 					System.out.println("Heading: "+board.radianToDegree1(realCamera.getRobot().heading));
 
-					String filepath = "/Users/Christian/Desktop/outputPath.txt";
-					if(f != null) {
-						if(f.exists()) {
-							f.delete();
-						}
-					}
+					String filepath = "/Users/Christian/Desktop/outputPath"+iterations+".txt";
+//					if(f != null) {
+//						if(f.exists()) {
+//							f.delete();
+//						}
+//					}
 					f = new File(filepath);
 					FileWriter fw = null;
 					try  {
@@ -123,6 +124,7 @@ public class Controller {
 					endGame = true;
 				}*/
 				realCamera.update();
+				iterations++;
 					if(ballCount == 2) {
 						endGame = true;
 					}
