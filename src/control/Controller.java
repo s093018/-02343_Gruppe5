@@ -10,7 +10,7 @@ import routing.*;
 
 public class Controller {
 
-	private FindingSequence fs;
+	private RobotOperations ro;
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
@@ -98,22 +98,22 @@ public class Controller {
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-						fs.shutdown();
+						ro.shutdown();
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-							fs.shutdown();
+							ro.shutdown();
 							System.out.println("Emergency shutdown");
 						} 
 					}
 
-					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
 					if(path != null) {
-						di = fs.sequence(path);
-						fs.drive(di, bfs.getCloseToWall());
+						di = ro.sequence(path);						
+						ro.drive(di, bfs.getCloseToWall());
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 					}
@@ -163,11 +163,11 @@ public class Controller {
 				//				}
 			}
 
-			fs.shutdown();
+			ro.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {
 			e.printStackTrace();
-			fs.shutdown();
+			ro.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
 	}
