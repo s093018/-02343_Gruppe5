@@ -19,8 +19,8 @@ public class RobotOperations {
 	public ArrayList<DriverInstructions> sequence (ArrayList<Integer> path) { 
 
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
-		int count = 1;
-		int updateCount = 1;
+		int count = 0;
+		int updateCount = 0;
 		for(int i = 1; i < path.size(); i++) {
 
 			if (path.get(i).equals((path.get(i-1)))) {
@@ -37,106 +37,23 @@ public class RobotOperations {
 			} else {
 				DriverInstructions di = new DriverInstructions(path.get(i-1), count);
 				robotInstructions.add(di); 
-				count = 1;
+				count = 0;
 			}
 
-			if(updateCount == 10) {
-				DriverInstructions di = new DriverInstructions(path.get(i-1), 100);
-				robotInstructions.add(di);
+			if(updateCount == 60) {
+				DriverInstructions di1 = new DriverInstructions(path.get(i-1), count);
+				robotInstructions.add(di1);
+				DriverInstructions di = new DriverInstructions(path.get(i-1), 0);
+				robotInstructions.add(di); 
 				updateCount = 0;
+				count = 0;
 			}
 			updateCount++;
 		}	
 		return robotInstructions;
 	}
 
-	public void drive (ArrayList<DriverInstructions> instructions, boolean closeToWall) {
-		int temp = 0;
-		for(DriverInstructions di : instructions) {
-			System.out.println("Instruktion "+temp+": heading="+di.getHeading()+", length="+di.getLength());
-			temp++;
-		}
-
-		for(int i = 0; i < instructions.size(); i++) {	
-			boolean done = false;
-
-			/* turn robot heading or drive forward */
-			if (i == 0) {
-
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree1(robotHeading)); 
-				System.out.println("turn 1: "+turn);
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnRight(Math.abs(turn));
-					}
-
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnLeft(turn);
-					}
-				}
-
-				/* open arms */
-				if(i == instructions.size()-2) {
-					done = false;
-					while(!done) {
-						done = robotControl.open();
-					}
-
-				}
-
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
-				}
-
-			} else {
-				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
-				System.out.println("turn"+(i+1)+": "+turn);
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnRight(Math.abs(turn));
-					}
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnLeft(turn);
-					}
-				}
-
-				/* open arms */
-				if(i == instructions.size()-1) {
-					done = false;
-					while(!done) {
-						done = robotControl.open();
-					}
-
-				}
-
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
-				}
-			}
-		}
-		/* close arms */
-		boolean done = false;
-		if(robotControl.getIsOpen()) { 
-
-			while(!done) {
-				done = robotControl.close();
-			}
-
-		}
-
-		/*close to wall */
-		done = false;
-		if (closeToWall) {
-			while(!done) {
-				done = robotControl.revers(3);
-			}
-		}
-	}
-
+	//####################################################################################3
 	public void goalDrive (ArrayList<DriverInstructions> instructions) {
 
 		for(int i = 0; i < instructions.size(); i++) {	
@@ -189,7 +106,7 @@ public class RobotOperations {
 						done = robotControl.open();
 					}
 				}
-				
+
 				done = false;
 				while (!done) { 
 					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
@@ -246,24 +163,80 @@ public class RobotOperations {
 		result *=45;
 		return result;
 	}
-	
+
 	public int radianToDegree1(double radian) {
-		
+
 		int result = (int)Math.toDegrees(radian);
-		
+
 		return result;
+	}
+	
+	public int turnRightDegree(int algoHeading, int robotHeading) {
+		int dif = 0;
+		
+		if(robotHeading > algoHeading) {
+			dif = robotHeading - algoHeading;
+		} else {
+			dif = robotHeading + algoHeading;
+		}
+			
+		
+		return dif;		
 	}
 
 	public int turnDegree(int algoHeading, int robotHeading) {
 		int dif = algoHeading-robotHeading;
-		if(-180<=dif && dif<=180)
+		if(-180 <= dif && dif <= 180)
 			return dif;
-		else if(dif<-180)
+		else if(dif < 180)
 			return dif + 360;
-		else if(dif>180)
+		else if(dif > 180)
 			return dif - 360; // return antal grader roboten skal dreje (negativ venstre / positiv hoejre) MAX 180grader
 		return dif;
 	}
 
+	public void turnRight(int turn) {
+		boolean done = false;
+		while (!done) {
+			done = robotControl.turnRight(turn);
+		}
+	}
+
+	public void turnLeft(int turn) {
+		boolean done = false;
+		while (!done) {
+			done = robotControl.turnLeft(Math.abs(turn));
+		}
+	}
+
+	public void open() {
+		boolean done = false;
+		while(!done) {
+			done = robotControl.open();
+		}
+	}
+
+	public void forward(int length) {
+		boolean done = false;
+		while (!done) { 
+			done = robotControl.forward(length); 
+		}
+	}
+
+	public void close() {
+		boolean done = false;
+		if(robotControl.getIsOpen()) { 
+			while(!done) {
+				done = robotControl.close();
+			}
+		}
+	}
+
+	public void reverse() {
+		boolean done = false;
+		while(!done) {
+			done = robotControl.revers(3);
+		}
+	}
 }
 

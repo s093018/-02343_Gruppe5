@@ -49,7 +49,7 @@ public class BFS {
 	public BFS(Field[][] board, char end) {
 		this.grid = board;
 		this.endChar = end;
-		this.robotChar = 'X';
+		this.robotChar = 'R';
 		this.obstacle = 'O';
 		this.fakeObstacle = 'F';
 		this.closeToWall = false;

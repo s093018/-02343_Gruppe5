@@ -22,7 +22,7 @@ public class Controller {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS = 1;
+	private final int MAX_NO_BALLS =1;
 	private List<Point> closeBalls;
 	File f;
 	int ballsOnTrack;
@@ -79,18 +79,13 @@ public class Controller {
 						board.buildObstacleAroundBall(p, 10);
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
-					
+
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
 
-					System.out.println("Heading: "+board.radianToDegree1(realCamera.getRobot().heading));
 
 					String filepath = "/Users/Christian/Desktop/outputPath"+iterations+".txt";
-					//					if(f != null) {
-					//						if(f.exists()) {
-					//							f.delete();
-					//						}
-					//					}
+
 					f = new File(filepath);
 					FileWriter fw = null;
 					try  {
@@ -111,15 +106,67 @@ public class Controller {
 
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
+					System.out.println("robotHeading: "+ro.radianToDegree1(realCamera.getRobot().heading));
+
 					if(path != null) {
-						di = ro.sequence(path);						
-						ro.drive(di, bfs.getCloseToWall());
+						di = ro.sequence(path);
+						int temp1 = 0;
+						for (DriverInstructions i : di) {
+							System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
+							temp1++;
+						}
+						int turn = ro.turnRightDegree(di.get(0).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+						//												if (turn < 0) {
+						//													ro.turnLeft(turn);
+						//												} else if(turn > 0) {
+						ro.turnRight(turn);
+						//												}
+						if(di.size() == 1) {
+							ro.open();
+						}
+
+						ro.forward((int)(di.get(0).getLength()*realCamera.getMap().pixelSize));
+
+						for(int i = 1; i < di.size(); i++) {
+
+							if(di.get(i).getLength() == 0) {
+								System.out.println("robotHeading before update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+								realCamera.update();
+								System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+								turn = ro.turnRightDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+								if(turn != 360 || turn != 0) {
+									//														if (turn < 0) {
+									//															ro.turnLeft(turn);
+									//														} else if(turn > 0) {
+									ro.turnRight(turn);
+								}
+
+							} else {
+
+								turn = ro.turnRightDegree(di.get(i).getHeading(), di.get(i-1).getHeading());
+								//														if (turn < 0) {
+								//															ro.turnLeft(turn);
+								//														} else if(turn > 0) {
+								ro.turnRight(turn);
+								//														}
+								if (i == di.size()-1) { // hvornår åbner lågerne sig
+									ro.open();
+								}
+								ro.forward((int)(di.get(0).getLength()*realCamera.getMap().pixelSize));
+							}
+						}
+						ro.close();
+
+						if(bfs.getCloseToWall()) {
+							ro.reverse();
+						}
+
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
+
 					}
-
-
-				}/* else {
+				}
+				/* else {
 					/** Drive to goal and release balls **//*
 
 					bfs = new BFS(board.getGrid(), 'G');
@@ -141,7 +188,7 @@ public class Controller {
 
 
 				iterations++;
-				if(ballCount == 1) {
+				if(ballCount > 1) {
 					endGame = true;
 				}
 				realCamera.update();
@@ -172,5 +219,6 @@ public class Controller {
 		} 		
 	}
 }
+
 
 
