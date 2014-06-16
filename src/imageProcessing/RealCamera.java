@@ -52,6 +52,10 @@ public class RealCamera implements Camera
 				System.out.println("IMAGE GRAB FAILED!");
 			if(!capture.retrieve(frame))
 				System.out.println("IMAGE RETRIEVE FAILED!");
+			if(!capture.grab())
+				System.out.println("IMAGE GRAB FAILED!");
+			if(!capture.retrieve(frame))
+				System.out.println("IMAGE RETRIEVE FAILED!");
 		}
 		//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 		Highgui.imwrite("src/imgDump/input.png", frame);
