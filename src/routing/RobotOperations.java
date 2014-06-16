@@ -168,24 +168,15 @@ public class RobotOperations {
 
 		int result = (int)Math.toDegrees(radian);
 
-		return result;
-	}
-	
-	public int turnRightDegree(int algoHeading, int robotHeading) {
-		int dif = 0;
-		
-		if(robotHeading > algoHeading) {
-			dif = robotHeading - algoHeading;
-		} else {
-			dif = robotHeading + algoHeading;
+		if (result < 0) {
+			result = result + 360;
 		}
-			
-		
-		return dif;		
+
+		return result;
 	}
 
 	public int turnDegree(int algoHeading, int robotHeading) {
-		int dif = algoHeading-robotHeading;
+		int dif = robotHeading-algoHeading;
 		if(-180 <= dif && dif <= 180)
 			return dif;
 		else if(dif < 180)
@@ -196,17 +187,19 @@ public class RobotOperations {
 	}
 
 	public void turnRight(int turn) {
-		boolean done = false;
-		while (!done) {
-			done = robotControl.turnRight(turn);
-		}
+
+			boolean done = false;
+			while (!done) {
+				done = robotControl.turnRight(turn);
+			}
+		
 	}
 
 	public void turnLeft(int turn) {
-		boolean done = false;
-		while (!done) {
-			done = robotControl.turnLeft(Math.abs(turn));
-		}
+			boolean done = false;
+			while (!done) {
+				done = robotControl.turnLeft(Math.abs(turn));
+			}
 	}
 
 	public void open() {
