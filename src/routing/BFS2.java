@@ -347,11 +347,11 @@ public class BFS2 {
 			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 0 && tmpY == 1) {
-				result.add(90); //
+				result.add(270); //
 			} else if(tmpX == -1 && tmpY == 0) {
 				result.add(0); //
 			} else if(tmpX == 0 && tmpY == -1) {
-				result.add(270); //
+				result.add(90); //
 			} else if(tmpX == 1 && tmpY == 0) {
 				result.add(180); //
 			} else if(tmpX == -1 && tmpY == 1) {
