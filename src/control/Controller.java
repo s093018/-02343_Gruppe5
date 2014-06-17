@@ -22,7 +22,7 @@ public class Controller {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =0;
+	private final int MAX_NO_BALLS =1;
 	private List<Point> closeBalls;
 	File f;
 	int ballsOnTrack;
@@ -81,7 +81,7 @@ public class Controller {
 					path = bfs.findPath(closeBalls);
 
 
-					String filepath = "/Users/Christian/Desktop/outputPath"+iterations+".txt";
+					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
 
 					f = new File(filepath);
 					FileWriter fw = null;
@@ -123,7 +123,7 @@ public class Controller {
 							ro.open();
 						}
 
-						ro.forward((int)(di.get(0).getLength()*realCamera.getMap().pixelSize));
+						ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
 
 						for(int i = 1; i < di.size(); i++) {
 
@@ -132,9 +132,9 @@ public class Controller {
 								System.out.println("NYT BILLEDE KALIBRERING");
 								realCamera.update();
 								System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
-								
+
 								turn = ro.turnDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
-								
+
 								if (turn < 0) {
 									ro.turnLeft(turn);
 								} else if(turn > 0) {
@@ -149,10 +149,11 @@ public class Controller {
 								} else if(turn > 0) {
 									ro.turnRight(turn);
 								}
+
 								if (i == di.size()-1) { // hvornår åbner lågerne sig
 									ro.open();
 								}
-								ro.forward((int)(di.get(0).getLength()*realCamera.getMap().pixelSize));
+								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
 							}
 						}
 						ro.close();
@@ -164,22 +165,77 @@ public class Controller {
 						ballCount++;
 						System.out.println("Ballcount = " + ballCount);
 
+					} else {
+						endGame = true;
 					}
-				}
-				/* else {
-					/** Drive to goal and release balls **//*
+				} else {
+
+					/** Drive to goal and release balls **/
 
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
-					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 
-					di = fs.sequence(path);
+					di = ro.sequence(path);
 
-					fs.goalDrive(di);
+					int temp1 = 0;
+					for (DriverInstructions i : di) {
+						System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
+						temp1++;
+					}
+
+					int turn = ro.turnDegree(di.get(0).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+					if (turn < 0) {
+						ro.turnLeft(turn);
+					} else if(turn > 0) {
+						ro.turnRight(turn);
+					}
+
+					if(di.size() == 1) {
+						ro.open();
+					}
+
+					ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
+
+					for(int i = 1; i < di.size(); i++) {
+
+						if(di.get(i).getLength() == 0) {
+							System.out.println("robotHeading before update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+							System.out.println("NYT BILLEDE KALIBRERING");
+							realCamera.update();
+							System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+
+							turn = ro.turnDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+
+							if (turn < 0) {
+								ro.turnLeft(turn);
+							} else if(turn > 0) {
+								ro.turnRight(turn);
+							}
+
+						} else {
+
+							turn = ro.turnDegree(di.get(i).getHeading(), di.get(i-1).getHeading());
+							if (turn < 0) {
+								ro.turnLeft(turn);
+							} else if(turn > 0) {
+								ro.turnRight(turn);
+							}
+
+							if (i == di.size()-1) { // hvornår åbner lågerne sig
+								ro.open();
+							}
+							ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
+						}
+					}
+
+					ro.kick();
+
+					ro.close();
 
 					ballCount = 0;
 					endGame = true;
-				}*/
+				}
 
 				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
 				board.getField(backField.getX(), backField.getY()).setValue(' ');
@@ -188,28 +244,11 @@ public class Controller {
 
 
 				iterations++;
-				if(ballCount > 0) {
+				if(ballCount > 1) {
 					endGame = true;
 				}
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-
-				//			 if(ballsOnTrack - realCamera.getBalls().size() == 1) {
-				//				 ballCount++;
-				//			 }
-
-				//				if(realCamera.getBalls().size() == 0) {
-				//					bfs = new BFS(board.getGrid(), 'G');
-				//					path = bfs.findPath(closeBalls);
-				//					fs = new FindingSequence(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-				//
-				//					di = fs.sequence(path);
-				//
-				//					fs.goalDrive(di);
-				//
-				//					ballCount = 0;
-				//					endGame = true;
-				//				}
 			}
 
 			ro.shutdown();

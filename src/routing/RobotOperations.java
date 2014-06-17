@@ -9,6 +9,7 @@ public class RobotOperations {
 	//	 private final int N = 0, NE = 45, E = 90, SE = 135, S = 180, SW = 225, W = 270, NW = 315; 
 	private robot.Control robotControl;
 	private double robotHeading, pixelSize;
+	private int correctionRate = 30;
 
 	public RobotOperations(robot.Control robotControl, double robotHeading, double pixelSize) {
 		this.robotControl = robotControl;
@@ -40,7 +41,7 @@ public class RobotOperations {
 				count = 0;
 			}
 
-			if(updateCount == 60) {
+			if(updateCount == correctionRate) {
 				DriverInstructions di1 = new DriverInstructions(path.get(i-1), count);
 				robotInstructions.add(di1);
 				DriverInstructions di = new DriverInstructions(path.get(i-1), 0);
@@ -49,92 +50,12 @@ public class RobotOperations {
 				count = 0;
 			}
 			updateCount++;
-		}	
+		}
+		
+		// lave for loop der kører baglænes
+		// tjek når heading skifter
+		
 		return robotInstructions;
-	}
-
-	//####################################################################################3
-	public void goalDrive (ArrayList<DriverInstructions> instructions) {
-
-		for(int i = 0; i < instructions.size(); i++) {	
-			boolean done = false;
-
-			/* turn robot heading or drive forward */
-			if (i == 0) {
-				int turn = turnDegree(instructions.get(i).getHeading(), radianToDegree1(robotHeading)); 
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
-					}
-
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnRight(turn);
-					}
-				}
-
-				/* open arms */
-				done = false;
-				if(i == instructions.size()-1) {
-					while(!done) {
-						done = robotControl.open();
-					}
-
-				}
-
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
-				}
-
-			} else {
-				int turn = turnDegree(instructions.get(i).getHeading(), instructions.get(i-1).getHeading());
-				if(turn < 0) {
-					while (!done) {
-						done = robotControl.turnLeft(Math.abs(turn));
-					}
-				} else if(turn > 0) {
-					while (!done) {
-						done = robotControl.turnRight(turn);
-					}
-				}
-
-				done = false;
-				/* open arms */
-				if(i == instructions.size()-1) {
-					while(!done) {
-						done = robotControl.open();
-					}
-				}
-
-				done = false;
-				while (!done) { 
-					done = robotControl.forward((int) (instructions.get(i).getLength()*pixelSize)); 
-				}
-			}
-		}
-		boolean done = false;
-
-		while(!done) {
-			done = robotControl.kick();
-		}
-		done = false;
-
-		while(!done) {
-			done = robotControl.kick();
-		}
-		done = false;
-
-		while(!done) {
-			done = robotControl.kick();
-		}
-		done = false;
-		if(robotControl.getIsOpen()) {
-			while(!done) {
-				done = robotControl.close();
-			}
-
-		}
 	}
 
 	public void shutdown () {
@@ -204,12 +125,15 @@ public class RobotOperations {
 
 	public void open() {
 		boolean done = false;
+
 		while(!done) {
+			System.out.println("BEFORE OPEN");
 			done = robotControl.open();
+			System.out.println("AFTER OPEN");
 		}
 	}
 
-	public void forward(int length) {
+	public void forward(double length) {
 		boolean done = false;
 		while (!done) { 
 			done = robotControl.forward(length); 
@@ -230,6 +154,25 @@ public class RobotOperations {
 		while(!done) {
 			done = robotControl.revers(3);
 		}
+	}
+
+	public void kick() {
+		boolean done = false;
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		done = false;
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		done = false;
+
+		while(!done) {
+			done = robotControl.kick();
+		}
+		
 	}
 }
 
