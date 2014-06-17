@@ -77,6 +77,7 @@ public class BFS2 {
 		Queue<Field> bfsQueue = new LinkedList<Field>();
 
 
+		boolean moveable = false;
 		int dist = 0;
 		int distX = start.getX() - robotFront.getX();
 		int distY = start.getY() - robotFront.getY();
@@ -87,7 +88,6 @@ public class BFS2 {
 		} else {
 			dist = (distX > distY) ? distX : distY;
 		}
-
 		// Create a new Field and mark it as the starting cell + set it as visited.
 		start.visit();
 		//Add it to the queue.
@@ -116,15 +116,17 @@ public class BFS2 {
 				N = grid[current.getX()][current.getY() + 1];
 				if(N.getY() + dist < grid[0].length) { 
 					for(int i = N.getY(); i < N.getY() + dist; i++) {
-						if(grid[N.getX()][i].getValue() != obstacle && grid[N.getX()][i].getValue() != fakeObstacle && !grid[N.getX()][i].isVisited()) {
-							if(grid[N.getX()][i].getValue() == endChar) {
-								current.setParent(N);
-								bfsQueue.add(N);
-								return printPath(N);
-							} 
+						if(grid[N.getX()][i].getValue() != obstacle && grid[N.getX()][i].getValue() != fakeObstacle && grid[N.getX()][i].getValue() != endChar && !grid[N.getX()][i].isVisited()) {
+							moveable = true;
 						} else {
+							moveable = false;
 							break;
 						}
+					}
+					if(moveable && grid[N.getX()][N.getY() + dist].getValue() == endChar) {
+						current.setParent(N);
+						bfsQueue.add(N);
+						return printPath(N);
 					}
 					// Get North Field
 					// Check if the value of the Field is not an obstacle and that the Field has not been visited.
@@ -153,15 +155,17 @@ public class BFS2 {
 				S = grid[current.getX()][current.getY() - 1];   
 				if(S.getY() - dist >= 0) {
 					for(int i = S.getY(); i > S.getY() - dist; i--) {
-						if(grid[S.getX()][i].getValue() != obstacle && grid[S.getX()][i].getValue() != fakeObstacle && !grid[S.getX()][i].isVisited()) {
-							if(grid[S.getX()][i].getValue() == endChar) {
-								current.setParent(S);
-								bfsQueue.add(S);
-								return printPath(S);
-							}
+						if(grid[S.getX()][i].getValue() != obstacle && grid[S.getX()][i].getValue() != fakeObstacle && grid[S.getX()][i].getValue() != endChar && !grid[S.getX()][i].isVisited()) {
+							moveable = true;
 						} else {
+							moveable = false;
 							break;
 						}
+					}
+					if(moveable && grid[S.getX()][S.getY() - dist].getValue() == endChar) {
+						current.setParent(S);
+						bfsQueue.add(S);
+						return printPath(S);
 					}
 					if(!grid[S.getX()][S.getY()].isVisited()) {
 						grid[S.getX()][S.getY()].visit();
@@ -187,15 +191,17 @@ public class BFS2 {
 				E = grid[current.getX() + 1][current.getY()];
 				if(E.getX() + dist < grid.length) {
 					for(int i = E.getX(); i < E.getX() + dist; i++) {
-						if(grid[i][E.getY()].getValue() != obstacle && grid[i][E.getY()].getValue() != fakeObstacle && !grid[i][E.getY()].isVisited()) {
-							if(grid[i][E.getY()].getValue() == endChar) {
-								current.setParent(E);
-								bfsQueue.add(E);
-								return printPath(E);
-							}
+						if(grid[i][E.getY()].getValue() != obstacle && grid[i][E.getY()].getValue() != fakeObstacle && grid[i][E.getY()].getValue() != endChar && !grid[i][E.getY()].isVisited()) {
+							moveable = true;
 						} else {
+							moveable = false;
 							break;
 						}
+					}
+					if(moveable && grid[E.getX() + dist][E.getY()].getValue() == endChar) {
+						current.setParent(E);
+						bfsQueue.add(E);
+						return printPath(E);
 					}
 					if(!grid[E.getX()][E.getY()].isVisited()) {
 						grid[E.getX()][E.getY()].visit();
@@ -218,15 +224,17 @@ public class BFS2 {
 				W = grid[current.getX() - 1][current.getY()];
 				if(W.getX() - dist >= 0) {
 					for(int i = W.getX(); i > W.getX() - dist; i--) {
-						if(grid[i][W.getY()].getValue() != obstacle && grid[i][W.getY()].getValue() != fakeObstacle && !grid[i][W.getY()].isVisited()) {
-							if(grid[i][W.getY()].getValue() == endChar) {
-								current.setParent(W);
-								bfsQueue.add(W);
-								return printPath(W);
-							}
+						if(grid[i][W.getY()].getValue() !=  endChar && grid[i][W.getY()].getValue() != obstacle && grid[i][W.getY()].getValue() != fakeObstacle && !grid[i][W.getY()].isVisited()) {
+							moveable = true;
 						} else {
+							moveable = false;
 							break;
 						}
+					}
+					if(moveable && grid[W.getX() - dist][W.getY()].getValue() == endChar) {
+						current.setParent(W);
+						bfsQueue.add(W);
+						return printPath(W);
 					}
 					if(!grid[W.getX()][W.getY()].isVisited()) {
 						grid[W.getX()][W.getY()].visit();
@@ -339,21 +347,21 @@ public class BFS2 {
 			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 0 && tmpY == 1) {
-				result.add(270); //
+				result.add(90); //
 			} else if(tmpX == -1 && tmpY == 0) {
 				result.add(0); //
 			} else if(tmpX == 0 && tmpY == -1) {
-				result.add(90); //
+				result.add(270); //
 			} else if(tmpX == 1 && tmpY == 0) {
 				result.add(180); //
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add(315); //
+				result.add(45); //
 			} else if(tmpX == 1 && tmpY == 1) {
-				result.add(225);
+				result.add(135);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add(135); //
+				result.add(225); //
 			} else if(tmpX == -1 && tmpY == -1) {
-				result.add(45);
+				result.add(315);
 			}
 
 			start = current_field;
