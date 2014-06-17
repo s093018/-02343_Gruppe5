@@ -245,7 +245,7 @@ public class Board {
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
 
 		for(int i = 0; i < pixelRadius * 2; i++){
-			checkAndBuild(buildObstacles, 'F');
+			checkAndBuild(buildObstacles, 'F', true);
 			incrBuildObstacles(buildObstacles);
 		}
 
@@ -300,7 +300,7 @@ public class Board {
 
 		int retryCounter = 0;
 		do{
-			if(!checkAndBuild(fieldListNew, 'G')){
+			if(!checkAndBuild(fieldListNew, 'G', true)){
 				ArrayList<String> directionArg = new ArrayList<String>();
 				for(int i = 0; i < fieldListNew.size(); i++){
 					directionArg.clear();
@@ -357,20 +357,23 @@ public class Board {
 				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
 			}
 		}
-		checkAndBuild(path, value);
+		checkAndBuild(path, value, true);
 	}
 
 	/**
 	 * Returns true if a ball or the robot currently is where trying to
 	 * build an obstacle, which means there exists an entrance to the ball
 	 * through the walls in progress of being built.
+	 * @param replaceObstacles TODO
 	 */
-	private boolean checkAndBuild(List<Field> buildObstacles, char value){
+	private boolean checkAndBuild(List<Field> buildObstacles, char value, boolean replaceObstacles){
 		boolean ret = false;
 		for(Field buildObstacle: buildObstacles){
 			try{
-				if(buildObstacle.getValue()!='R'
+				if(buildObstacle.getValue()!='R' || buildObstacle.getValue()!='X' || buildObstacle.getValue()!='Y'
 						|| buildObstacle.getValue()!='B' || buildObstacle.getValue()!='G'){
+					if(!replaceObstacles && buildObstacle.getValue()!='O')
+						break;
 					buildObstacle.setValue(value);
 					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
 				}
@@ -388,31 +391,22 @@ public class Board {
 		buildObstacles.set(3, grid[buildObstacles.get(3).getX()][buildObstacles.get(3).getY() - 1]);
 	}
 
-	public void fakeWallsBuild(double robotWidth) {
-		int pixelRadius = (int)robotWidth/2;
+	public void fakeWallsBuild(int pixelRadius) {		
+		ArrayList<Field> fakeObstacles = new ArrayList<Field>();
 
 		//i = 640
 		//j = 480
 		for (int i = 0 ; i < grid.length ; i++) {
 			for (int j = 0 ; j < grid[i].length ; j++) {
 				if (grid[i][j].getValue() == 'O') {
-					
 					try{
-											if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
-												grid[i+pixelRadius][j].setValue('F');
-												}
-												if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-													grid[i-pixelRadius][j].setValue('F');
-												}
-												if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-													grid[i][j+pixelRadius].setValue('F');
-												}
-												if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-													grid[i][j-pixelRadius].setValue('F');
-												}
+							fakeObstacles.add(grid[i+pixelRadius][j]);
+							fakeObstacles.add(grid[i-pixelRadius][j]);
+							fakeObstacles.add(grid[i][j+pixelRadius]);
+							fakeObstacles.add(grid[i][j-pixelRadius]);
 						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 					}catch(IndexOutOfBoundsException e) {}
-					
+
 
 					//					System.out.println("********FAKEWALL********");
 					//					System.out.println("1: "+(i+pixelRadius)+" < "+grid.length);
@@ -440,6 +434,8 @@ public class Board {
 				}
 			}
 		}
+		
+		checkAndBuild(fakeObstacles, 'F', false);
 	}
 	//	}
 
