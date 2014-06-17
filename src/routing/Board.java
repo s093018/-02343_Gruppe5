@@ -400,27 +400,28 @@ public class Board {
 
 	public void fakeWallsBuild(double robotWidth) {
 		int pixelRadius = (int)robotWidth;
+				
 		for (int i = 0 ; i < grid.length ; ++i) {
 			for (int j = 0 ; j < grid[i].length ; ++j) {
-				if (grid[i][j].getValue() == 'O') {
-					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
-						if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
-							grid[i+pixelRadius][j].setValue('F');
-						}
-						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-							grid[i-pixelRadius][j].setValue('F');
-						}
-						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-							grid[i][j+pixelRadius].setValue('F');
-						}
-						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-							grid[i][j-pixelRadius].setValue('F');
-						}
-						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
-					}
-				}
-			}
-		}
+//				if (grid[i][j].getValue() == 'O') {
+//					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
+//						if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
+//							grid[i+pixelRadius][j].setValue('F');
+//						}
+//						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+//							grid[i-pixelRadius][j].setValue('F');
+//						}
+//						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+//							grid[i][j+pixelRadius].setValue('F');
+//						}
+//						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+//							grid[i][j-pixelRadius].setValue('F');
+//						}
+//						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
+//					}
+//				}
+//			}
+//		}
 	}
 
 	public void fillInBalls(List<Point> balls) {
@@ -498,27 +499,5 @@ public class Board {
 	public String degreeToDirection(int degree){
 		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
 		return directions[(((degree + 22) % 360) / 45)];
-	}
-
-	/*Virker ikke endnu*/
-	//	public Board rotate (Board oldBoard) {
-	//	
-	//		System.out.println("length: "+oldBoard.getGrid().length+" width: "+oldBoard.getGrid()[0].length);
-	//        char[][] newGrid = new char[oldBoard.getGrid()[0].length][oldBoard.getGrid().length];
-	//
-	//        int ii = 0;
-	//        int jj = 0;
-	//        for(int i=0; i < oldBoard.getGrid()[0].length; i++){
-	//            for(int j = oldBoard.getGrid().length-1; j >= 0; j--){
-	//                System.out.print(ii+","+jj+" p "+i+","+j);
-	//                newGrid[ii][jj] = oldBoard.getGrid()[i][j].getValue();
-	//                jj++;
-	//            }
-	//            System.out.println();
-	//            ii++;
-	//        }
-	//        Board board = new Board(newGrid);
-	//        return board;
-	//    }
-	
+	}	
 }
