@@ -62,6 +62,18 @@ public class BFS2 {
 		}
 	}
 
+	public int getDistance(int distX, int distY) {
+		int dist;
+		if(distX < 1 && distY < 1) {
+			distX = Math.abs(distX);
+			distY = Math.abs(distY);
+			dist = (distX > distY) ? distX : distY;
+		} else {
+			dist = (distX > distY) ? distX : distY;
+		}
+		return dist;
+	}
+
 	/**
 	 * BFS routine 
 	 * Using a queue, this findPath(closeBalls) method is doing BFS.
@@ -72,22 +84,12 @@ public class BFS2 {
 		 *  Crete fields for North(N), South(S), East(E), West(W), 
 		 *	Northeast(NE), Northwest(NW), Southwest(SW) and Southeast(SE)
 		 */
-		Field N, S, E, W, NW, NE, SW, SE, current;
+		Field N, S, E, W, /* NW, NE, SW, SE,*/ current;
 		// Create new Queue to use for BFS. 
 		Queue<Field> bfsQueue = new LinkedList<Field>();
 
-
 		boolean moveable = false;
-		int dist = 0;
-		int distX = start.getX() - robotFront.getX();
-		int distY = start.getY() - robotFront.getY();
-		if(distX < 1 && distY < 1) {
-			distX = Math.abs(distX);
-			distY = Math.abs(distY);
-			dist = (distX > distY) ? distX : distY;
-		} else {
-			dist = (distX > distY) ? distX : distY;
-		}
+		int dist = getDistance(start.getX() - robotFront.getX(), start.getY() - robotFront.getY());
 		// Create a new Field and mark it as the starting cell + set it as visited.
 		start.visit();
 		//Add it to the queue.
@@ -96,9 +98,25 @@ public class BFS2 {
 		while(!bfsQueue.isEmpty()) {
 
 			current = bfsQueue.remove();
+			//			grid[current.getX()][current.getY()].setValue('C');
+			//			System.out.println(toString());
+			if(current.getY() + dist < grid[0].length && grid[current.getX()][current.getY() + dist].getValue() == endChar) {
+				System.out.println("Found ball N at [" + current.getX() + "," + (current.getY() + dist) + "]");
+				return printPath(current);
+			} else if(current.getY() - dist >= 0 && grid[current.getX()][current.getY() - dist].getValue() == endChar) {
+				System.out.println("Found ball S at [" + current.getX() + "," + (current.getY() - dist) + "]");
+				return printPath(current);
+			} else if(current.getX() + dist < grid.length && grid[current.getX() + dist][current.getY()].getValue() == endChar) {
+				System.out.println("Found ball E at [" + (current.getX() + dist) + "," + current.getY() + "]");
+				return printPath(current);
+			} else if(current.getX() - dist >= 0 && grid[current.getX() - dist][current.getY()].getValue() == endChar) {
+				System.out.println("Found ball at W: [" + (current.getX() - dist) + "," + current.getY() + "]");
+				return printPath(current);
+			}
 
-			if(current.getValue() == endChar) {      
-				/*
+
+
+			/*
 			for(int i = 0; i < closeBalls.size(); i++) {
 				Point ball = closeBalls.get(i);
 				if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
@@ -107,27 +125,24 @@ public class BFS2 {
 					break;
 				}
 			}
-
-				/* Call printPath to get a list of directions to return. */
-				return printPath(current);
-			}
-
+			 */
 			if(current.getY() + 1 < grid[0].length) {
 				N = grid[current.getX()][current.getY() + 1];
 				if(N.getY() + dist < grid[0].length) { 
 					for(int i = N.getY(); i < N.getY() + dist; i++) {
 						if(grid[N.getX()][i].getValue() != obstacle && grid[N.getX()][i].getValue() != fakeObstacle && grid[N.getX()][i].getValue() != endChar && !grid[N.getX()][i].isVisited()) {
-							moveable = true;
+//							moveable = true;
 						} else {
-							moveable = false;
+//							moveable = false;
 							break;
 						}
 					}
-					if(moveable && grid[N.getX()][N.getY() + dist].getValue() == endChar) {
-						current.setParent(N);
-						bfsQueue.add(N);
-						return printPath(N);
-					}
+					//					if(moveable && grid[current.getX()][current.getY() + dist].getValue() == endChar) {
+					//						System.out.println("Found ball N at [" + current.getX() + "," + (current.getY() + dist) + "]");
+					//						current.setParent(N);
+					//						bfsQueue.add(N);
+					//						return printPath(N);
+					//					}
 					// Get North Field
 					// Check if the value of the Field is not an obstacle and that the Field has not been visited.
 					// Set it as visited.
@@ -162,11 +177,12 @@ public class BFS2 {
 							break;
 						}
 					}
-					if(moveable && grid[S.getX()][S.getY() - dist].getValue() == endChar) {
-						current.setParent(S);
-						bfsQueue.add(S);
-						return printPath(S);
-					}
+					//					if(moveable && grid[current.getX()][current.getY() - dist].getValue() == endChar) {
+					//						System.out.println("Found ball S at [" + current.getX() + "," + (current.getY() - dist) + "]");
+					//						current.setParent(S);
+					//						bfsQueue.add(S);
+					//						return printPath(S);
+					//					}
 					if(!grid[S.getX()][S.getY()].isVisited()) {
 						grid[S.getX()][S.getY()].visit();
 						current.setParent(S);
@@ -198,11 +214,12 @@ public class BFS2 {
 							break;
 						}
 					}
-					if(moveable && grid[E.getX() + dist][E.getY()].getValue() == endChar) {
-						current.setParent(E);
-						bfsQueue.add(E);
-						return printPath(E);
-					}
+					//					if(moveable && grid[current.getX() + dist][current.getY()].getValue() == endChar) {
+					//						System.out.println("Found ball E at [" + (current.getX() + dist) + "," + current.getY() + "]");
+					//						current.setParent(E);
+					//						bfsQueue.add(E);
+					//						return printPath(E);
+					//					}
 					if(!grid[E.getX()][E.getY()].isVisited()) {
 						grid[E.getX()][E.getY()].visit();
 						current.setParent(E);
@@ -231,11 +248,12 @@ public class BFS2 {
 							break;
 						}
 					}
-					if(moveable && grid[W.getX() - dist][W.getY()].getValue() == endChar) {
-						current.setParent(W);
-						bfsQueue.add(W);
-						return printPath(W);
-					}
+					//					if(moveable && grid[current.getX() - dist][current.getY()].getValue() == endChar) {
+					//						System.out.println("Found ball at W: [" + (current.getX() - dist) + "," + current.getY() + "]");
+					//						current.setParent(W);
+					//						bfsQueue.add(W);
+					//						return printPath(W);
+					//					}
 					if(!grid[W.getX()][W.getY()].isVisited()) {
 						grid[W.getX()][W.getY()].visit();
 						current.setParent(W);
@@ -318,6 +336,7 @@ public class BFS2 {
 			//					bfsQueue.add(SW);
 			//				}
 			//			}
+			//			grid[current.getX()][current.getY()].setValue(' ');
 		}
 
 		// If we get here, we're screwed!
@@ -355,13 +374,13 @@ public class BFS2 {
 			} else if(tmpX == 1 && tmpY == 0) {
 				result.add(180); //
 			} else if(tmpX == -1 && tmpY == 1) {
-				result.add(45); //
+				result.add(315); //
 			} else if(tmpX == 1 && tmpY == 1) {
-				result.add(135);
+				result.add(225);
 			} else if(tmpX == 1 && tmpY == -1) {
-				result.add(225); //
+				result.add(135); //
 			} else if(tmpX == -1 && tmpY == -1) {
-				result.add(315);
+				result.add(45);
 			}
 
 			start = current_field;
