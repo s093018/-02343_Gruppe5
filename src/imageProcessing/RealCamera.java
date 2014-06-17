@@ -370,7 +370,7 @@ public class RealCamera implements Camera
 		
 		System.out.println("Robot front: " + (int)x2 + ", " + (int)y2 + " px");
 		System.out.println("Robot back:  " + (int)x1 + ", " + (int)y1 + " px");
-		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 24/pixelSize, 38/pixelSize);
+		robot = new Robot(new Point((int)((x1+x2)/2), (int)((y1+y2)/2), pixelSize), Math.atan2(y2-y1, x2-x1), 37/pixelSize, 24/pixelSize);
 	}
 
 	//optimer de her senere hvis det bliver nødvendigt

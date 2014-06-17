@@ -19,14 +19,6 @@ public class Board {
 
 	public Board(char[][] map) {
 
-		//		grid = new Field[map.length][map[0].length];
-		//
-		//		for (int i = 0 ; i < map.length ; ++i) {
-		//			for (int j = 0 ; j < map[i].length ; ++j) {
-		//				grid[i][j] = new Field(i, j, map[i][j]);
-		//			}
-		//		}
-
 		grid = new Field[map.length][map[0].length];
 
 		for (int i = 0 ; i < map.length ; ++i) {
@@ -34,7 +26,6 @@ public class Board {
 				grid[i][j] = new Field(i, j, map[i][j]);
 			}
 		}
-
 	}
 
 	/**
@@ -246,8 +237,7 @@ public class Board {
 	}
 
 	public void buildObstacleAroundBall(Point ball, int pixelRadius){
-		ball = ball.convert();
-			
+
 		List<Field> buildObstacles = new ArrayList<Field>();
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
 		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
@@ -399,40 +389,69 @@ public class Board {
 	}
 
 	public void fakeWallsBuild(double robotWidth) {
-		int pixelRadius = (int)robotWidth;
-				
-		for (int i = 0 ; i < grid.length ; ++i) {
-			for (int j = 0 ; j < grid[i].length ; ++j) {
-//				if (grid[i][j].getValue() == 'O') {
-//					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
-//						if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
-//							grid[i+pixelRadius][j].setValue('F');
-//						}
-//						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-//							grid[i-pixelRadius][j].setValue('F');
-//						}
-//						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-//							grid[i][j+pixelRadius].setValue('F');
-//						}
-//						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-//							grid[i][j-pixelRadius].setValue('F');
-//						}
-//						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
-//					}
-//				}
+		int pixelRadius = (int)robotWidth/2;
+
+		//i = 640
+		//j = 480
+		for (int i = 0 ; i < grid.length ; i++) {
+			for (int j = 0 ; j < grid[i].length ; j++) {
+				if (grid[i][j].getValue() == 'O') {
+					
+					try{
+											if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
+												grid[i+pixelRadius][j].setValue('F');
+												}
+												if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+													grid[i-pixelRadius][j].setValue('F');
+												}
+												if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+													grid[i][j+pixelRadius].setValue('F');
+												}
+												if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+													grid[i][j-pixelRadius].setValue('F');
+												}
+						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
+					}catch(IndexOutOfBoundsException e) {}
+					
+
+					//					System.out.println("********FAKEWALL********");
+					//					System.out.println("1: "+(i+pixelRadius)+" < "+grid.length);
+					//					System.out.println("2 "+(i-pixelRadius)+" >= "+0);
+					//					System.out.println("3: "+(j+pixelRadius)+" < "+grid[i].length);
+					//					System.out.println("4: "+(j-pixelRadius)+" >= "+0);
+					//					System.out.println("********FAKEWALL********");
+					//					System.out.println();
+
+					//					
+					//					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
+					//					if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
+					//						grid[i+pixelRadius][j].setValue('F');
+					//						}
+					//						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+					//							grid[i-pixelRadius][j].setValue('F');
+					//						}
+					//						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+					//							grid[i][j+pixelRadius].setValue('F');
+					//						}
+					//						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
+					//							grid[i][j-pixelRadius].setValue('F');
+					//						}
+					// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
+				}
 			}
 		}
 	}
+	//	}
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls) {
-		//	point = point.convert();
+			//	point = point.convert();
 			grid[point.pixel_x][point.pixel_y].setValue('B');
 		}
 	}
 
 	public void fillInRobotPosition(Point robotPosition) {
-	//	robotPosition = robotPosition.convert();
+		//	robotPosition = robotPosition.convert();
 		grid[robotPosition.pixel_x][robotPosition.pixel_y].setValue('R');	
 	}
 
@@ -486,12 +505,12 @@ public class Board {
 			grid[ball.pixel_x][ball.pixel_y].setValue(' ');
 		}
 	}
-	
+
 	public void clearRobot(Point robotPos) {
 		grid[robotPos.pixel_x][robotPos.pixel_y].setValue(' ');
 	}
-	
-	
+
+
 	// Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
 	/**
 	 * degree should be positive, if not may throw ArrayIndexOutOfBoundsException.
