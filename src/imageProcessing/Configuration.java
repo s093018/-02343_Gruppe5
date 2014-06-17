@@ -1,6 +1,7 @@
 package imageProcessing;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -8,6 +9,19 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.highgui.Highgui;
+
+
+class ConfigStream extends FileInputStream
+{
+	public ConfigStream(String name) throws FileNotFoundException {super(name);}
+	public int read(byte []b) throws IOException
+	{
+		int length = super.read(b);
+		for(int i = 0; i < length; ++i)
+			b[i] = (byte)Character.toLowerCase(b[i]);
+		return length;
+	}
+}
 
 
 //Uses fully qualified OpenCV Point classes since we already have a Point class.
@@ -66,8 +80,7 @@ public class Configuration
 		Properties props = new Properties();
 		try
 		{
-			//TODO: Convert keys to lowercase (also when extracting)
-			FileInputStream configFile = new FileInputStream(filename);
+			FileInputStream configFile = new ConfigStream(filename);
 			props.load(configFile);
 			configFile.close();
 		}
@@ -88,7 +101,7 @@ public class Configuration
 	}
 	private static Mat getImage(Properties props, String key, String defaultFile)
 	{
-		String filename = props.getProperty(key);
+		String filename = props.getProperty(key.toLowerCase());
 		if(filename == null)
 		{
 			System.out.println("Missing value for " + key + ", using default (" + defaultFile + ").");
@@ -111,7 +124,7 @@ public class Configuration
 	}
 	private static int getInt(Properties props, String key, int defaultValue)
 	{
-		String value = props.getProperty(key);
+		String value = props.getProperty(key.toLowerCase());
 		if(value != null)
 		{
 			try
@@ -125,7 +138,7 @@ public class Configuration
 	}
 	private static double getDouble(Properties props, String key, double defaultValue)
 	{
-		String value = props.getProperty(key);
+		String value = props.getProperty(key.toLowerCase());
 		if(value != null)
 		{
 			try
@@ -146,7 +159,7 @@ public class Configuration
 	}
 	private static String getString(Properties props, String key, String defaultValue)
 	{
-		String s = props.getProperty(key);
+		String s = props.getProperty(key.toLowerCase());
 		if(s == null)
 		{
 			System.out.println("Missing value for " + key + ", using default (" + defaultValue + ").");
@@ -158,7 +171,7 @@ public class Configuration
 	{
 		try
 		{
-			int []coordinates = extractInts(props.getProperty(key), 2);
+			int []coordinates = extractInts(props.getProperty(key.toLowerCase()), 2);
 			if(coordinates[0] < 0 || coordinates[1] < 0) throw new NumberFormatException();
 			return new org.opencv.core.Point(coordinates[0], coordinates[1]);
 		}
@@ -170,7 +183,7 @@ public class Configuration
 	{
 		try
 		{
-			int []colors = extractInts(props.getProperty(key), 3);
+			int []colors = extractInts(props.getProperty(key.toLowerCase()), 3);
 			return new org.opencv.core.Scalar(colors[0], colors[1], colors[2], 255);
 		}
 		catch(NumberFormatException nfe){System.out.println("Bad value for " + key + ", using default (" + defaultValue + ").");}
