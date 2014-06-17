@@ -420,8 +420,8 @@ public class Board {
 //						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 //					}
 //				}
-//			}
-//		}
+			}
+		}
 	}
 
 	public void fillInBalls(List<Point> balls) {
