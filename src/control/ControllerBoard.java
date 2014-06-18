@@ -5,7 +5,6 @@ import imageProcessing.*;
 import java.io.*;
 import java.util.*;
 
-import robot.Control;
 import routing.*;
 
 public class ControllerBoard {
@@ -16,12 +15,17 @@ public class ControllerBoard {
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
-	private ArrayList<DriverInstructions> di;
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS =0;
 	private List<Point> closeBalls;
+	
+	private int pixelLength = 10;
+	private int pixelRadius = 20;
+	private int pixelDistance = 10;
+	
+	
 	File f;
 	int ballsOnTrack;
 	int iterations = 0;
@@ -60,21 +64,21 @@ public class ControllerBoard {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 10);
-		//		board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
-				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
-//				for(int i = 0; i < realCamera.getGoals().size(); i++){
-//				
-//					Point p = realCamera.getGoals().get(i).center;
-//					board.buildPath(p, 20, ' ');
-//				}
+				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
+//				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
+				for(int i = 0; i < realCamera.getGoals().size(); i++){
+				
+					Point p = realCamera.getGoals().get(i).center;
+				board.buildPath(p, pixelLength, ' ');
+				}
 				
 				if(ballCount <= MAX_NO_BALLS) {
 
 					Iterator<Point> it = closeBalls.iterator();
 					while(it.hasNext()) {
 						Point p = it.next();
-						board.buildObstacleAroundBall(p, 10);
+						board.buildObstacleAroundBall(p, pixelRadius);
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
 

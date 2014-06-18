@@ -52,9 +52,6 @@ public class RobotOperations {
 			updateCount++;
 		}
 		
-		// lave for loop der kører baglænes
-		// tjek når heading skifter
-		
 		return robotInstructions;
 	}
 
