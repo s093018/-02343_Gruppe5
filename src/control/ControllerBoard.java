@@ -21,9 +21,7 @@ public class ControllerBoard {
 	private final int MAX_NO_BALLS =0;
 	private List<Point> closeBalls;
 	
-	private int pixelLength = 10;
-	private int pixelRadius = 20;
-	private int pixelDistance = 5;
+	private int pixelRadius, pixelDistance, pixelLength;
 	
 	
 	File f;
@@ -38,7 +36,7 @@ public class ControllerBoard {
 	}
 
 	public void run() {
-
+		
 		try {
 			System.out.println("Started!");
 			map = realCamera.getMap().obstacle;
@@ -64,8 +62,12 @@ public class ControllerBoard {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
+				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				pixelLength = pixelDistance - pixelRadius;
+				
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
-//				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
 				
@@ -82,7 +84,7 @@ public class ControllerBoard {
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
 					
-					bfs = new BFS2(board.getGrid(), 'B');  
+					bfs = new BFS2(board.getGrid(), 'G');  
 					//					path = bfs.findPath(closeBalls);
 					path = bfs.findPath();
 
