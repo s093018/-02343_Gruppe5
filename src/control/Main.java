@@ -12,9 +12,10 @@ public class Main {
 	 */
 	public static void main(String[] arg) {
 
-		ControllerRobot ctrl = new ControllerRobot();
+	
+//		ControllerRobot ctrl = new ControllerRobot();
 //		ControllerFinal ctrl = new ControllerFinal();
-//		ControllerBoard ctrl = new ControllerBoard();
+		ControllerBoard ctrl = new ControllerBoard();
 		ctrl.run();
 	}
 }

@@ -151,7 +151,7 @@ public class ControllerRobot {
 									ro.turnRight(turn);
 								}
 
-								if (i == di.size()-1) { // hvornår åbner lågerne sig
+								if (di.get(i-1).getLength() == -1) { // hvornår åbner lågerne sig
 									ro.open();
 								}
 								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
