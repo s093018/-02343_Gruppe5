@@ -48,14 +48,10 @@ public class RealCamera implements Camera
 		else
 		{
 			frame = new Mat();
-			if(!capture.grab())
-				System.out.println("IMAGE GRAB FAILED!");
+			if(!(capture.grab() && capture.grab()))//Grab twice to ensure fresh data
+				System.out.println("WARNING: IMAGE GRAB FAILED!");
 			if(!capture.retrieve(frame))
-				System.out.println("IMAGE RETRIEVE FAILED!");
-			if(!capture.grab())
-				System.out.println("IMAGE GRAB FAILED!");
-			if(!capture.retrieve(frame))
-				System.out.println("IMAGE RETRIEVE FAILED!");
+				System.out.println("WARNING: IMAGE RETRIEVE FAILED!");
 		}
 		//Ensure image and loaded templates have the same type (convertTo() doesn't work).
 		Highgui.imwrite("src/imgDump/input.png", frame);
@@ -117,7 +113,7 @@ public class RealCamera implements Camera
 		int width = image.width()/2;
 		int height = image.height()/2;
 		int xOff = (quadrant == 1 || quadrant == 4) ? width : 0;
-		int yOff = (quadrant > 2) ? height : 0;
+		int yOff = (quadrant > 2) ? 0 : height;
 		Mat Q = image.submat(yOff, yOff + height, xOff, xOff + width);
 
 		//Find best match
@@ -127,37 +123,65 @@ public class RealCamera implements Camera
 		org.opencv.core.Point origin = Core.minMaxLoc(match).minLoc;
 		return new org.opencv.core.Point(xOff + origin.x + prototype.width()/2, yOff + origin.y + prototype.height()/2);
 	}
-	private Goal makeGoal(org.opencv.core.Point left, org.opencv.core.Point right)
+	private double ratio(double a, double b)
 	{
-		int xAvg = (int)(left.x+right.x);
-		int yAvg = (int)(left.y+right.y);
-		return new Goal(new Point(xAvg/2, yAvg/2, pixelSize), 10, Math.atan2(-(left.x-right.x), (left.y-right.y)));
-	}/*
+		if(a > b) return (b/a)*settings.rectangleRatio;
+		else return (a/b)*settings.rectangleRatio;
+	}
 	private double dev(org.opencv.core.Point a, org.opencv.core.Point b, org.opencv.core.Point c)
 	{
+		double q = Proc.distance(a, b);
+		double w = Proc.distance(b, c);
 		double dot = (a.x - b.x)*(b.x - c.x) + (a.y - b.y)*(b.y - c.y);
-		return Math.abs(dot)/Proc.distance(a, b)*Proc.distance(b, c);
+		return Math.abs(ratio(q, w)-1) + 10*Math.abs(dot)/(q*w);
 	}
-	private List<org.opencv.core.Point> symmetrify(List<org.opencv.core.Point> points)
+	private void antiSymmetrify(List<org.opencv.core.Point> points)
 	{
-		double[] deviation = {};
-		double maxDev = ;
-		if(maxDev > settings.maxTolerance)
+		double[] deviation = new double[4];
+		double max = 0.0;
+		double min = 10000;
+		double d;
+		for(int i = 0; i < 4; ++i)
+		{
+			d = dev(points.get((i + 3) % 4), points.get(i), points.get((i + 1) % 4));
+			if(d > max) max = d;
+			if(d < min) min = d;
+			deviation[i] = d;
+		}
+		System.out.println("Deviation from rectangle:");
+		System.out.println("" + deviation[1] + "\t" + deviation[0]);
+		System.out.println("" + deviation[2] + "\t" + deviation[3]);
+		System.out.println("Max deviation: " + max + " (limit: " + settings.deviationTolerance + ")");
+
+		if(max > settings.deviationTolerance)
 		{
 			for(int i = 0; i < 4; ++i)
 			{
-				if(deviation[i] = maxDev)
+				//Alternative: Add deviations from neighboring corners, the wrong one will have bad neighbors.
+				if(deviation[i] == min)
 				{
-					
-					return ;
+					org.opencv.core.Point p = Proc.add(points.get(i), Proc.add(
+							Proc.sub(points.get((i+3) % 4), points.get(i)),
+							Proc.sub(points.get((i+1) % 4), points.get(i))));
+					System.out.println("Correcting corner " + ((i+2) % 4 + 1) + " to (" + p.x + ", " + p.y + ").");
+					points.set((i + 2) % 4, p);
+					return;
 				}
+				/*
+				if(deviation[i] == max)
+				{
+					org.opencv.core.Point p = Proc.add(points.get((i+2) % 4), Proc.add(
+							Proc.sub(points.get((i+1) % 4), points.get((i+2) % 4)),
+							Proc.sub(points.get((i+3) % 4), points.get((i+2) % 4))));
+					System.out.println("Correcting corner " + (i+1) + " to (" + p.x + ", " + p.y + ").");
+					points.set(i, p);
+					return;
+				}*/
 			}
 		}
-		return points;
-	}*/
-	private Mat cornerBasedDetection(Mat image)
+	}
+	private List<org.opencv.core.Point> adjustedPrototypeSearch(Mat image)
 	{
-		Mat marked = image.clone();
 		Mat processed = Proc.norm(smooth(image));
 		showStep("processed.png", processed, 1);
 
@@ -168,48 +192,9 @@ public class RealCamera implements Camera
 		double[] floorColor = Proc.estimateFloorColor(processed, settings.NW, settings.SE);
 		List<org.opencv.core.Point> points = new ArrayList<org.opencv.core.Point>();
 		for(int i = 1; i < 5; ++i)
-		{
 			points.add(findCorner(processed, i, floorColor));
-			Core.circle(marked, points.get(i-1), 6, new Scalar(0, 0, 255), -1);
-		}
 
-		//TODO: Recover from malplaced corner by mirroring
-		
-		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-		contours.add(new MatOfPoint(points.get(0), points.get(1), points.get(2), points.get(3)));
-		Mat course = Mat.zeros(image.size(), CvType.CV_8U);
-		Imgproc.drawContours(course, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
-
-		//Estimate pixel size
-		double diagonal = (Proc.distance(points.get(0), points.get(2)) + Proc.distance(points.get(1), points.get(3)))/2;
-		pixelSize = 216.33 / diagonal;
-		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
-
-		goals = new ArrayList<Goal>();
-		goals.add(makeGoal(points.get(1), points.get(2)));
-		goals.add(makeGoal(points.get(3), points.get(0)));
-
-		for(Goal g : goals)
-			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
-		showStep("corners.png", marked, 1.0);
-
-		return course;
-	}
-	private Mat detectBounds(Mat image, int strategy)
-	{
-		switch(strategy)
-		{
-//		case 0: return floodFillDetection(image);
-		case 1: return cornerBasedDetection(image);
-//		case 2: return prototypeBoundsDetection(image);
-		default:
-			System.out.println("detectBounds(): Unknown strategy (" + strategy + "). Using cornerBasedDetection");
-			return cornerBasedDetection(image);
-		}
-	}
-	private Mat findCentralObstacle(Mat image)
-	{
-		return null;
+		return points;
 	}
 	private Mat detectCentralObstacle(Mat image)
 	{
@@ -244,30 +229,82 @@ public class RealCamera implements Camera
 		showStep("centralObstacleMask.png", centralMask, 255);
 		return centralMask;
 	}
+	private Map buildMap(Mat image, List<org.opencv.core.Point> corners, Mat centralObstacle)
+	{
+		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+		contours.add(new MatOfPoint(corners.get(0), corners.get(1), corners.get(2), corners.get(3)));
+		Mat blocked = Mat.zeros(image.size(), CvType.CV_8U);
+		Imgproc.drawContours(blocked, contours, -1, new Scalar(1, 1, 1, 255), Core.FILLED);
+
+		if(!settings.ignoreCentralObstacle)
+			blocked = blocked.mul(centralObstacle);
+
+		showStep("obstacleMask.png", blocked, 255);
+
+		char obstacle[][] = new char[blocked.width()][blocked.height()];
+		for(int y = 0; y < blocked.height(); ++y)
+			for(int x = 0; x < blocked.width(); ++x)
+				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
+		return new Map(obstacle, pixelSize);
+	}
+	private List<org.opencv.core.Point> getCorners(Mat image, int strategy)
+	{
+		switch(strategy)
+		{
+		case 0:
+			return adjustedPrototypeSearch(image);
+		default:
+			System.out.println("Unknown corner strategy: " + settings.boundsStrategy + "\nUsing adjustedPrototypeSearch.");
+			return adjustedPrototypeSearch(image);
+		}
+
+	}
+	private Goal makeGoal(org.opencv.core.Point left, org.opencv.core.Point right)
+	{
+		int x = (int)(left.x+right.x)/2;
+		int y = (int)(left.y+right.y)/2;
+		double heading = Math.atan2(right.x-left.x, left.y-right.y);
+		return new Goal(new Point(x, y, pixelSize), 10, heading);
+	}
+	public void updateMap()
+	{
+		Mat image = getImage();
+
+		List<org.opencv.core.Point> corners = getCorners(image, settings.boundsStrategy);
+
+		Mat marked = image.clone();
+		for(org.opencv.core.Point c : corners)
+			Core.circle(marked, c, 6, new Scalar(255, 255, 0), -1);
+
+		//Recover from malplaced corner by mirroring
+		antiSymmetrify(corners);
+
+		for(org.opencv.core.Point c : corners)
+			Core.circle(marked, c, 6, new Scalar(0, 0, 255), -1);
+
+		//Estimate pixel size
+		double diagonal = (Proc.distance(corners.get(0), corners.get(2)) + Proc.distance(corners.get(1), corners.get(3)))/2;
+		pixelSize = 216.33 / diagonal;
+		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
+
+		goals = new ArrayList<Goal>();
+		goals.add(makeGoal(corners.get(2), corners.get(1)));
+		goals.add(makeGoal(corners.get(0), corners.get(3)));
+
+		for(Goal g : goals)
+			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
+		showStep("corners.png", marked, 1.0);
+
+		map = buildMap(image, corners, detectCentralObstacle(image));
+	}
 	public RealCamera()
 	{
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		if(settings.testMode) testImage = Highgui.imread(settings.testImageFile);
 		else capture = new VideoCapture(0);
-
-		Mat image = getImage();
-
-		//Find obstacles
-		Mat bounds = detectBounds(image, settings.boundsStrategy);
-		Mat blocked = bounds.mul(detectCentralObstacle(image), 255);
-		if(settings.ignoreCentralObstacle)
-			blocked = bounds;
-
-		char obstacle[][] = new char[blocked.width()][blocked.height()];
-		for(int y = 0; y < blocked.height(); ++y)
-			for(int x = 0; x < blocked.width(); ++x)
-				obstacle[x][y] = blocked.get(y, x)[0] == 0.0 ? 'O' : ' ';
-		map = new Map(obstacle, pixelSize);
-
-		showStep("obstacleMask.png", blocked, 255);
-
-		//Find initial position of balls + robot
+		capture.grab();
+		updateMap();
 		update();
 	}
 	public void update()
@@ -285,7 +322,7 @@ public class RealCamera implements Camera
 		findRobot(image.clone(), "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
 	}
 
-	public void findBalls(Mat image, String templFileName)
+	private void findBalls(Mat image, String templFileName)
 	{
 		Mat templ = Highgui.imread(templFileName);
 
@@ -320,7 +357,7 @@ public class RealCamera implements Camera
 		showStep("billede3.png", image, 1);
 	}
 
-	public void findRobot(Mat image, String front, String back)
+	private void findRobot(Mat image, String front, String back)
 	{
 		Mat image1 = image.clone();
 		Mat image2 = image.clone();

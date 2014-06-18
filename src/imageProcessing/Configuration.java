@@ -45,6 +45,9 @@ public class Configuration
 	public final double floodFillUpdiff;
 	public final double floodFillLodiff;
 	public final boolean ignoreCentralObstacle;
+	public final boolean rectangleIntuition;
+	public final double rectangleRatio;
+	public final double deviationTolerance;
 
 	public Configuration(String filename)
 	{
@@ -71,8 +74,9 @@ public class Configuration
 		floodFillUpdiff = getDouble(props, "floodFillUpdiff", 2.0);
 		floodFillLodiff = getDouble(props, "floodFillLodiff", 0.25);
 		ignoreCentralObstacle = getInt(props, "ignoreCentralObstacle", 0) != 0;
-//		rectangleIntuition = getInt(props, "rectangleIntuition", 1);
-//		rectangle
+		rectangleIntuition = getInt(props, "rectangleIntuition", 1) != 0;
+		rectangleRatio = getDouble(props, "rectangleRatio", 1.5);
+		deviationTolerance = getDouble(props, "deviationTolerance", 0.1);
 		System.out.println();
 	}
 	private Properties load(String filename)
