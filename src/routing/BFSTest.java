@@ -77,8 +77,6 @@ public class BFSTest {
 		// Create new Queue to use for BFS. 
 		Queue<Field> bfsQueue = new LinkedList<Field>();
 
-		System.out.println("Starting at: [" + start.getX() + "," + start.getY() + "]");
-
 		// Create a new Field and mark it as the starting cell + set it as visited.
 		start.visit();
 		//Add it to the queue.
@@ -130,7 +128,6 @@ public class BFSTest {
 						NE_corner = grid[N.getX() + robotWidth/2][N.getY() + robotLength/2];
 						SW_corner = grid[N.getX() - robotWidth/2][N.getY() - robotLength/2];
 						SE_corner = grid[N.getX() + robotWidth/2][N.getY() - robotLength/2];
-						System.out.println("N");
 						for(int i = NW_corner.getX(); i <= NE_corner.getX(); i++) {
 							for(int j = SW_corner.getY(); j <= NE_corner.getY(); j++) {
 								if(grid[i][j].getValue() != obstacle && grid[i][j].getValue() != fakeObstacle && grid[i][j].getValue() != endChar){
@@ -204,9 +201,8 @@ public class BFSTest {
 			 */	
 			if (current.getX() + 1 < grid.length) {               
 				E = grid[current.getX() + 1][current.getY()];
-				System.out.println("h");
 				if (E.getValue() != obstacle && E.getValue() != fakeObstacle && !grid[E.getX()][E.getY()].isVisited()) {    
-					System.out.println("Hej");
+
 					if((E.getX() - robotLength/2) >= 0 && E.getY() - (robotWidth/2) >= 0 && E.getX() + (robotLength/2) < grid.length && 
 							E.getY() + (robotWidth/2) < grid[0].length) {
 
@@ -300,11 +296,11 @@ public class BFSTest {
 			tmpY = start.getY() - current_field.getY();
 
 			if(tmpX == 0 && tmpY == 1) {
-				result.add(90); //
+				result.add(270); //
 			} else if(tmpX < 0 && tmpY == 0) {
 				result.add(0); //
 			} else if(tmpX == 0 && tmpY < 0) {
-				result.add(270); //
+				result.add(90); //
 			} else if(tmpX > 1 && tmpY == 0) {
 				result.add(180); //
 			} else if(tmpX < 0 && tmpY > 0) {

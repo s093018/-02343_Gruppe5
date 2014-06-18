@@ -19,6 +19,11 @@ public class RobotOperations {
 
 	public ArrayList<DriverInstructions> sequence (ArrayList<Integer> path) { 
 
+		for(int k : path) {
+			System.out.print(k+", ");
+		}
+		System.out.println();		
+		
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
 		int count = 0;
 		int updateCount = 0;
@@ -51,6 +56,7 @@ public class RobotOperations {
 			}
 			updateCount++;
 		}
+		
 		int tempHeading = robotInstructions.get(robotInstructions.size()-1).getHeading(); ;
 		for(int i = robotInstructions.size()-2; i >= 0; i--) {
 			if (tempHeading != robotInstructions.get(i).getHeading()) {

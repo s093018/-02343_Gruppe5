@@ -14,7 +14,7 @@ public class ControllerRobot {
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
-	private BFS bfs;
+	private BFSTest bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -66,21 +66,21 @@ public class ControllerRobot {
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 				
-				/* Encase all not close to wall-balls in fake obstacles
-				 * and create a path outward in the direction away from closest obstacle */
-				for(Point ball: realCamera.getBalls()){
-					if(!closeBalls.contains(ball)){
-						ball.setPathDirection(board.directionToObstacle(ball));
-						board.buildObstacleAroundBall(ball, pixelRadius);
-						board.buildPath(ball, pixelLength, ' ');
-					}
-				}
+//				/* Encase all not close to wall-balls in fake obstacles
+//				 * and create a path outward in the direction away from closest obstacle */
+//				for(Point ball: realCamera.getBalls()){
+//					if(!closeBalls.contains(ball)){
+//						ball.setPathDirection(board.directionToObstacle(ball));
+//						board.buildObstacleAroundBall(ball, pixelRadius);
+//						board.buildPath(ball, pixelLength, ' ');
+//					}
+//				}
 				
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
 				
-					Point goalPoints = realCamera.getGoals().get(i).center;
+				Point goalPoints = realCamera.getGoals().get(i).center;
 				board.buildPath(goalPoints, pixelLength, ' ');
 				}
 				
@@ -93,9 +93,9 @@ public class ControllerRobot {
 //						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 //					}
 
-					bfs = new BFS(board.getGrid(), 'B');  
-					path = bfs.findPath(closeBalls);
-//					path = bfs.findPath();
+					bfs = new BFSTest(board.getGrid(), 'B', (int)realCamera.getRobot().robotLength, (int)realCamera.getRobot().robotWidth);  
+//					path = bfs.findPath(closeBalls);
+					path = bfs.findPath();
 
 
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";

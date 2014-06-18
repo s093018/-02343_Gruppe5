@@ -11,7 +11,7 @@ public class ControllerBoard {
 
 	private RealCamera realCamera;
 	private Board board;
-	private BFS3 bfs;
+	private BFSTest bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -88,7 +88,7 @@ public class ControllerBoard {
 //						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 //					}
 					
-					bfs = new BFS3(board.getGrid(), 'B');  
+					bfs = new BFSTest(board.getGrid(), 'B', (int)realCamera.getRobot().robotLength, (int)realCamera.getRobot().robotWidth);  
 					//					path = bfs.findPath(closeBalls);
 					path = bfs.findPath();
 
