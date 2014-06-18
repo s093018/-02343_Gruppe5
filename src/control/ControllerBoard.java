@@ -23,7 +23,7 @@ public class ControllerBoard {
 	
 	private int pixelLength = 10;
 	private int pixelRadius = 20;
-	private int pixelDistance = 10;
+	private int pixelDistance = 5;
 	
 	
 	File f;

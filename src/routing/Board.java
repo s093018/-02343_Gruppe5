@@ -262,7 +262,7 @@ public class Board {
 		ArrayList<String> directions = new ArrayList<String>();
 
 		for(int i = 0; i < goals.size(); i++){
-			directions.add(degreeToDirection((radianToDegreePositive(reflectRadian(goals.get(i).heading)))));
+			directions.add(degreeToDirection(rotateDegree((radianToDegreePositive(reflectRadian(goals.get(i).heading))))));
 			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
 			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
 
