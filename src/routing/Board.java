@@ -236,7 +236,7 @@ public class Board {
 		return path_direction;
 	}
 
-	public void buildObstacleAroundBall(Point ball, int pixelRadius){
+	private void buildObstacleAroundBall(Point ball, int pixelRadius){
 
 		List<Field> buildObstacles = new ArrayList<Field>();
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
@@ -249,7 +249,8 @@ public class Board {
 			incrBuildObstacles(buildObstacles);
 		}
 
-		buildPath(ball, pixelRadius, ' ');
+		// Outcomment this if using moveBalls()
+	//	buildPath(ball, pixelRadius, ' ');
 	}
 
 	/**
@@ -269,28 +270,28 @@ public class Board {
 			if(directions.get(i).equals("N")){
 				y_new = goals.get(i).center.pixel_y - pixelDistance;
 			}
-			if(directions.get(i).equals("S")){
+			else if(directions.get(i).equals("S")){
 				y_new = goals.get(i).center.pixel_y + pixelDistance;
 			}
-			if(directions.get(i).equals("E")){
+			else if(directions.get(i).equals("E")){
 				x_new = goals.get(i).center.pixel_x + pixelDistance;
 			}
-			if(directions.get(i).equals("W")){
+			else if(directions.get(i).equals("W")){
 				x_new = goals.get(i).center.pixel_x - pixelDistance;
 			}
-			if(directions.get(i).equals("NW")){
+			else if(directions.get(i).equals("NW")){
 				x_new = goals.get(i).center.pixel_x - pixelDistance;
 				y_new = goals.get(i).center.pixel_y - pixelDistance;
 			}
-			if(directions.get(i).equals("NE")){
+			else if(directions.get(i).equals("NE")){
 				x_new = goals.get(i).center.pixel_x + pixelDistance;
 				y_new = goals.get(i).center.pixel_y - pixelDistance;
 			}
-			if(directions.get(i).equals("SW")){
+			else if(directions.get(i).equals("SW")){
 				x_new = goals.get(i).center.pixel_x - pixelDistance;
 				y_new = goals.get(i).center.pixel_y + pixelDistance;
 			}
-			if(directions.get(i).equals("SE")){
+			else if(directions.get(i).equals("SE")){
 				x_new = goals.get(i).center.pixel_x + pixelDistance;
 				y_new = goals.get(i).center.pixel_y + pixelDistance;
 			}
@@ -320,6 +321,75 @@ public class Board {
 		}while(retryCounter < 50);
 
 		System.out.println("The goals were not moved.");
+		return fieldListNew;
+	}
+	
+	/**
+	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
+	 */
+	public List<Field> moveBalls(List<Point> balls, int pixelDistance, char newValueAtOldLocation, int pixelLength, int pixelRadius){
+		ArrayList<Field> fieldListOld = new ArrayList<Field>();
+		ArrayList<Field> fieldListNew = new ArrayList<Field>();
+		
+		for(Point ball: balls){
+			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
+			int x_new = ball.pixel_x, y_new = ball.pixel_y;
+
+			if(ball.pathDirection.equals("S")){
+				y_new = ball.pixel_y - pixelDistance; //Towards N
+			}
+			else if(ball.pathDirection.equals("N")){
+				y_new = ball.pixel_y + pixelDistance; //Towards S
+			}
+			else if(ball.pathDirection.equals("W")){
+				x_new = ball.pixel_x + pixelDistance; //Towards E
+			}
+			else if(ball.pathDirection.equals("E")){
+				x_new = ball.pixel_x - pixelDistance; //Towards W
+			}
+			else if(ball.pathDirection.equals("SE")){
+				x_new = ball.pixel_x - pixelDistance; //Towards NW
+				y_new = ball.pixel_y - pixelDistance;
+			}
+			else if(ball.pathDirection.equals("SW")){
+				x_new = ball.pixel_x + pixelDistance; //Towards NE
+				y_new = ball.pixel_y - pixelDistance;
+			}
+			else if(ball.pathDirection.equals("NE")){
+				x_new = ball.pixel_x - pixelDistance; //Towards SW
+				y_new = ball.pixel_y + pixelDistance;
+			}
+			else if(ball.pathDirection.equals("NW")){
+				x_new = ball.pixel_x + pixelDistance; //Towards SE
+				y_new = ball.pixel_y + pixelDistance;
+			}
+
+			fieldListNew.add(grid[x_new][y_new]);
+		}
+
+		int retryCounter = 0;
+		do{
+			if(!checkAndBuild(fieldListNew, 'B', true)){
+				for(int i = 0; i < fieldListNew.size(); i++){
+					Point newBall = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
+					newBall.setPathDirection(balls.get(i).pathDirection);
+					
+					buildObstacleAroundBall(newBall, pixelRadius);
+					buildPath(newBall,	pixelLength, ' ');
+				}
+				for(Field fieldOld : fieldListOld)
+					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+				return fieldListNew;
+			}
+			// Retry at x+1, y - May require optimizing
+			for(int i = 0; i < fieldListNew.size(); i++){
+				Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
+				fieldListNew.set(i, fieldNewRetry);
+			}
+			retryCounter++;
+		}while(retryCounter < 50);
+
+		System.out.println("The balls were not moved.");
 		return fieldListNew;
 	}
 
