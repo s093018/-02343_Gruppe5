@@ -239,10 +239,10 @@ public class Board {
 	private void buildObstacleAroundBall(Point ball, int pixelRadius){
 
 		List<Field> buildObstacles = new ArrayList<Field>();
-		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);
-		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
+		try{buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);}catch(IndexOutOfBoundsException e){}
 
 		for(int i = 0; i < pixelRadius * 2; i++){
 			checkAndBuild(buildObstacles, 'F', false);
@@ -263,7 +263,7 @@ public class Board {
 		ArrayList<String> directions = new ArrayList<String>();
 
 		for(int i = 0; i < goals.size(); i++){
-			directions.add(degreeToDirection(rotateDegree((radianToDegreePositive(reflectRadian(goals.get(i).heading))))));
+			directions.add(degreeToDirection(rotateDegree((radianToDegreePositive(goals.get(i).heading)))));
 			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
 			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
 
@@ -538,14 +538,6 @@ public class Board {
 		int result = (int) Math.toDegrees(radian);
 		while (result < 0) 
 			result = result + 360;
-		return result;
-	}
-	
-	//Code from: http://stackoverflow.com/questions/5830791/find-radians-reflection-angle
-	public double reflectRadian(double startRadian){
-		double result = 0.5*Math.PI - (startRadian + Math.PI - 0.5*Math.PI);
-		result = 2*Math.PI - startRadian; 
-		result = -startRadian; //subtract 2*Pi
 		return result;
 	}
 	

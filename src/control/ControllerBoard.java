@@ -11,7 +11,7 @@ public class ControllerBoard {
 
 	private RealCamera realCamera;
 	private Board board;
-	private BFS2 bfs;
+	private BFS3 bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -53,12 +53,6 @@ public class ControllerBoard {
 
 
 				board.fillInBalls(realCamera.getBalls());
-				int temp = 0;
-				for (Point p : realCamera.getBalls()) {
-					System.out.println("Bold "+temp+": ("+p.pixel_x+","+p.pixel_y+")" );
-					temp++;
-				}
-
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
@@ -67,24 +61,25 @@ public class ControllerBoard {
 				pixelLength = pixelDistance - pixelRadius;
 				
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
-				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+			//	board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
+				board.moveBalls(realCamera.getBalls(), pixelDistance, 'H', pixelLength, pixelRadius);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
 				
-					Point p = realCamera.getGoals().get(i).center;
-				board.buildPath(p, pixelLength, ' ');
+					Point goalPoints = realCamera.getGoals().get(i).center;
+				board.buildPath(goalPoints, pixelLength, ' ');
 				}
 				
 				if(ballCount <= MAX_NO_BALLS) {
 
-					Iterator<Point> it = closeBalls.iterator();
-					while(it.hasNext()) {
-						Point p = it.next();
-						board.buildObstacleAroundBall(p, pixelRadius);
-						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
-					}
+//					Iterator<Point> it = closeBalls.iterator();
+//					while(it.hasNext()) {
+//						Point p = it.next();
+//						board.buildObstacleAroundBall(p, pixelRadius);
+//						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
+//					}
 					
-					bfs = new BFS2(board.getGrid(), 'G');  
+					bfs = new BFS3(board.getGrid(), 'B');  
 					//					path = bfs.findPath(closeBalls);
 					path = bfs.findPath();
 
