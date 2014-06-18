@@ -14,7 +14,7 @@ public class ControllerRobot {
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
-	private BFS3 bfs;
+	private BFS bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -82,9 +82,9 @@ public class ControllerRobot {
 //						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 //					}
 
-					bfs = new BFS3(board.getGrid(), 'B');  
-//					path = bfs.findPath(closeBalls);
-					path = bfs.findPath();
+					bfs = new BFS(board.getGrid(), 'B');  
+					path = bfs.findPath(closeBalls);
+//					path = bfs.findPath();
 
 
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
