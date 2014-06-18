@@ -65,6 +65,17 @@ public class ControllerRobot {
 				
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				
+				/* Encase all not close to wall-balls in fake obstacles
+				 * and create a path outward in the direction away from closest obstacle */
+				for(Point ball: realCamera.getBalls()){
+					if(!closeBalls.contains(ball)){
+						ball.setPathDirection(board.directionToObstacle(ball));
+						board.buildObstacleAroundBall(ball, pixelRadius);
+						board.buildPath(ball, pixelLength, ' ');
+					}
+				}
+				
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
