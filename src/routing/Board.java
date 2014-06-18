@@ -73,9 +73,9 @@ public class Board {
 		}
 		return closeBalls;
 	}
-
+	/** Search in all directions (SE, S etc.) for obstacle - find closest obstacle and return direction
+	 */
 	private String directionToObstacle(Point point){
-		// Search in all directions (SE, S etc.) for obstacle - find closest obstacle and return direction
 		int shortest_dist = 0, temp_dist = 0, temp_pixel_x = point.pixel_x, temp_pixel_y = point.pixel_y;
 		String path_direction = "Failed to identify direction";
 		boolean done = false;
@@ -512,7 +512,7 @@ public class Board {
 	}
 	
 	public int rotateDegree(int degree){
-		return degree ;
+		return degree - 90;
 	}
 
 	// Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
@@ -522,5 +522,8 @@ public class Board {
 	public String degreeToDirection(int degree){
 		String directions[] = {"N", "E", "S", "W"};
 		return directions[(((degree + 45) % 360) / 90)];
+	
+//		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+//		return directions[(((degree + 22) % 360) / 45)];
 	}	
 }
