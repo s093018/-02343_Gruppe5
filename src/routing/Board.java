@@ -301,19 +301,17 @@ public class Board {
 		int retryCounter = 0;
 		do{
 			if(!checkAndBuild(fieldListNew, 'G', true)){
-				ArrayList<String> directionArg = new ArrayList<String>();
 				for(int i = 0; i < fieldListNew.size(); i++){
-					directionArg.clear();
-					directionArg.add(directions.get(i));
-
-					buildPath(new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0),
-							pixelLength, ' ');
+					Point newGoalPoint = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
+					newGoalPoint.setPathDirection(directions.get(i));
+					
+					buildPath(newGoalPoint,	pixelLength, ' ');
 				}
 				for(Field fieldOld : fieldListOld)
 					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
 				return fieldListNew;
 			}
-			// May require optimizing
+			// Retry at x+1, y - May require optimizing
 			for(int i = 0; i < fieldListNew.size(); i++){
 				Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
 				fieldListNew.set(i, fieldNewRetry);
