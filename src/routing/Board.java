@@ -335,31 +335,31 @@ public class Board {
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
 			int x_new = ball.pixel_x, y_new = ball.pixel_y;
 
-			if(ball.pathDirection.equals("S")){
+			if(ball.pathDirection.equals("N")){
 				y_new = ball.pixel_y - pixelDistance; //Towards N
 			}
-			else if(ball.pathDirection.equals("N")){
+			else if(ball.pathDirection.equals("S")){
 				y_new = ball.pixel_y + pixelDistance; //Towards S
 			}
-			else if(ball.pathDirection.equals("W")){
+			else if(ball.pathDirection.equals("E")){
 				x_new = ball.pixel_x + pixelDistance; //Towards E
 			}
-			else if(ball.pathDirection.equals("E")){
+			else if(ball.pathDirection.equals("W")){
 				x_new = ball.pixel_x - pixelDistance; //Towards W
 			}
-			else if(ball.pathDirection.equals("SE")){
+			else if(ball.pathDirection.equals("NW")){
 				x_new = ball.pixel_x - pixelDistance; //Towards NW
 				y_new = ball.pixel_y - pixelDistance;
 			}
-			else if(ball.pathDirection.equals("SW")){
+			else if(ball.pathDirection.equals("NE")){
 				x_new = ball.pixel_x + pixelDistance; //Towards NE
 				y_new = ball.pixel_y - pixelDistance;
 			}
-			else if(ball.pathDirection.equals("NE")){
+			else if(ball.pathDirection.equals("SW")){
 				x_new = ball.pixel_x - pixelDistance; //Towards SW
 				y_new = ball.pixel_y + pixelDistance;
 			}
-			else if(ball.pathDirection.equals("NW")){
+			else if(ball.pathDirection.equals("SE")){
 				x_new = ball.pixel_x + pixelDistance; //Towards SE
 				y_new = ball.pixel_y + pixelDistance;
 			}
