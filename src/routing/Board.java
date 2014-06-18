@@ -370,9 +370,9 @@ public class Board {
 		boolean ret = false;
 		for(Field buildObstacle: buildObstacles){
 			try{
-				if(buildObstacle.getValue()!='R' || buildObstacle.getValue()!='X' || buildObstacle.getValue()!='Y'
-						|| buildObstacle.getValue()!='B' || buildObstacle.getValue()!='G'){
-					if(!replaceObstacles && buildObstacle.getValue()!='O')
+				if(buildObstacle.getValue()!='R' && buildObstacle.getValue()!='X' && buildObstacle.getValue()!='Y'
+						&& buildObstacle.getValue()!='B' && buildObstacle.getValue()!='G'){
+					if(!replaceObstacles && buildObstacle.getValue()=='O')
 						continue;
 					buildObstacle.setValue(value);
 					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);

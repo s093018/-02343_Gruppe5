@@ -60,10 +60,15 @@ public class ControllerBoard {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 10);
-				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
-
+		//		board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
+//				for(int i = 0; i < realCamera.getGoals().size(); i++){
+//				
+//					Point p = realCamera.getGoals().get(i).center;
+//					board.buildPath(p, 20, ' ');
+//				}
+				
 				if(ballCount <= MAX_NO_BALLS) {
 
 					Iterator<Point> it = closeBalls.iterator();
