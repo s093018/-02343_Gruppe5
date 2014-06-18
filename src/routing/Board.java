@@ -393,8 +393,6 @@ public class Board {
 	public void fakeWallsBuild(int pixelRadius) {		
 		ArrayList<Field> fakeObstacles = new ArrayList<Field>();
 
-		//i = 640
-		//j = 480
 		for (int i = 0 ; i < grid.length ; i++) {
 			for (int j = 0 ; j < grid[i].length ; j++) {
 				if (grid[i][j].getValue() == 'O') {
@@ -405,38 +403,12 @@ public class Board {
 							fakeObstacles.add(grid[i][j-pixelRadius]);
 						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 					}catch(IndexOutOfBoundsException e) {}
-
-
-					//					System.out.println("********FAKEWALL********");
-					//					System.out.println("1: "+(i+pixelRadius)+" < "+grid.length);
-					//					System.out.println("2 "+(i-pixelRadius)+" >= "+0);
-					//					System.out.println("3: "+(j+pixelRadius)+" < "+grid[i].length);
-					//					System.out.println("4: "+(j-pixelRadius)+" >= "+0);
-					//					System.out.println("********FAKEWALL********");
-					//					System.out.println();
-
-					//					
-					//					if(i+pixelRadius < grid.length && i-pixelRadius >= 0 && j+pixelRadius < grid[i].length && j-pixelRadius >= 0) {
-					//					if(grid[i+pixelRadius][j].getValue() != 'G' && grid[i+pixelRadius][j].getValue() != 'B' && grid[i+pixelRadius][j].getValue() != 'O'&& grid[i+pixelRadius][j].getValue() != 'R') {
-					//						grid[i+pixelRadius][j].setValue('F');
-					//						}
-					//						if(grid[i-pixelRadius][j].getValue() != 'G' && grid[i-pixelRadius][j].getValue() != 'B' && grid[i-pixelRadius][j].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-					//							grid[i-pixelRadius][j].setValue('F');
-					//						}
-					//						if(grid[i][j+pixelRadius].getValue() != 'G' && grid[i][j+pixelRadius].getValue() != 'B' && grid[i][j+pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-					//							grid[i][j+pixelRadius].setValue('F');
-					//						}
-					//						if(grid[i][j-pixelRadius].getValue() != 'G' && grid[i][j-pixelRadius].getValue() != 'B' && grid[i][j-pixelRadius].getValue() != 'O' && grid[i+pixelRadius][j].getValue() != 'R') {
-					//							grid[i][j-pixelRadius].setValue('F');
-					//						}
-					// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 				}
 			}
 		}
 		
 		checkAndBuild(fakeObstacles, 'F', false);
 	}
-	//	}
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls) {
