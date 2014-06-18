@@ -12,7 +12,7 @@ public class Main {
 	 */
 	public static void main(String[] arg) {
 
-		Controller ctrl = new Controller();		
+		ControllerRobot ctrl = new ControllerRobot();		
 		ctrl.run();
 	}
 }
