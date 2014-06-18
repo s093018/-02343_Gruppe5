@@ -119,23 +119,24 @@ public class BFS3 {
 //				System.out.println("Found ball at W: [" + (current.getX() - dist) + "," + current.getY() + "]");
 				current.setParent(grid[current.getX() - dist][current.getY()]);
 				return printPath(grid[current.getX() - dist][current.getY()]);
-			} else if(current.getX() + dist < grid.length && current.getY() + dist < grid[0].length && grid[current.getX() + dist][current.getY() + dist].getValue() == endChar) {
-//				System.out.println("Found ball at NE: [ " + (current.getX() + dist) + "," + (current.getY() + dist) + "]");
-				current.setParent(grid[current.getX() + dist][current.getY() + dist]);
-				return printPath(grid[current.getX() + dist][current.getY() + dist]);
-			} else if(current.getX() - dist >= 0 && current.getY() + dist < grid[0].length && grid[current.getX() - dist][current.getY() + dist].getValue() == endChar) {
-//				System.out.println("Found ball at NW: [" + (current.getX() - dist) + "," + current.getY() + dist + "]");
-				current.setParent(grid[current.getX() - dist][current.getY() + dist]);
-				return printPath(grid[current.getX() - dist][current.getY() + dist]);
-			} else if(current.getX() - dist >= 0 && current.getY() - dist >= 0 && grid[current.getX() - dist][current.getY() - dist].getValue() == endChar) {
-//				System.out.println("Found ball at SW: [" + (current.getX() - dist) + "," + (current.getY() - dist) + "]");
-				current.setParent(grid[current.getX() - dist][current.getY() - dist]);
-				return printPath(grid[current.getX() - dist][current.getY() - dist]);
-			} else if(current.getX() + dist < grid.length && current.getY() - dist >= 0 && grid[current.getX() + dist][current.getY() - dist].getValue() == endChar) {
-//				System.out.println("Found ball at SE: [" + (current.getX() + dist) + "," + (current.getY() - dist) + "]");
-				current.setParent(grid[current.getX() + dist][current.getY() - dist]);
-				return printPath(grid[current.getX() + dist][current.getY() - dist]);
-			}
+			} 
+//			else if(current.getX() + dist < grid.length && current.getY() + dist < grid[0].length && grid[current.getX() + dist][current.getY() + dist].getValue() == endChar) {
+////				System.out.println("Found ball at NE: [ " + (current.getX() + dist) + "," + (current.getY() + dist) + "]");
+//				current.setParent(grid[current.getX() + dist][current.getY() + dist]);
+//				return printPath(grid[current.getX() + dist][current.getY() + dist]);
+//			} else if(current.getX() - dist >= 0 && current.getY() + dist < grid[0].length && grid[current.getX() - dist][current.getY() + dist].getValue() == endChar) {
+////				System.out.println("Found ball at NW: [" + (current.getX() - dist) + "," + current.getY() + dist + "]");
+//				current.setParent(grid[current.getX() - dist][current.getY() + dist]);
+//				return printPath(grid[current.getX() - dist][current.getY() + dist]);
+//			} else if(current.getX() - dist >= 0 && current.getY() - dist >= 0 && grid[current.getX() - dist][current.getY() - dist].getValue() == endChar) {
+////				System.out.println("Found ball at SW: [" + (current.getX() - dist) + "," + (current.getY() - dist) + "]");
+//				current.setParent(grid[current.getX() - dist][current.getY() - dist]);
+//				return printPath(grid[current.getX() - dist][current.getY() - dist]);
+//			} else if(current.getX() + dist < grid.length && current.getY() - dist >= 0 && grid[current.getX() + dist][current.getY() - dist].getValue() == endChar) {
+////				System.out.println("Found ball at SE: [" + (current.getX() + dist) + "," + (current.getY() - dist) + "]");
+//				current.setParent(grid[current.getX() + dist][current.getY() - dist]);
+//				return printPath(grid[current.getX() + dist][current.getY() - dist]);
+//			}
 			
 			/*
 			for(int i = 0; i < closeBalls.size(); i++) {
@@ -265,26 +266,26 @@ public class BFS3 {
 			 *  Keep parent information.
 			 *  Add Field to queue.
 			 */
-			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
-				NE = grid[current.getX() + 1][current.getY() + 1];
-				if(NE.getX() + dist < grid.length && NE.getY() + dist < grid[0].length) {
-					int tmp = NE.getY();
-					for(int i = NE.getX(); i <= NE.getX() + dist; i++) {
-						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
-							moveable = true;
-						} else {
-							moveable = false;
-							break;
-						}
-						tmp++;
-					}
-					if(moveable) {
-						NE.visit();
-						current.setParent(NE);
-						bfsQueue.add(NE);
-					}
-				}
-			}
+//			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
+//				NE = grid[current.getX() + 1][current.getY() + 1];
+//				if(NE.getX() + dist < grid.length && NE.getY() + dist < grid[0].length) {
+//					int tmp = NE.getY();
+//					for(int i = NE.getX(); i <= NE.getX() + dist; i++) {
+//						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
+//							moveable = true;
+//						} else {
+//							moveable = false;
+//							break;
+//						}
+//						tmp++;
+//					}
+//					if(moveable) {
+//						NE.visit();
+//						current.setParent(NE);
+//						bfsQueue.add(NE);
+//					}
+//				}
+//			}
 
 			/*
 			 *	Northwest child
@@ -296,27 +297,27 @@ public class BFS3 {
 			 *  Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
-				NW = grid[current.getX() - 1][current.getY() + 1];
-
-				if(NW.getX() - dist >= 0 && NW.getY() + dist < grid[0].length) {
-					int tmp = NW.getY();
-					for(int i = NW.getX(); i > NW.getX() - dist; i--) {
-						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
-							moveable = true;
-						} else {
-							moveable = false;
-							break;
-						}
-						tmp++;
-					}
-					if(moveable) {
-						NW.visit();
-						current.setParent(NW);
-						bfsQueue.add(NW);
-					}
-				}
-			}
+//			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
+//				NW = grid[current.getX() - 1][current.getY() + 1];
+//
+//				if(NW.getX() - dist >= 0 && NW.getY() + dist < grid[0].length) {
+//					int tmp = NW.getY();
+//					for(int i = NW.getX(); i > NW.getX() - dist; i--) {
+//						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
+//							moveable = true;
+//						} else {
+//							moveable = false;
+//							break;
+//						}
+//						tmp++;
+//					}
+//					if(moveable) {
+//						NW.visit();
+//						current.setParent(NW);
+//						bfsQueue.add(NW);
+//					}
+//				}
+//			}
 
 			/*
 			 *	Southeast child
@@ -328,26 +329,26 @@ public class BFS3 {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
-				SE = grid[current.getX() + 1][current.getY() - 1];
-				if(SE.getX() + dist < grid.length && SE.getY() - dist >= 0) {
-					int tmp = SE.getY();
-					for(int i = SE.getX(); i < SE.getX() + dist; i++) {
-						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
-							moveable = true;
-						} else {
-							moveable = false;
-							break;
-						}
-						tmp--;
-					}
-					if(moveable) {
-						SE.visit();
-						current.setParent(SE);
-						bfsQueue.add(SE);
-					}
-				}
-			}
+//			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
+//				SE = grid[current.getX() + 1][current.getY() - 1];
+//				if(SE.getX() + dist < grid.length && SE.getY() - dist >= 0) {
+//					int tmp = SE.getY();
+//					for(int i = SE.getX(); i < SE.getX() + dist; i++) {
+//						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
+//							moveable = true;
+//						} else {
+//							moveable = false;
+//							break;
+//						}
+//						tmp--;
+//					}
+//					if(moveable) {
+//						SE.visit();
+//						current.setParent(SE);
+//						bfsQueue.add(SE);
+//					}
+//				}
+//			}
 
 			/*
 			 *	Southwest child
@@ -359,26 +360,26 @@ public class BFS3 {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-				SW = grid[current.getX() - 1][current.getY() - 1];
-				if(SW.getX() - dist >= 0 && SW.getY() - dist >= 0) {
-					int tmp = SW.getY();
-					for(int i = SW.getX(); i > SW.getX() - dist; i--) {
-						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
-							moveable = true;
-						} else {
-							moveable = false;
-							break;
-						}
-						tmp--;
-					}
-					if(moveable) {
-						SW.visit();
-						current.setParent(SW);
-						bfsQueue.add(SW);
-					}
-				}
-			}
+//			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
+//				SW = grid[current.getX() - 1][current.getY() - 1];
+//				if(SW.getX() - dist >= 0 && SW.getY() - dist >= 0) {
+//					int tmp = SW.getY();
+//					for(int i = SW.getX(); i > SW.getX() - dist; i--) {
+//						if(grid[i][tmp].getValue() != endChar && grid[i][tmp].getValue() != obstacle && grid[i][tmp].getValue() != fakeObstacle && !grid[i][tmp].isVisited()) {
+//							moveable = true;
+//						} else {
+//							moveable = false;
+//							break;
+//						}
+//						tmp--;
+//					}
+//					if(moveable) {
+//						SW.visit();
+//						current.setParent(SW);
+//						bfsQueue.add(SW);
+//					}
+//				}
+//			}
 		}
 
 		// If we get here, we're screwed!
