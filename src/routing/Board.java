@@ -236,7 +236,7 @@ public class Board {
 		return path_direction;
 	}
 
-	private void buildObstacleAroundBall(Point ball, int pixelRadius){
+	public void buildObstacleAroundBall(Point ball, int pixelRadius){
 
 		List<Field> buildObstacles = new ArrayList<Field>();
 		try{buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);}catch(IndexOutOfBoundsException e){}
@@ -403,25 +403,25 @@ public class Board {
 			if(center.pathDirection.equals("N")){
 				path.add(grid[center.pixel_x][center.pixel_y - l]);
 			}
-			if(center.pathDirection.equals("S")){
+			else if(center.pathDirection.equals("S")){
 				path.add(grid[center.pixel_x][center.pixel_y + l]);
 			}
-			if(center.pathDirection.equals("E")){
+			else if(center.pathDirection.equals("E")){
 				path.add(grid[center.pixel_x + l][center.pixel_y]);
 			}
-			if(center.pathDirection.equals("W")){
+			else if(center.pathDirection.equals("W")){
 				path.add(grid[center.pixel_x - l][center.pixel_y]);
 			}
-			if(center.pathDirection.equals("NW")){
+			else if(center.pathDirection.equals("NW")){
 				path.add(grid[center.pixel_x - l][center.pixel_y - l]);
 			}
-			if(center.pathDirection.equals("NE")){
+			else if(center.pathDirection.equals("NE")){
 				path.add(grid[center.pixel_x + l][center.pixel_y - l]);
 			}
-			if(center.pathDirection.equals("SW")){
+			else if(center.pathDirection.equals("SW")){
 				path.add(grid[center.pixel_x - l][center.pixel_y + l]);
 			}
-			if(center.pathDirection.equals("SE")){
+			else if(center.pathDirection.equals("SE")){
 				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
 			}
 		}
