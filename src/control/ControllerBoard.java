@@ -11,7 +11,7 @@ public class ControllerBoard {
 
 	private RealCamera realCamera;
 	private Board board;
-	private BFS2 bfs;
+	private BFS3 bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -81,8 +81,8 @@ public class ControllerBoard {
 						board.buildObstacleAroundBall(p, pixelRadius);
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
-
-					bfs = new BFS2(board.getGrid(), 'B');  
+					
+					bfs = new BFS3(board.getGrid(), 'B');  
 					//					path = bfs.findPath(closeBalls);
 					path = bfs.findPath();
 
