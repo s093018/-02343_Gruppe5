@@ -295,7 +295,7 @@ public class Board {
 				y_new = goals.get(i).center.pixel_y + pixelDistance;
 			}
 
-			fieldListNew.add(new Field(x_new, y_new, 'G'));
+			fieldListNew.add(grid[x_new][y_new]);
 		}
 
 		int retryCounter = 0;
@@ -315,7 +315,7 @@ public class Board {
 			}
 			// May require optimizing
 			for(int i = 0; i < fieldListNew.size(); i++){
-				Field fieldNewRetry = new Field(fieldListNew.get(i).getX() + 1, fieldListNew.get(i).getY(), fieldListNew.get(i).getValue());
+				Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
 				fieldListNew.set(i, fieldNewRetry);
 			}
 			retryCounter++;
@@ -366,7 +366,7 @@ public class Board {
 	 * through the walls in progress of being built.
 	 */
 	private boolean checkAndBuild(List<Field> buildObstacles, char value, boolean replaceObstacles){
-		boolean ret = false;
+		boolean obstructed = false;
 		for(Field buildObstacle: buildObstacles){
 			try{
 				if(buildObstacle.getValue()!='R' && buildObstacle.getValue()!='X' && buildObstacle.getValue()!='Y'
@@ -377,10 +377,10 @@ public class Board {
 					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
 				}
 				else
-					ret = true;
+					obstructed = true;
 			}catch(IndexOutOfBoundsException e) {}
 		}
-		return ret;
+		return obstructed;
 	}
 
 	private void incrBuildObstacles(List<Field> buildObstacles){
