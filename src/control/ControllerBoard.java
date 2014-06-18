@@ -58,7 +58,7 @@ public class ControllerBoard {
 
 				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
 				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
-				pixelLength = pixelDistance - pixelRadius;
+				pixelLength = pixelRadius;
 				
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
 			//	board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
