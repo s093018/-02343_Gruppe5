@@ -14,7 +14,7 @@ public class ControllerRobot {
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
-	private BFSTest bfs;
+	private BFS bfs;
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
@@ -93,9 +93,8 @@ public class ControllerRobot {
 //						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 //					}
 
-					bfs = new BFSTest(board.getGrid(), 'B', (int)realCamera.getRobot().robotLength, (int)realCamera.getRobot().robotWidth);  
-//					path = bfs.findPath(closeBalls);
-					path = bfs.findPath();
+					bfs = new BFS(board.getGrid(), 'B');  
+					path = bfs.findPath(closeBalls);
 
 
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
@@ -167,7 +166,7 @@ public class ControllerRobot {
 									ro.turnRight(turn);
 								}
 
-								if (di.get(i-1).getLength() == -1) { // hvornår åbner lågerne sig
+								if (di.get(i-1).getLength() == -1) { // hvornaar aabner laagerne sig
 									ro.open();
 								}
 								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
@@ -239,7 +238,7 @@ public class ControllerRobot {
 //								ro.turnRight(turn);
 //							}
 //
-//							if (i == di.size()-1) { // hvornår åbner lågerne sig
+//							if (i == di.size()-1) { // hvornaar aabner laagerne sig
 //								ro.open();
 //							}
 //							ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
