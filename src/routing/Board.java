@@ -396,13 +396,11 @@ public class Board {
 		for (int i = 0 ; i < grid.length ; i++) {
 			for (int j = 0 ; j < grid[i].length ; j++) {
 				if (grid[i][j].getValue() == 'O') {
-					try{
-							fakeObstacles.add(grid[i+pixelRadius][j]);
-							fakeObstacles.add(grid[i-pixelRadius][j]);
-							fakeObstacles.add(grid[i][j+pixelRadius]);
-							fakeObstacles.add(grid[i][j-pixelRadius]);
-						// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
-					}catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i+pixelRadius][j]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i-pixelRadius][j]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i][j+pixelRadius]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i][j-pixelRadius]); }catch(IndexOutOfBoundsException e) {}
+					// tilfj evt [i-1][j-1], [i-1][j+1], [j-1][i+1], og [j+1][i+1]
 				}
 			}
 		}
