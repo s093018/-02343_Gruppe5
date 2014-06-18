@@ -22,8 +22,10 @@ public class ControllerRobot {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =0;
+	private final int MAX_NO_BALLS = 1;
 	private List<Point> closeBalls;
+	private int pixelRadius, pixelDistance, pixelLength;
+
 	File f;
 	int ballsOnTrack;
 	int iterations = 0;
@@ -54,28 +56,31 @@ public class ControllerRobot {
 
 
 				board.fillInBalls(realCamera.getBalls());
-				int temp = 0;
-				for (Point p : realCamera.getBalls()) {
-					System.out.println("Bold "+temp+": ("+p.pixel_x+","+p.pixel_y+")" );
-					temp++;
-				}
-
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
-				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 10);
-//				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
-				ballsOnTrack = realCamera.getBalls().size();
-
+				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				pixelLength = pixelRadius;
+				
+				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
+				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
+				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
+				for(int i = 0; i < realCamera.getGoals().size(); i++){
+				
+					Point goalPoints = realCamera.getGoals().get(i).center;
+				board.buildPath(goalPoints, pixelLength, ' ');
+				}
+				
 				if(ballCount <= MAX_NO_BALLS) {
 
-					Iterator<Point> it = closeBalls.iterator();
-					while(it.hasNext()) {
-						Point p = it.next();
-						board.buildObstacleAroundBall(p, 10);
-						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
-					}
+//					Iterator<Point> it = closeBalls.iterator();
+//					while(it.hasNext()) {
+//						Point p = it.next();
+//						board.buildObstacleAroundBall(p, 10);
+//						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
+//					}
 
 					bfs = new BFS3(board.getGrid(), 'B');  
 //					path = bfs.findPath(closeBalls);
@@ -245,9 +250,9 @@ public class ControllerRobot {
 
 
 				iterations++;
-//				if(ballCount > 0) {
+				if(ballCount > 1) {
 					endGame = true;
-//				}
+				}
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
 			}

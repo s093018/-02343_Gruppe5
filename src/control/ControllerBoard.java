@@ -20,10 +20,8 @@ public class ControllerBoard {
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS =0;
 	private List<Point> closeBalls;
-	
 	private int pixelRadius, pixelDistance, pixelLength;
-	
-	
+		
 	File f;
 	int ballsOnTrack;
 	int iterations = 0;
@@ -61,9 +59,9 @@ public class ControllerBoard {
 				pixelLength = pixelRadius;
 				
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius);
-			//	board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBalls(closeBalls, pixelDistance, 'H', pixelLength, pixelRadius);
+				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
 				
 					Point goalPoints = realCamera.getGoals().get(i).center;
