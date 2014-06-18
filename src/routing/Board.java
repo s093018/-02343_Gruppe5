@@ -262,7 +262,7 @@ public class Board {
 		ArrayList<String> directions = new ArrayList<String>();
 
 		for(int i = 0; i < goals.size(); i++){
-			directions.add(degreeToDirection((radianToDegreePositive(goals.get(i).heading))));
+			directions.add(degreeToDirection((radianToDegreePositive(reflectRadian(goals.get(i).heading)))));
 			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
 			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
 
@@ -364,7 +364,6 @@ public class Board {
 	 * Returns true if a ball or the robot currently is where trying to
 	 * build an obstacle, which means there exists an entrance to the ball
 	 * through the walls in progress of being built.
-	 * @param replaceObstacles TODO
 	 */
 	private boolean checkAndBuild(List<Field> buildObstacles, char value, boolean replaceObstacles){
 		boolean ret = false;
@@ -486,16 +485,7 @@ public class Board {
 	public int getStartY() {
 		return startY;
 	}
-
-	public int radianToDegreePositive(double radian) {
-		double degree = (radian*180)/Math.PI;
-		int result = (int)(degree + 22.5)/45;
-		result *=45;
-		while (result < 0) 
-			result = result + 360;
-		return result;
-	}
-
+	
 	public void clearBalls(List<Point> balls) {
 		for(Point ball : balls) {
 			grid[ball.pixel_x][ball.pixel_y].setValue(' ');
@@ -506,13 +496,29 @@ public class Board {
 		grid[robotPos.pixel_x][robotPos.pixel_y].setValue(' ');
 	}
 
+	public int radianToDegreePositive(double radian) {
+		double degree = (radian*180)/Math.PI;
+		int result = (int)(degree + 22.5)/45;
+		result *=45;
+		while (result < 0) 
+			result = result + 360;
+		return result;
+	}
+	
+	//Code from: http://stackoverflow.com/questions/5830791/find-radians-reflection-angle
+	public double reflectRadian(double startRadian){
+		double result = 0.5*Math.PI - (startRadian + Math.PI - 0.5*Math.PI);
+		result = 2*Math.PI - startRadian; 
+		result = -startRadian; //subtract 2*Pi
+		return result;
+	}
 
 	// Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
 	/**
 	 * degree should be positive, if not may throw ArrayIndexOutOfBoundsException.
 	 */
 	public String degreeToDirection(int degree){
-		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
-		return directions[(((degree + 22) % 360) / 45)];
+		String directions[] = {"N", "E", "S", "W"};
+		return directions[(((degree + 45) % 360) / 90)];
 	}	
 }
