@@ -62,8 +62,7 @@ public class ControllerBoard {
 
 				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
 				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 10);
-				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth);
-				ballsOnTrack = realCamera.getBalls().size();
+				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 
 				if(ballCount <= MAX_NO_BALLS) {
 
@@ -101,10 +100,10 @@ public class ControllerBoard {
 					}
 				}
 
-				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
-				board.getField(backField.getX(), backField.getY()).setValue(' ');
-				board.clearRobot(realCamera.getRobot().position);
-				board.clearBalls(realCamera.getBalls());
+	//			board.getField(frontField.getX(), frontField.getY()).setValue(' ');
+	//			board.getField(backField.getX(), backField.getY()).setValue(' ');
+	//			board.clearRobot(realCamera.getRobot().position);
+	//			board.clearBalls(realCamera.getBalls());
 
 				iterations++;
 
