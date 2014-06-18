@@ -497,9 +497,7 @@ public class Board {
 	}
 
 	public int radianToDegreePositive(double radian) {
-		double degree = (radian*180)/Math.PI;
-		int result = (int)(degree + 22.5)/45;
-		result *=45;
+		int result = (int) Math.toDegrees(radian);
 		while (result < 0) 
 			result = result + 360;
 		return result;
@@ -511,6 +509,10 @@ public class Board {
 		result = 2*Math.PI - startRadian; 
 		result = -startRadian; //subtract 2*Pi
 		return result;
+	}
+	
+	public int rotateDegree(int degree){
+		return degree ;
 	}
 
 	// Modified code from: http://stackoverflow.com/questions/2131195/cardinal-direction-algorithm-in-java
