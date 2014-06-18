@@ -75,7 +75,7 @@ public class Board {
 	}
 	/** Search in all directions (SE, S etc.) for obstacle - find closest obstacle and return direction
 	 */
-	private String directionToObstacle(Point point){
+	public String directionToObstacle(Point point){
 		int shortest_dist = 0, temp_dist = 0, temp_pixel_x = point.pixel_x, temp_pixel_y = point.pixel_y;
 		String path_direction = "Failed to identify direction";
 		boolean done = false;
