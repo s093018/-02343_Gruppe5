@@ -245,7 +245,7 @@ public class Board {
 		buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);
 
 		for(int i = 0; i < pixelRadius * 2; i++){
-			checkAndBuild(buildObstacles, 'F', true);
+			checkAndBuild(buildObstacles, 'F', false);
 			incrBuildObstacles(buildObstacles);
 		}
 
@@ -331,7 +331,7 @@ public class Board {
 	 */
 	public void buildPath(Point center, int pixelLength, char value){
 		List<Field> path = new ArrayList<Field>();
-		for(int l = 1; l <= pixelLength; l++){
+		for(int l = 1; l <= pixelLength; l++){ //TODO while <pixelLength and next char == F
 			if(center.pathDirection.equals("N")){
 				path.add(grid[center.pixel_x][center.pixel_y - l]);
 			}
@@ -373,7 +373,7 @@ public class Board {
 				if(buildObstacle.getValue()!='R' || buildObstacle.getValue()!='X' || buildObstacle.getValue()!='Y'
 						|| buildObstacle.getValue()!='B' || buildObstacle.getValue()!='G'){
 					if(!replaceObstacles && buildObstacle.getValue()!='O')
-						break;
+						continue;
 					buildObstacle.setValue(value);
 					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
 				}
