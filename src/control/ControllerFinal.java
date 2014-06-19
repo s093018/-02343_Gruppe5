@@ -36,6 +36,21 @@ public class ControllerFinal {
 			this.realCamera = new RealCamera();
 			MAX_NO_BALLS = realCamera.getBalls().size();
 			robotControl = new robot.Control();
+			
+			// Listen for input and shutdown if input is detected
+			Thread userShutdown = new Thread(){
+				public void run(){
+					BufferedReader stdIn =
+						new BufferedReader(
+								new InputStreamReader(System.in, "UTF-8"));
+				
+					while (stdIn.readLine() != null) {
+						System.out.println("User input detected, shutdown imminent.");
+						ro.shutdown();
+					}
+				}
+			};
+			userShutdown.run();
 		} catch (Exception e) {	e.printStackTrace(); }
 
 	}
