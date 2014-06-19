@@ -85,4 +85,12 @@ public class Proc
 		double averageColor[] = {sumColor[0] / floorRectSize, sumColor[1] / floorRectSize, sumColor[2] / floorRectSize};
 		return averageColor;
 	}
+	public static org.opencv.core.Point add(org.opencv.core.Point lhs, org.opencv.core.Point rhs)
+	{
+		return new org.opencv.core.Point(lhs.x + rhs.x, lhs.y + rhs.y);
+	}
+	public static org.opencv.core.Point sub(org.opencv.core.Point lhs, org.opencv.core.Point rhs)
+	{
+		return new org.opencv.core.Point(lhs.x - rhs.x, lhs.y - rhs.y);
+	}
 }

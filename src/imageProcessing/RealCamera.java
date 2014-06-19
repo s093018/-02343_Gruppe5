@@ -302,8 +302,11 @@ public class RealCamera implements Camera
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		if(settings.testMode) testImage = Highgui.imread(settings.testImageFile);
-		else capture = new VideoCapture(0);
-		capture.grab();
+		else
+		{
+			capture = new VideoCapture(0);
+			capture.grab();
+		}
 		updateMap();
 		update();
 	}
