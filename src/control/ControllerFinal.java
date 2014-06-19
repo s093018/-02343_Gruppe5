@@ -36,22 +36,9 @@ public class ControllerFinal {
 			this.realCamera = new RealCamera();
 			MAX_NO_BALLS = realCamera.getBalls().size();
 			robotControl = new robot.Control();
-			
-			// Listen for input and shutdown if input is detected
-			Thread userShutdown = new Thread(){
-				public void run(){
-					BufferedReader stdIn =
-						new BufferedReader(
-								new InputStreamReader(System.in, "UTF-8"));
-				
-					while (stdIn.readLine() != null) {
-						System.out.println("User input detected, shutdown imminent.");
-						ro.shutdown();
-					}
-				}
-			};
-			userShutdown.run();
-		} catch (Exception e) {	e.printStackTrace(); }
+		} catch (Exception e) {	
+			e.printStackTrace(); 
+		}
 
 	}
 
@@ -76,13 +63,13 @@ public class ControllerFinal {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				pixelRadius = (int)realCamera.getRobot().robotWidth/3;
+				pixelRadius = (int)realCamera.getRobot().robotWidth/4;
 				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelLength = pixelRadius;
-				
+
 				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
-				
+
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
@@ -134,7 +121,7 @@ public class ControllerFinal {
 						//
 
 						ro.in();
-						
+
 						int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 						if (turn < 0) {
 							ro.turnLeft(turn);
@@ -192,6 +179,7 @@ public class ControllerFinal {
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+					this.userShutdown();
 					di = ro.sequence(path);
 
 					int temp1 = 0; //
@@ -202,7 +190,7 @@ public class ControllerFinal {
 					} //
 
 					ro.in();
-					
+
 					int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 					if (turn < 0) {
 						ro.turnLeft(turn);
@@ -251,8 +239,8 @@ public class ControllerFinal {
 				//				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
 				//				board.getField(backField.getX(), backField.getY()).setValue(' ');
 
-//				board.clearRobot(realCamera.getRobot().position);
-//				board.clearBalls(realCamera.getBalls());
+				//				board.clearRobot(realCamera.getRobot().position);
+				//				board.clearBalls(realCamera.getBalls());
 
 
 				iterations++; // fjernes
@@ -271,6 +259,28 @@ public class ControllerFinal {
 			ro.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
+	}
+	/** Listen for input and shutdown if input is detected.
+	 * DOES NOT WORK
+	 * @author Julian
+	 */
+	public void userShutdown(){
+					Thread userShutdown = new Thread(){
+						public void run(){
+							try {
+								BufferedReader stdIn = new BufferedReader(
+										new InputStreamReader(System.in, "UTF-8"));
+								while (stdIn.readLine() != null) {
+									System.out.println("-------------------User input detected, shutdown imminent.");
+									ro.shutdown();
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								ro.shutdown();
+							}			
+						}
+					};
+					userShutdown.run();
 	}
 }
 
