@@ -29,6 +29,7 @@ public class ControllerFinal {
 	private RealCamera realCamera;
 	private Board board;
 	private BFS bfs;
+	private int pixelRadius, pixelDistance, pixelLength;
 
 	public ControllerFinal () {
 		try {
@@ -61,32 +62,25 @@ public class ControllerFinal {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				// Skal slettes - bruges kun til test.
-				int temp = 0;
-				for (Point p : realCamera.getBalls()) {
-					System.out.println("Bold "+temp+": ("+p.pixel_x+","+p.pixel_y+")" );
-					temp++;
+				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				pixelLength = pixelRadius;
+
+				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
+				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				
+				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
+				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
+				for(int i = 0; i < realCamera.getGoals().size(); i++){
+
+					Point goalPoints = realCamera.getGoals().get(i).center;
+					board.buildPath(goalPoints, pixelLength, ' ');
 				}
-				//
-
-
-				//				board.moveGoals(realCamera.getGoals(), 10, 'F', 10);
-				closeBalls = board.ballsCloseToObstacle(realCamera.getBalls(), 10);
-				//				board.fakeWallsBuild(realCamera.getRobot().robotWidth);
 
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
-					Iterator<Point> it = closeBalls.iterator();
-					while(it.hasNext()) {
-						Point p = it.next();
-						board.buildObstacleAroundBall(p, 10);
-						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
-					}
-
 					bfs = new BFS(board.getGrid(), 'B');  
-					//					path = bfs.findPath(closeBalls);
 					path = bfs.findPath(closeBalls);
-
 
 					// To be deleted - only used for testing!
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
@@ -117,13 +111,15 @@ public class ControllerFinal {
 					if(path != null) { 
 						di = ro.sequence(path);
 						int temp1 = 0;
-						
+
 						// Only used for testing
 						for (DriverInstructions i : di) {
 							System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
 							temp1++;
 						}
 						//
+
+						ro.in();
 						
 						int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 						if (turn < 0) {
@@ -132,10 +128,6 @@ public class ControllerFinal {
 							ro.turnRight(turn);
 						}
 
-						
-						if(di.size() == 1) {
-							ro.in();
-						}
 
 						ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
 
@@ -166,10 +158,6 @@ public class ControllerFinal {
 								} else if(turn > 0) {
 									ro.turnRight(turn);
 								}
-
-								if (i == di.size() - 1) { // hvornaar aabner laagerne sig
-									ro.in();
-								}
 								ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
 							}
 						}
@@ -192,7 +180,7 @@ public class ControllerFinal {
 					path = bfs.findPath(closeBalls);
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 					di = ro.sequence(path);
-					
+
 					int temp1 = 0; //
 					// Only used for testing.
 					for (DriverInstructions i : di) { //
@@ -200,15 +188,13 @@ public class ControllerFinal {
 						temp1++; //
 					} //
 
+					ro.in();
+					
 					int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 					if (turn < 0) {
 						ro.turnLeft(turn);
 					} else if(turn > 0) {
 						ro.turnRight(turn);
-					}
-
-					if(di.size() == 1) {
-						ro.in();
 					}
 
 					ro.forward(di.get(0).getLength() * realCamera.getMap().pixelSize);
@@ -238,15 +224,11 @@ public class ControllerFinal {
 								ro.turnRight(turn);
 							}
 
-							if (i == di.size()-1) { // hvornaar aabner laagerne sig
-								ro.in();
-							}
 							ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
 						}
 					}
-
+					ro.out();
 					ro.kick();
-
 					ro.stop();
 
 					ballsInRobot = 0;
@@ -255,7 +237,7 @@ public class ControllerFinal {
 				// Bruges ikke lige pt - skal det slettes?
 				//				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
 				//				board.getField(backField.getX(), backField.getY()).setValue(' ');
-				
+
 				board.clearRobot(realCamera.getRobot().position);
 				board.clearBalls(realCamera.getBalls());
 
