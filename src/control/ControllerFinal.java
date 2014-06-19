@@ -15,7 +15,7 @@ public class ControllerFinal {
 	private final int MAX_NO_BALLS_BEFORE_SCORING = 5;
 	int ballsInRobot = 0;
 
-	private Field frontField, backField;
+	//	private Field frontField, backField;
 	private char [][] map;
 
 	int iterations = 0; //Skal slettes 
@@ -49,10 +49,11 @@ public class ControllerFinal {
 			while(!endGame) {
 				board = new Board(map);
 
-				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
-				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
-				backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
-				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, backField);
+				// Bruges ikke lige pt - skal det slettes?
+				//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
+				//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
+				//				backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
+				//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, backField);
 
 
 				// Add balls, robot and goals to the board.
@@ -112,20 +113,26 @@ public class ControllerFinal {
 
 					System.out.println("robotHeading: "+ro.radianToDegree1(realCamera.getRobot().heading));
 
-					if(path != null) {
+					// No path found!
+					if(path != null) { 
 						di = ro.sequence(path);
 						int temp1 = 0;
+						
+						// Only used for testing
 						for (DriverInstructions i : di) {
 							System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
 							temp1++;
 						}
-						int turn = ro.turnDegree(di.get(0).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+						//
+						
+						int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 						if (turn < 0) {
 							ro.turnLeft(turn);
 						} else if(turn > 0) {
 							ro.turnRight(turn);
 						}
 
+						
 						if(di.size() == 1) {
 							ro.in();
 						}
@@ -134,11 +141,14 @@ public class ControllerFinal {
 
 						for(int i = 1; i < di.size(); i++) {
 
+							// If the length of the instruction is 0, it means that we must recalibrate the heading
+							// by taking a new picture and comparing the two headings.
 							if(di.get(i).getLength() == 0) {
-								System.out.println("robotHeading before update: "+ro.radianToDegree1(realCamera.getRobot().heading));
-								System.out.println("NYT BILLEDE KALIBRERING");
+								// Only used for testing
+								System.out.println("robotHeading before update: " + ro.radianToDegree1(realCamera.getRobot().heading)); //
+								System.out.println("NYT BILLEDE KALIBRERING"); //
 								realCamera.update();
-								System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+								System.out.println("RobotHeading after Update: " + ro.radianToDegree1(realCamera.getRobot().heading)); //
 
 								turn = ro.turnDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
 
@@ -157,10 +167,10 @@ public class ControllerFinal {
 									ro.turnRight(turn);
 								}
 
-								if (i == di.size()-1) { // hvornaar aabner laagerne sig
+								if (i == di.size() - 1) { // hvornaar aabner laagerne sig
 									ro.in();
 								}
-								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
+								ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
 							}
 						}
 						ro.stop();
@@ -170,24 +180,27 @@ public class ControllerFinal {
 						}
 
 						if(MAX_NO_BALLS > realCamera.getBalls().size()) {
-							ballsInRobot++;
+							ballsInRobot = MAX_NO_BALLS - realCamera.getBalls().size();
 						}
 						System.out.println("Number of balls currently in the robot = " + ballsInRobot);
 
 					} 
 				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
-
+					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
+					// on the field -> Drive to goal and deliver the balls.
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 					di = ro.sequence(path);
-					int temp1 = 0;
-					for (DriverInstructions i : di) {
-						System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
-						temp1++;
-					}
+					
+					int temp1 = 0; //
+					// Only used for testing.
+					for (DriverInstructions i : di) { //
+						System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength()); //
+						temp1++; //
+					} //
 
-					int turn = ro.turnDegree(di.get(0).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+					int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
 					if (turn < 0) {
 						ro.turnLeft(turn);
 					} else if(turn > 0) {
@@ -198,7 +211,7 @@ public class ControllerFinal {
 						ro.in();
 					}
 
-					ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
+					ro.forward(di.get(0).getLength() * realCamera.getMap().pixelSize);
 
 					for(int i = 1; i < di.size(); i++) {
 
@@ -228,7 +241,7 @@ public class ControllerFinal {
 							if (i == di.size()-1) { // hvornaar aabner laagerne sig
 								ro.in();
 							}
-							ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
+							ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
 						}
 					}
 
@@ -239,14 +252,15 @@ public class ControllerFinal {
 					ballsInRobot = 0;
 				}
 
-
-				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
-				board.getField(backField.getX(), backField.getY()).setValue(' ');
+				// Bruges ikke lige pt - skal det slettes?
+				//				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
+				//				board.getField(backField.getX(), backField.getY()).setValue(' ');
+				
 				board.clearRobot(realCamera.getRobot().position);
 				board.clearBalls(realCamera.getBalls());
 
 
-				iterations++;
+				iterations++; // fjernes
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
 				MAX_NO_BALLS = realCamera.getBalls().size();
