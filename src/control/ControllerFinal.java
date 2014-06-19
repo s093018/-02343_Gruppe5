@@ -28,7 +28,7 @@ public class ControllerFinal {
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
-	private BFS2 bfs;
+	private BFS bfs;
 
 	public ControllerFinal () {
 		try {
@@ -82,9 +82,9 @@ public class ControllerFinal {
 						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
 					}
 
-					bfs = new BFS2(board.getGrid(), 'B');  
+					bfs = new BFS(board.getGrid(), 'B');  
 					//					path = bfs.findPath(closeBalls);
-					path = bfs.findPath();
+					path = bfs.findPath(closeBalls);
 
 
 					// To be deleted - only used for testing!
@@ -177,8 +177,8 @@ public class ControllerFinal {
 					} 
 				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
 
-					bfs = new BFS2(board.getGrid(), 'G');
-					path = bfs.findPath(/*closeBalls*/);
+					bfs = new BFS(board.getGrid(), 'G');
+					path = bfs.findPath(closeBalls);
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 					di = ro.sequence(path);
 					int temp1 = 0;

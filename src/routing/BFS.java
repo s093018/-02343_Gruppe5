@@ -94,20 +94,17 @@ public class BFS {
 			current = bfsQueue.remove();
 
 			if(current.getValue() == endChar) {      
-				/*
-			for(int i = 0; i < closeBalls.size(); i++) {
-				Point ball = closeBalls.get(i);
-				if(ball.pixel_x == current.getX() && ball.pixel_y == current.getY()) {
-					System.out.println("The found ball is close to a wall.");
-					setCloseToWall();
-					break;
+				for(Point ball : closeBalls) {
+					if(ball.pixel_x == current.getX() && ball.pixel_x == current.getX()) {
+						System.out.println("The found ball is close to a wall!");
+						setCloseToWall();
+						break;
+					}
 				}
-			}
-
 				/* Call printPath to get a list of directions to return. */
 				return printPath(current);
 			}
-			
+
 			if(current.getY() + 1 < grid[0].length) {               
 				// Get North Field
 				N = grid[current.getX()][current.getY() + 1];
@@ -207,14 +204,14 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
-				NW = grid[current.getX() - 1][current.getY() + 1];
-				if (NW.getValue() != obstacle && NW.getValue() != fakeObstacle && !grid[NW.getX()][NW.getY()].isVisited()) {
-					grid[NW.getX()][NW.getY()].visit();
-					current.setParent(NW);
-					bfsQueue.add(NW);
-				}
-			}
+//			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
+//				NW = grid[current.getX() - 1][current.getY() + 1];
+//				if (NW.getValue() != obstacle && NW.getValue() != fakeObstacle && !grid[NW.getX()][NW.getY()].isVisited()) {
+//					grid[NW.getX()][NW.getY()].visit();
+//					current.setParent(NW);
+//					bfsQueue.add(NW);
+//				}
+//			}
 
 			/*
 			 *	Southeast child
@@ -226,14 +223,14 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
-				SE = grid[current.getX() + 1][current.getY() - 1];
-				if (SE.getValue() != obstacle && SE.getValue() != fakeObstacle && !grid[SE.getX()][SE.getY()].isVisited()) {
-					grid[SE.getX()][SE.getY()].visit();
-					current.setParent(SE);
-					bfsQueue.add(SE);
-				}
-			}
+//			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
+//				SE = grid[current.getX() + 1][current.getY() - 1];
+//				if (SE.getValue() != obstacle && SE.getValue() != fakeObstacle && !grid[SE.getX()][SE.getY()].isVisited()) {
+//					grid[SE.getX()][SE.getY()].visit();
+//					current.setParent(SE);
+//					bfsQueue.add(SE);
+//				}
+//			}
 
 			/*
 			 *	Southwest child
@@ -245,14 +242,14 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-				SW = grid[current.getX() - 1][current.getY() - 1];
-				if (SW.getValue() != obstacle && SW.getValue() != fakeObstacle && !grid[SW.getX()][SW.getY()].isVisited()) {
-					grid[SW.getX()][SW.getY()].visit();
-					current.setParent(SW);
-					bfsQueue.add(SW);
-				}
-			}
+//			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
+//				SW = grid[current.getX() - 1][current.getY() - 1];
+//				if (SW.getValue() != obstacle && SW.getValue() != fakeObstacle && !grid[SW.getX()][SW.getY()].isVisited()) {
+//					grid[SW.getX()][SW.getY()].visit();
+//					current.setParent(SW);
+//					bfsQueue.add(SW);
+//				}
+//			}
 		}
 
 		// If we get here, we're screwed!
@@ -301,31 +298,9 @@ public class BFS {
 
 			start = current_field;
 		}
-//		result = convertPath(result);
+		//		result = convertPath(result);
 		return result;
 	}   
-
-//	private ArrayList<Integer> convertPath(ArrayList<Integer> path) {
-//		ArrayList<Integer> convertedPath = new ArrayList<Integer>();
-//		int first = 0, last = 0;
-//
-//		for(int i = 1; i < path.size(); i++) {
-//			if(path.get(i-1) != path.get(i)) {
-//				first = i;
-//				last = path.size() - i;
-//				break;
-//			}
-//		}
-//		if(first > last) {
-//			for(int i = 0; i < last; i++) {
-//				convertedPath.add(path.get(path.size() - last));
-//			}
-//			for(int i = 0; i < first; i++) {
-//				convertedPath.add(path.get(0));
-//			}
-//		}
-//		return convertedPath;
-//	}
 
 	public String toString() {
 		StringBuilder printer = new StringBuilder();
