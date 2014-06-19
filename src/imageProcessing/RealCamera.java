@@ -290,7 +290,7 @@ public class RealCamera implements Camera
 			Core.circle(marked, c, 6, new Scalar(255, 255, 0), -1);
 
 		//Recover from malplaced corner by mirroring
-		antiSymmetrify(corners);
+		if(settings.rectangleIntuition) antiSymmetrify(corners);
 
 		for(org.opencv.core.Point c : corners)
 			Core.circle(marked, c, 6, new Scalar(0, 0, 255), -1);

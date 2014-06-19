@@ -63,8 +63,8 @@ public class Configuration
 		floodFillOrigin = getPoint(props, "floodFillOrigin", new org.opencv.core.Point(320, 240));
 		obstaclePrototype = getString(props, "obstaclePrototype", "src/imgInOut/woodPrototype.png");
 		centralObstacleSize = getInt(props, "centralObstacleSize", 20);
-		centralObstacleTolerance = getScalar(props, "centralObstacleTolerance", new Scalar(20, 20, 20, 255));
-		centralObstacleColor = getScalar(props, "centralObstacleColor", new Scalar(37, 37, 90, 255));
+		centralObstacleTolerance = getScalar(props, "centralObstacleTolerance", new Scalar(45, 45, 45, 255));
+		centralObstacleColor = getScalar(props, "centralObstacleColor", new Scalar(35, 55, 155, 255));
 		woodTreshold = getDouble(props, "woodTreshold", 50.0);
 		cornerPrototypes = new String[4];
 		cornerPrototypes[0] = getString(props, "corner1", "src/imgInOut/normalizedcorner.png");
@@ -76,7 +76,7 @@ public class Configuration
 		ignoreCentralObstacle = getInt(props, "ignoreCentralObstacle", 0) != 0;
 		rectangleIntuition = getInt(props, "rectangleIntuition", 1) != 0;
 		rectangleRatio = getDouble(props, "rectangleRatio", 1.5);
-		deviationTolerance = getDouble(props, "deviationTolerance", 0.1);
+		deviationTolerance = getDouble(props, "deviationTolerance", 1.0);
 		System.out.println();
 	}
 	private Properties load(String filename)
