@@ -56,22 +56,7 @@ public class RobotOperations {
 			}
 			updateCount++;
 		}
-
-		int tempHeading = robotInstructions.get(robotInstructions.size()-1).getHeading(); ;
-		for(int i = robotInstructions.size()-2; i >= 0; i--) {
-			if (tempHeading != robotInstructions.get(i).getHeading()) {
-				if(i == 0) {
-					DriverInstructions di = new DriverInstructions(path.get(i), -1);
-					robotInstructions.add(i+1 , di);
-					break;
-				} else {
-					DriverInstructions di = new DriverInstructions(path.get(i-1), -1);
-					robotInstructions.add(i+1 , di);
-					break;
-				}
-			}
-		}
-
+		
 		return robotInstructions;
 	}
 
@@ -159,7 +144,7 @@ public class RobotOperations {
 	public void reverse() {
 		boolean done = false;
 		while(!done) {
-			done = robotControl.revers(3);
+			done = robotControl.revers(10);
 		}
 	}
 	

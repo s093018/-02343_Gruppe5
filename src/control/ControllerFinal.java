@@ -23,7 +23,7 @@ public class ControllerFinal {
 
 	private ArrayList<DriverInstructions> di;
 	private ArrayList<Integer> path;
-	private List<Point> closeBalls;
+	private ArrayList<Point> closeBalls = new ArrayList<Point>();
 	private RobotOperations ro;
 	private Control robotControl;
 	private RealCamera realCamera;
@@ -35,7 +35,6 @@ public class ControllerFinal {
 		try {
 			this.realCamera = new RealCamera();
 			MAX_NO_BALLS = realCamera.getBalls().size();
-
 			robotControl = new robot.Control();
 		} catch (Exception e) {	e.printStackTrace(); }
 
@@ -62,10 +61,10 @@ public class ControllerFinal {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+				pixelRadius = (int)realCamera.getRobot().robotWidth/3;
 				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelLength = pixelRadius;
-
+				
 				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 				
@@ -161,7 +160,6 @@ public class ControllerFinal {
 								ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
 							}
 						}
-						ro.stop();
 
 						if(bfs.getCloseToWall()) {
 							ro.reverse();
@@ -238,8 +236,8 @@ public class ControllerFinal {
 				//				board.getField(frontField.getX(), frontField.getY()).setValue(' ');
 				//				board.getField(backField.getX(), backField.getY()).setValue(' ');
 
-				board.clearRobot(realCamera.getRobot().position);
-				board.clearBalls(realCamera.getBalls());
+//				board.clearRobot(realCamera.getRobot().position);
+//				board.clearBalls(realCamera.getBalls());
 
 
 				iterations++; // fjernes
