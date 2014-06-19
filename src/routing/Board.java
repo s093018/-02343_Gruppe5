@@ -100,24 +100,24 @@ public class Board {
 		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// NE
-//		while(!done){
-//			temp_pixel_y--;
-//			temp_pixel_x++;
-//			temp_dist++;
-//			try{
-//				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
-//					if(temp_dist < shortest_dist || shortest_dist == 0){
-//						shortest_dist = temp_dist;
-//						path_direction = "SW";
-//					}
-//					done = true;
-//				}
-//			}catch(IndexOutOfBoundsException e) { break; }
-//		}
+		while(!done){
+			temp_pixel_y--;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						path_direction = "SW";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
 
 		//Reset bookkeeping  values
-//		done = false;
-//		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// E
 		while(!done){
@@ -139,24 +139,24 @@ public class Board {
 		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// SE
-//		while(!done){
-//			temp_pixel_y++;
-//			temp_pixel_x++;
-//			temp_dist++;
-//			try{
-//				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
-//					if(temp_dist < shortest_dist || shortest_dist == 0){
-//						shortest_dist = temp_dist;
-//						path_direction = "NW";
-//					}
-//					done = true;
-//				}
-//			}catch(IndexOutOfBoundsException e) { break; }
-//		}
-//
+		while(!done){
+			temp_pixel_y++;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						path_direction = "NW";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
 		//Reset bookkeeping  values
-//		done = false;
-//		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// S
 		while(!done){
@@ -178,24 +178,24 @@ public class Board {
 		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// SW
-//		while(!done){
-//			temp_pixel_y++;
-//			temp_pixel_x--;
-//			temp_dist++;
-//			try{
-//				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
-//					if(temp_dist < shortest_dist || shortest_dist == 0){
-//						shortest_dist = temp_dist;
-//						path_direction = "NE";
-//					}
-//					done = true;
-//				}
-//			}catch(IndexOutOfBoundsException e) { break; }
-//		}
-//
+		while(!done){
+			temp_pixel_y++;
+			temp_pixel_x--;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						path_direction = "NE";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}
+
 		//Reset bookkeeping  values
-//		done = false;
-//		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 
 		// W
@@ -214,24 +214,24 @@ public class Board {
 		}
 
 		//Reset bookkeeping  values
-//		done = false;
-//		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
+		done = false;
+		temp_dist = 0; temp_pixel_x = point.pixel_x; temp_pixel_y = point.pixel_y;
 
 		// NW
-//		while(!done){
-//			temp_pixel_y--;
-//			temp_pixel_x++;
-//			temp_dist++;
-//			try{
-//				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
-//					if(temp_dist < shortest_dist || shortest_dist == 0){
-//						shortest_dist = temp_dist;
-//						path_direction = "SE";
-//					}
-//					done = true;
-//				}
-//			}catch(IndexOutOfBoundsException e) { break; }
-//		}		
+		while(!done){
+			temp_pixel_y--;
+			temp_pixel_x++;
+			temp_dist++;
+			try{
+				if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
+					if(temp_dist < shortest_dist || shortest_dist == 0){
+						shortest_dist = temp_dist;
+						path_direction = "SE";
+					}
+					done = true;
+				}
+			}catch(IndexOutOfBoundsException e) { break; }
+		}		
 
 		return path_direction;
 	}
@@ -364,7 +364,7 @@ public class Board {
 				y_new = ball.pixel_y + pixelDistance;
 			}
 
-			fieldListNew.add(grid[x_new][y_new]);
+			try{fieldListNew.add(grid[x_new][y_new]);}catch(IndexOutOfBoundsException e) {}
 		}
 
 		int retryCounter = 0;
@@ -401,28 +401,28 @@ public class Board {
 		List<Field> path = new ArrayList<Field>();
 		for(int l = 1; l <= pixelLength; l++){ //TODO while <pixelLength and next char == F
 			if(center.pathDirection.equals("N")){
-				path.add(grid[center.pixel_x][center.pixel_y - l]);
+				try{path.add(grid[center.pixel_x][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("S")){
-				path.add(grid[center.pixel_x][center.pixel_y + l]);
+				try{path.add(grid[center.pixel_x][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("E")){
-				path.add(grid[center.pixel_x + l][center.pixel_y]);
+				try{path.add(grid[center.pixel_x + l][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("W")){
-				path.add(grid[center.pixel_x - l][center.pixel_y]);
+				try{path.add(grid[center.pixel_x - l][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("NW")){
-				path.add(grid[center.pixel_x - l][center.pixel_y - l]);
+				try{path.add(grid[center.pixel_x - l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("NE")){
-				path.add(grid[center.pixel_x + l][center.pixel_y - l]);
+				try{path.add(grid[center.pixel_x + l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("SW")){
-				path.add(grid[center.pixel_x - l][center.pixel_y + l]);
+				try{path.add(grid[center.pixel_x - l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("SE")){
-				path.add(grid[center.pixel_x + l][center.pixel_y + l]);
+				try{path.add(grid[center.pixel_x + l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
 			}
 		}
 		checkAndBuild(path, value, true);
@@ -550,10 +550,10 @@ public class Board {
 	 * degree should be positive, if not may throw ArrayIndexOutOfBoundsException.
 	 */
 	public String degreeToDirection(int degree){
-		String directions[] = {"N", "E", "S", "W"};
-		return directions[(((degree + 45) % 360) / 90)];
+//		String directions[] = {"N", "E", "S", "W"};
+//		return directions[(((degree + 45) % 360) / 90)];
 	
-//		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
-//		return directions[(((degree + 22) % 360) / 45)];
+		String directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+		return directions[(((degree + 22) % 360) / 45)];
 	}	
 }
