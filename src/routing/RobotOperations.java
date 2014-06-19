@@ -9,7 +9,7 @@ public class RobotOperations {
 	//	 private final int N = 0, NE = 45, E = 90, SE = 135, S = 180, SW = 225, W = 270, NW = 315; 
 	private robot.Control robotControl;
 	private double robotHeading, pixelSize;
-	private int correctionRate = 120;
+	private int correctionRate = 60; //TODO adjust this
 
 	public RobotOperations(robot.Control robotControl, double robotHeading, double pixelSize) {
 		this.robotControl = robotControl;

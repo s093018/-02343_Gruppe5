@@ -41,6 +41,18 @@ public class RealCamera implements Camera
 			Core.flip(image, image, 0);
 		}
 	}
+	private void sleep(long millis)
+	{
+		long current, start;
+		while(millis > 0)
+		{
+			start = System.currentTimeMillis();
+			try{Thread.sleep(millis);}
+			catch(InterruptedException e){}
+			current = System.currentTimeMillis();
+			millis -= current - start;
+		}
+	}
 	private Mat getImage()
 	{
 		Mat frame;
@@ -48,9 +60,9 @@ public class RealCamera implements Camera
 		else
 		{
 			frame = new Mat();
-			if(!(capture.grab() && capture.grab()))//Grab twice to ensure fresh data
+			if(!capture.grab())
 				System.out.println("WARNING: IMAGE GRAB FAILED!");
-			if(!capture.retrieve(frame))
+			if(!(capture.retrieve(frame) && capture.retrieve(frame)))//Double retrieve to ensure fresh data
 				System.out.println("WARNING: IMAGE RETRIEVE FAILED!");
 		}
 		//Ensure image and loaded templates have the same type (convertTo() doesn't work).
@@ -305,7 +317,7 @@ public class RealCamera implements Camera
 		else
 		{
 			capture = new VideoCapture(0);
-			capture.grab();
+			capture.read(new Mat());
 		}
 		updateMap();
 		update();
