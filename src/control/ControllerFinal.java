@@ -127,7 +127,7 @@ public class ControllerFinal {
 						}
 
 						if(di.size() == 1) {
-							ro.open();
+							ro.in();
 						}
 
 						ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
@@ -158,12 +158,12 @@ public class ControllerFinal {
 								}
 
 								if (i == di.size()-1) { // hvornaar aabner laagerne sig
-									ro.open();
+									ro.in();
 								}
 								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
 							}
 						}
-						ro.close();
+						ro.stop();
 
 						if(bfs.getCloseToWall()) {
 							ro.reverse();
@@ -195,7 +195,7 @@ public class ControllerFinal {
 					}
 
 					if(di.size() == 1) {
-						ro.open();
+						ro.in();
 					}
 
 					ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
@@ -226,7 +226,7 @@ public class ControllerFinal {
 							}
 
 							if (i == di.size()-1) { // hvornaar aabner laagerne sig
-								ro.open();
+								ro.in();
 							}
 							ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
 						}
@@ -234,7 +234,7 @@ public class ControllerFinal {
 
 					ro.kick();
 
-					ro.close();
+					ro.stop();
 
 					ballsInRobot = 0;
 				}

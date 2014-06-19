@@ -128,15 +128,14 @@ public class ControllerRobot {
 							System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength());
 							temp1++;
 						}
+						
+						ro.in();
+						
 						int turn = ro.turnDegree(di.get(0).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
 						if (turn < 0) {
 							ro.turnLeft(turn);
 						} else if(turn > 0) {
 							ro.turnRight(turn);
-						}
-
-						if(di.size() == 1) {
-							ro.open();
 						}
 
 						ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
@@ -166,13 +165,9 @@ public class ControllerRobot {
 									ro.turnRight(turn);
 								}
 
-								if (di.get(i-1).getLength() == -1) { // hvornaar aabner laagerne sig
-									ro.open();
-								}
 								ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
 							}
 						}
-						ro.close();
 
 						if(bfs.getCloseToWall()) {
 							ro.reverse();
@@ -207,10 +202,6 @@ public class ControllerRobot {
 //						ro.turnRight(turn);
 //					}
 //
-//					if(di.size() == 1) {
-//						ro.open();
-//					}
-//
 //					ro.forward(di.get(0).getLength()*realCamera.getMap().pixelSize);
 //
 //					for(int i = 1; i < di.size(); i++) {
@@ -238,16 +229,12 @@ public class ControllerRobot {
 //								ro.turnRight(turn);
 //							}
 //
-//							if (i == di.size()-1) { // hvornaar aabner laagerne sig
-//								ro.open();
-//							}
 //							ro.forward(di.get(i).getLength()*realCamera.getMap().pixelSize);
 //						}
 //					}
-//
+//					ro.out();
 //					ro.kick();
 //
-//					ro.close();
 //
 //					ballCount = 0;
 //					endGame = true;
@@ -266,7 +253,7 @@ public class ControllerRobot {
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
 			}
-
+		ro.stop();
 		ro.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {

@@ -23,7 +23,7 @@ public class RobotOperations {
 			System.out.print(k+", ");
 		}
 		System.out.println();		
-		
+
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
 		int count = 0;
 		int updateCount = 0;
@@ -56,7 +56,7 @@ public class RobotOperations {
 			}
 			updateCount++;
 		}
-		
+
 		int tempHeading = robotInstructions.get(robotInstructions.size()-1).getHeading(); ;
 		for(int i = robotInstructions.size()-2; i >= 0; i--) {
 			if (tempHeading != robotInstructions.get(i).getHeading()) {
@@ -140,12 +140,8 @@ public class RobotOperations {
 		}
 	}
 
-	public void open() {
-		boolean done = false;
-
-		while(!done) {
-			done = robotControl.open();
-		}
+	public void in() {
+		robotControl.in();
 	}
 
 	public void forward(double length) {
@@ -155,13 +151,9 @@ public class RobotOperations {
 		}
 	}
 
-	public void close() {
-		boolean done = false;
-		if(robotControl.getIsOpen()) { 
-			while(!done) {
-				done = robotControl.close();
-			}
-		}
+	public void stop() {
+		robotControl.collectStop();
+
 	}
 
 	public void reverse() {
@@ -169,6 +161,10 @@ public class RobotOperations {
 		while(!done) {
 			done = robotControl.revers(3);
 		}
+	}
+	
+	public void out () {
+		robotControl.out();
 	}
 
 	public void kick() {
