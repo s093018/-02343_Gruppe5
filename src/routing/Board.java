@@ -19,7 +19,7 @@ public class Board {
 
 	public Board(char[][] map) {
 
-		grid = new Field[map.length][map[0].length];
+		grid = new Field[map.length][map[0].length]; //TODO grid's anden dimension tom?
 
 		for (int i = 0 ; i < map.length ; ++i) {
 			for (int j = 0 ; j < map[0].length ; ++j) {
@@ -403,7 +403,6 @@ public class Board {
 	public List<Field> moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation){
 		ArrayList<Field> fieldListOld = new ArrayList<Field>();
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
-		int outOfBoundsCounter = 0;
 		
 		for(Point ball: balls){
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
@@ -413,56 +412,56 @@ public class Board {
 					for(int i = 0; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y - i -1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("S")){
 				try{
 					for(int i = 0; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y + i +1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("E")){
 				try{
 					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("W")){
 				try{
 					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x - i -1][ball.pixel_y].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("NW")){
 				try{
 					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y - i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x - i -1][ball.pixel_y - i -1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y - i -1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("NE")){
 				try{
 					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y - i -1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("SW")){
 				try{
 					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y + i +1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("SE")){
 				try{
 					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y + i].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x + i +1][ball.pixel_y + i +1].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y + i +1]);
-				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+				}catch(IndexOutOfBoundsException e) {}
 			}
 			
 		}
@@ -471,8 +470,8 @@ public class Board {
 		for(Field fieldOld : fieldListOld)
 			grid[fieldOld.getX()][fieldOld.getY()].setValue(newValueAtOldLocation);
 
-		if(outOfBoundsCounter > 0)
-			System.out.println(outOfBoundsCounter + " balls were not moved.");
+		if(fieldListOld.size() != fieldListNew.size())
+			System.out.println((fieldListOld.size() - fieldListNew.size()) + " balls were not moved.");
 		
 		return fieldListNew;
 	}
