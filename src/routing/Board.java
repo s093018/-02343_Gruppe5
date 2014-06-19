@@ -313,11 +313,13 @@ public class Board {
 				return fieldListNew;
 			}
 			// Retry at x+1, y - May require optimizing
-			for(int i = 0; i < fieldListNew.size(); i++){
-				Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
-				fieldListNew.set(i, fieldNewRetry);
-			}
-			retryCounter++;
+			try{
+				for(int i = 0; i < fieldListNew.size(); i++){
+					Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
+					fieldListNew.set(i, fieldNewRetry);
+				}
+				retryCounter++;
+			}catch(IndexOutOfBoundsException e) {break;}
 		}while(retryCounter < 50);
 
 		System.out.println("The goals were not moved.");
@@ -382,14 +384,96 @@ public class Board {
 				return fieldListNew;
 			}
 			// Retry at x+1, y - May require optimizing
-			for(int i = 0; i < fieldListNew.size(); i++){
-				Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
-				fieldListNew.set(i, fieldNewRetry);
-			}
-			retryCounter++;
+			try{
+				for(int i = 0; i < fieldListNew.size(); i++){
+					Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
+					fieldListNew.set(i, fieldNewRetry);
+				}
+				retryCounter++;
+			}catch(IndexOutOfBoundsException e) {break;}
 		}while(retryCounter < 50);
 
 		System.out.println("The balls were not moved.");
+		return fieldListNew;
+	}
+	
+	/**
+	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
+	 */
+	public List<Field> moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation){
+		ArrayList<Field> fieldListOld = new ArrayList<Field>();
+		ArrayList<Field> fieldListNew = new ArrayList<Field>();
+		int outOfBoundsCounter = 0;
+		
+		for(Point ball: balls){
+			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
+
+			if(ball.pathDirection.equals("N")){
+				try{
+					for(int i = 0; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y - i -1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("S")){
+				try{
+					for(int i = 0; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y + i +1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("E")){
+				try{
+					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("W")){
+				try{
+					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x - i -1][ball.pixel_y].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("NW")){
+				try{
+					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y - i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x - i -1][ball.pixel_y - i -1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y - i -1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("NE")){
+				try{
+					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y - i -1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("SW")){
+				try{
+					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y + i +1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			else if(ball.pathDirection.equals("SE")){
+				try{
+					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y + i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x + i +1][ball.pixel_y + i +1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y + i +1]);
+				}catch(IndexOutOfBoundsException e) {outOfBoundsCounter++;}
+			}
+			
+		}
+		for(Field fieldNew : fieldListNew)
+			grid[fieldNew.getX()][fieldNew.getY()].setValue('B');
+		for(Field fieldOld : fieldListOld)
+			grid[fieldOld.getX()][fieldOld.getY()].setValue(newValueAtOldLocation);
+
+		if(outOfBoundsCounter > 0)
+			System.out.println(outOfBoundsCounter + " balls were not moved.");
+		
 		return fieldListNew;
 	}
 
@@ -399,7 +483,7 @@ public class Board {
 	 */
 	public void buildPath(Point center, int pixelLength, char value){
 		List<Field> path = new ArrayList<Field>();
-		for(int l = 1; l <= pixelLength; l++){ //TODO while <pixelLength and next char == F
+		for(int l = 1; l <= pixelLength; l++){ //Could be optimized to: while <pixelLength and next char == F
 			if(center.pathDirection.equals("N")){
 				try{path.add(grid[center.pixel_x][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
@@ -524,10 +608,15 @@ public class Board {
 		return startY;
 	}
 	
+	public void clearBoard(){
+		for (int i = 0 ; i < grid.length ; i++)
+			for (int j = 0 ; j < grid[i].length ; j++)
+				grid[i][j].setValue(' ');
+	}
+	
 	public void clearBalls(List<Point> balls) {
-		for(Point ball : balls) {
+		for(Point ball : balls)
 			grid[ball.pixel_x][ball.pixel_y].setValue(' ');
-		}
 	}
 
 	public void clearRobot(Point robotPos) {

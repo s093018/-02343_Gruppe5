@@ -54,8 +54,15 @@ public class ControllerBoard {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
+				/* pixelRadius is for fake walls and fake obstacles around balls.
+				 * pixelDistance is for moving goals and balls away from obstacles
+				 * 		and should be equal to or less than pixelRadius.
+				 * pixelLength is for making paths for balls or goals through (fake) obstacles
+				 * 		and should be equal to or bigger than pixelRadius.
+				 * @author Julian */
 				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
-				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
@@ -72,7 +79,8 @@ public class ControllerBoard {
 //				}
 
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
+//				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
+				board.moveBallsPastFakeWalls(closeBalls, ' ');
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
 
 					Point goalPoints = realCamera.getGoals().get(i).center;
@@ -118,6 +126,7 @@ public class ControllerBoard {
 				//			board.getField(backField.getX(), backField.getY()).setValue(' ');
 				//			board.clearRobot(realCamera.getRobot().position);
 				//			board.clearBalls(realCamera.getBalls());
+				board.clearBoard();
 
 				iterations++;
 
