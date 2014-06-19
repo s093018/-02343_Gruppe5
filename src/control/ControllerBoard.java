@@ -18,7 +18,7 @@ public class ControllerBoard {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =0;
+	private final int MAX_NO_BALLS =2;
 	private ArrayList<Point> closeBalls = new ArrayList<Point>();
 	private int pixelRadius, pixelDistance, pixelLength;
 
@@ -109,7 +109,7 @@ public class ControllerBoard {
 						} 
 					}
 
-					if(path != null) {
+					if(path == null) {
 						endGame = true;
 					}
 				}
@@ -123,7 +123,10 @@ public class ControllerBoard {
 
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-				endGame = true;
+				if(ballCount == 2) {
+					endGame = true;
+				}
+				ballCount++;
 			}
 			System.out.println("shutdown done");
 		} catch (Exception e) {

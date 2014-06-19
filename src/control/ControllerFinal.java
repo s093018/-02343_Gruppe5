@@ -247,7 +247,7 @@ public class ControllerFinal {
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
 				MAX_NO_BALLS = realCamera.getBalls().size();
-				if(realCamera.getBalls().size() == 0 && ballsInRobot == 0) {
+				if(MAX_NO_BALLS == 0 && ballsInRobot == 0) {
 					endGame = true;
 				}
 			}
