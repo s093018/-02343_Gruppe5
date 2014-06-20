@@ -19,7 +19,7 @@ public class ControllerBoard {
 	private boolean endGame = false;
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS =2;
-	private ArrayList<Point> closeBalls;
+	private ArrayList<Point> closeBalls, balls;
 	private int pixelRadius, pixelDistance, pixelLength;
 
 	File f;
@@ -42,7 +42,7 @@ public class ControllerBoard {
 			while(!endGame) {
 				board = new Board(map);
 				 closeBalls = new ArrayList<Point>();
-				
+				 balls = new ArrayList<Point>();
 				
 				Point tempPoint = realCamera.frontPoint;
 				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
@@ -67,7 +67,10 @@ public class ControllerBoard {
 				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
-				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
+				for(Point ball: realCamera.getBalls()){
+					balls.add(ball.convert());
+				}
+				closeBalls.addAll(board.ballsCloseToObstacle(balls, pixelRadius));
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 
 				/* Encase all not close to wall-balls in fake obstacles
