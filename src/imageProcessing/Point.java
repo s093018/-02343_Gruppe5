@@ -22,16 +22,15 @@ public class Point {
 		this.pixel_x = pixel_x;
 		this.pixel_y = pixel_y;
 	}
-	public Point convert()
-	{
+	public Point convertCoordinates() {
 		Point newPoint = new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
 		newPoint.setPathDirection(pathDirection);
-
-//		if(pathDirection.contains("N"))
-//			newPoint.setPathDirection(pathDirection.replace('N', 'S'));
-//		else if(pathDirection.contains("S"))
-//			newPoint.setPathDirection(pathDirection.replace('S', 'N'));
-
 		return newPoint;
+	}
+	public void convertAndSetPathDirection() {
+		if(pathDirection.contains("N"))
+			setPathDirection(pathDirection.replace('N', 'S'));
+		else if(pathDirection.contains("S"))
+			setPathDirection(pathDirection.replace('S', 'N'));
 	}
 }

@@ -68,7 +68,7 @@ public class ControllerBoard {
 				pixelLength = pixelRadius;
 
 				for(Point ball: realCamera.getBalls()){
-					balls.add(ball.convert());
+					balls.add(ball.convertCoordinates());
 				}
 				closeBalls.addAll(board.ballsCloseToObstacle(balls, pixelRadius));
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
@@ -127,10 +127,6 @@ public class ControllerBoard {
 					}
 				}
 
-				//			board.getField(frontField.getX(), frontField.getY()).setValue(' ');
-				//			board.getField(backField.getX(), backField.getY()).setValue(' ');
-				//			board.clearRobot(realCamera.getRobot().position);
-				//			board.clearBalls(realCamera.getBalls());
 				board.clearBoard();
 
 				iterations++;
