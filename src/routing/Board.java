@@ -577,8 +577,8 @@ public class Board {
 
 	public void fillInBalls(List<Point> balls) {
 		for(Point point: balls) {
-			//	point = point.convert();
-			grid[point.pixel_x][point.pixel_y].setValue('B');
+			if(grid[point.pixel_x][point.pixel_y].getValue() != 'O')
+				grid[point.pixel_x][point.pixel_y].setValue('B');
 		}
 	}
 
