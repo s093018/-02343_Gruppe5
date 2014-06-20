@@ -475,7 +475,7 @@ public class Board {
 			grid[fieldOld.getX()][fieldOld.getY()].setValue(newValueAtOldLocation);
 
 		if(fieldListOld.size() != fieldListNew.size())
-			System.out.println((fieldListOld.size() - fieldListNew.size()) + " balls were not moved.");
+			System.out.println(fieldListNew.size() + " balls were moved, out of " +fieldListOld.size());
 		
 		return fieldListNew;
 	}
