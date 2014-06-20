@@ -63,8 +63,15 @@ public class ControllerFinal {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				pixelRadius = (int)realCamera.getRobot().robotWidth/4;
-				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				/* pixelRadius is for fake walls and fake obstacles around balls.
+				 * pixelDistance is for moving goals and balls away from obstacles
+				 * 		and should be equal to or less than pixelRadius.
+				 * pixelLength is for making paths for balls or goals through (fake) obstacles
+				 * 		and should be equal to or bigger than pixelRadius.
+				 * @author Julian */
+				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
@@ -102,6 +109,7 @@ public class ControllerFinal {
 							System.out.println("Emergency shutdown");
 						} 
 					}
+					System.out.println("Board file called: "+filepath+" created.");
 					//
 
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
@@ -172,7 +180,13 @@ public class ControllerFinal {
 						}
 						System.out.println("Number of balls currently in the robot = " + ballsInRobot);
 
-					} 
+					}
+					else {
+						
+						ro.shutdown();
+						endGame = true;
+						System.out.println("no path found shutdown");
+					}
 				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
 					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
 					// on the field -> Drive to goal and deliver the balls.
