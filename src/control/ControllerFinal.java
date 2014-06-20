@@ -23,7 +23,7 @@ public class ControllerFinal {
 
 	private ArrayList<DriverInstructions> di;
 	private ArrayList<Integer> path;
-	private ArrayList<Point> closeBalls = new ArrayList<Point>();
+	private ArrayList<Point> closeBalls;
 	private RobotOperations ro;
 	private Control robotControl;
 	private RealCamera realCamera;
@@ -50,6 +50,7 @@ public class ControllerFinal {
 
 			while(!endGame) {
 				board = new Board(map);
+				 closeBalls = new ArrayList<Point>();
 
 				// Bruges ikke lige pt - skal det slettes?
 				//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
@@ -78,12 +79,7 @@ public class ControllerFinal {
 				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
 
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
-				for(int i = 0; i < realCamera.getGoals().size(); i++){
-
-					Point goalPoints = realCamera.getGoals().get(i).center;
-					board.buildPath(goalPoints, pixelLength, ' ');
-				}
+				board.moveBallsPastFakeWalls(closeBalls, ' ');
 
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
@@ -186,6 +182,7 @@ public class ControllerFinal {
 						ro.shutdown();
 						endGame = true;
 						System.out.println("no path found shutdown");
+						
 					}
 				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
 					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
@@ -193,7 +190,6 @@ public class ControllerFinal {
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
 					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-					this.userShutdown();
 					di = ro.sequence(path);
 
 					int temp1 = 0; //
@@ -257,7 +253,6 @@ public class ControllerFinal {
 				//				board.clearBalls(realCamera.getBalls());
 				board.clearBoard();
 
-
 				iterations++; // fjernes
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
@@ -274,28 +269,6 @@ public class ControllerFinal {
 			ro.shutdown();
 			System.out.println("Emergency shutdown");
 		} 		
-	}
-	/** Listen for input and shutdown if input is detected.
-	 * DOES NOT WORK
-	 * @author Julian
-	 */
-	public void userShutdown(){
-					Thread userShutdown = new Thread(){
-						public void run(){
-							try {
-								BufferedReader stdIn = new BufferedReader(
-										new InputStreamReader(System.in, "UTF-8"));
-								while (stdIn.readLine() != null) {
-									System.out.println("-------------------User input detected, shutdown imminent.");
-									ro.shutdown();
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								ro.shutdown();
-							}			
-						}
-					};
-					userShutdown.run();
 	}
 }
 

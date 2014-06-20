@@ -78,11 +78,6 @@ public class ControllerRobot {
 				
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
-				for(int i = 0; i < realCamera.getGoals().size(); i++){
-				
-				Point goalPoints = realCamera.getGoals().get(i).center;
-				board.buildPath(goalPoints, pixelLength, ' ');
-				}
 				
 				if(ballCount <= MAX_NO_BALLS) {
 

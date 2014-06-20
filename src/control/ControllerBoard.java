@@ -18,7 +18,7 @@ public class ControllerBoard {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =2;
+	private final int MAX_NO_BALLS =0;
 	private ArrayList<Point> closeBalls;
 	private int pixelRadius, pixelDistance, pixelLength;
 
@@ -80,14 +80,8 @@ public class ControllerBoard {
 //				}
 
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-//				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				board.moveBallsPastFakeWalls(closeBalls, ' ');
 				
-				for(int i = 0; i < realCamera.getGoals().size(); i++){
-					Point goalPoints = realCamera.getGoals().get(i).center;
-					board.buildPath(goalPoints, pixelLength, ' ');
-				}
-
 				if(ballCount <= MAX_NO_BALLS) {
 
 					//					Iterator<Point> it = closeBalls.iterator();
@@ -129,7 +123,7 @@ public class ControllerBoard {
 
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-				if(ballCount == 2) {
+				if(ballCount == 0) {
 					endGame = true;
 				}
 				ballCount++;
