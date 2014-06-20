@@ -22,12 +22,12 @@ public class Point {
 		this.pixel_x = pixel_x;
 		this.pixel_y = pixel_y;
 	}
-	public Point convertCoordinates() {
+	public Point mirrorCoordinates() {
 		Point newPoint = new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
 		newPoint.setPathDirection(pathDirection);
 		return newPoint;
 	}
-	public void convertAndSetPathDirection() {
+	public void mirrorAndSetPathDirection() {
 		if(pathDirection.contains("N"))
 			setPathDirection(pathDirection.replace('N', 'S'));
 		else if(pathDirection.contains("S"))

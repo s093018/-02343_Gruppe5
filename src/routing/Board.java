@@ -60,7 +60,7 @@ public class Board {
 								checkObstacle = grid[x][y];
 								if(checkObstacle.getValue()=='O'){
 									ball.setPathDirection(directionToObstacle(ball));
-									ball.convertAndSetPathDirection();
+								//	ball.mirrorAndSetPathDirection();
 									closeBalls.add(ball);
 									break squareLoop;
 								}
