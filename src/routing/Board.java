@@ -367,7 +367,10 @@ public class Board {
 				y_new = ball.pixel_y + pixelDistance;
 			}
 
-			try{fieldListNew.add(grid[x_new][y_new]);}catch(IndexOutOfBoundsException e) {}
+			try{fieldListNew.add(grid[x_new][y_new]);}catch(IndexOutOfBoundsException e) {
+				System.out.println("Failed to move ball at: " + ball.pixel_x + ", " + ball.pixel_y);
+				
+			}
 		}
 
 		for(int i = 0; i < fieldListNew.size(); i++){
