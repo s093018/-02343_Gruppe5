@@ -235,6 +235,8 @@ public class Board {
 //		}		
 		if(path_direction.equals("Failed to identify direction"))
 			System.out.println("Failed to identify path direction for " + point.pixel_x + ", " + point.pixel_y);
+		else
+			System.out.println("Path direction: "+ path_direction + " for " + point.pixel_x + ", " + point.pixel_y);
 		return path_direction;
 	}
 
