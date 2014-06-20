@@ -86,8 +86,8 @@ public class ControllerBoard {
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 //				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
 				board.moveBallsPastFakeWalls(closeBalls, ' ');
+				
 				for(int i = 0; i < realCamera.getGoals().size(); i++){
-
 					Point goalPoints = realCamera.getGoals().get(i).center;
 					board.buildPath(goalPoints, pixelLength, ' ');
 				}
