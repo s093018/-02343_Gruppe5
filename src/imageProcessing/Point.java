@@ -27,10 +27,10 @@ public class Point {
 		Point newPoint = new Point(x, 480-1-y, pixel_x, 480-1-pixel_y);
 		newPoint.setPathDirection(pathDirection);
 
-//		if(pathDirection.contains("N"))
-//			newPoint.setPathDirection(pathDirection.replace('N', 'S'));
-//		else if(pathDirection.contains("S"))
-//			newPoint.setPathDirection(pathDirection.replace('S', 'N'));
+		if(pathDirection.contains("N"))
+			newPoint.setPathDirection(pathDirection.replace('N', 'S'));
+		else if(pathDirection.contains("S"))
+			newPoint.setPathDirection(pathDirection.replace('S', 'N'));
 
 		return newPoint;
 	}

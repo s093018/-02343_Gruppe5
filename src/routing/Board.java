@@ -410,33 +410,33 @@ public class Board {
 		
 		for(Point ball: balls){
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
-
+		
 			if(ball.pathDirection.equals("N")){
 				try{
-					for(int i = 0; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F')
-							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y - i -1]);
+					for(int i = 0; grid[ball.pixel_x-i][ball.pixel_y].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x - i - 1][ball.pixel_y].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x - i - 1][ball.pixel_y]);
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("S")){
-				try{
-					for(int i = 0; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F')
-							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y + i +1]);
-				}catch(IndexOutOfBoundsException e) {}
-			}
-			else if(ball.pathDirection.equals("E")){
 				try{
 					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++)
 						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F')
 							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y]);
 				}catch(IndexOutOfBoundsException e) {}
 			}
+			else if(ball.pathDirection.equals("E")){
+				try{
+					for(int i = 0; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y + i +1]);
+				}catch(IndexOutOfBoundsException e) {}
+			}
 			else if(ball.pathDirection.equals("W")){
 				try{
-					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x - i -1][ball.pixel_y].getValue() != 'F')
-							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y]);
+					for(int i = 0; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x][ball.pixel_y - i -1]);
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("NW")){
@@ -448,16 +448,16 @@ public class Board {
 			}
 			else if(ball.pathDirection.equals("NE")){
 				try{
-					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F')
-							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y - i -1]);
+					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y + i +1]);
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("SW")){
 				try{
-					for(int i = 0; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F')
-							fieldListNew.add(grid[ball.pixel_x - i -1][ball.pixel_y + i +1]);
+					for(int i = 0; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++)
+						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F')
+							fieldListNew.add(grid[ball.pixel_x + i +1][ball.pixel_y - i -1]);
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(ball.pathDirection.equals("SE")){

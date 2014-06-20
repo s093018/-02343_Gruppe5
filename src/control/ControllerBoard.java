@@ -19,7 +19,7 @@ public class ControllerBoard {
 	private boolean endGame = false;
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS =2;
-	private ArrayList<Point> closeBalls = new ArrayList<Point>();
+	private ArrayList<Point> closeBalls;
 	private int pixelRadius, pixelDistance, pixelLength;
 
 	File f;
@@ -41,7 +41,9 @@ public class ControllerBoard {
 
 			while(!endGame) {
 				board = new Board(map);
-
+				 closeBalls = new ArrayList<Point>();
+				
+				
 				Point tempPoint = realCamera.frontPoint;
 				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
