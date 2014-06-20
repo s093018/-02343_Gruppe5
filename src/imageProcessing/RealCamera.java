@@ -334,11 +334,12 @@ public class RealCamera implements Camera
 		System.out.println("Update " + update + " at " + (System.currentTimeMillis() - startTime) + " ms.");
 		showStep("update" + update +".png", image, 1);
 
-		findBalls(image.clone(), "src/imgInOut/Template.png");
+		Mat ballImg = findBalls(image.clone(), "src/imgInOut/Template.png");
+		showStep("balls" + update +".png", ballImg, 1);
 		findRobot(image.clone(), "src/imgInOut/greenfront.png", "src/imgInOut/Back.png");
 	}
 
-	private void findBalls(Mat image, String templFileName)
+	private Mat findBalls(Mat image, String templFileName)
 	{
 		Mat templ = Highgui.imread(templFileName);
 
@@ -370,7 +371,7 @@ public class RealCamera implements Camera
 			}
 		}
 		System.out.println("Found " + balls.size() + " balls.");
-		showStep("billede3.png", image, 1);
+		return image;
 	}
 
 	private void findRobot(Mat image, String front, String back)
