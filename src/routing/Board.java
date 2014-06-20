@@ -369,29 +369,29 @@ public class Board {
 			try{fieldListNew.add(grid[x_new][y_new]);}catch(IndexOutOfBoundsException e) {}
 		}
 
-		int retryCounter = 0;
-		do{
-			if(!checkAndBuild(fieldListNew, 'B', true)){
-				for(int i = 0; i < fieldListNew.size(); i++){
-					Point newBall = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
-					newBall.setPathDirection(balls.get(i).pathDirection);
-					
-					buildObstacleAroundBall(newBall, pixelRadius);
-					buildPath(newBall,	pixelLength, ' ');
+		for(int i = 0; i < fieldListNew.size(); i++){
+			int retryCounter = 0;
+			while(retryCounter < 50){
+				if(!checkAndBuildSingle(fieldListNew.get(i), 'B', true)){
+						Point newBall = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
+						newBall.setPathDirection(balls.get(i).pathDirection);
+
+						buildObstacleAroundBall(newBall, pixelRadius);
+						buildPath(newBall,	pixelLength, ' ');
+					for(Field fieldOld : fieldListOld)
+						setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
+					return fieldListNew;
 				}
-				for(Field fieldOld : fieldListOld)
-					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
-				return fieldListNew;
+				// Retry at x+1, y - May require optimizing
+				try{
+					for(int j = 0; j < fieldListNew.size(); j++){
+						Field fieldNewRetry = grid[fieldListNew.get(j).getX() + 1][fieldListNew.get(j).getY()];
+						fieldListNew.set(j, fieldNewRetry);
+					}
+					retryCounter++;
+				}catch(IndexOutOfBoundsException e) {break;}
 			}
-			// Retry at x+1, y - May require optimizing
-			try{
-				for(int i = 0; i < fieldListNew.size(); i++){
-					Field fieldNewRetry = grid[fieldListNew.get(i).getX() + 1][fieldListNew.get(i).getY()];
-					fieldListNew.set(i, fieldNewRetry);
-				}
-				retryCounter++;
-			}catch(IndexOutOfBoundsException e) {break;}
-		}while(retryCounter < 50);
+		}
 
 		System.out.println("The balls were not moved.");
 		return fieldListNew;
@@ -531,6 +531,22 @@ public class Board {
 					obstructed = true;
 			}catch(IndexOutOfBoundsException e) {}
 		}
+		return obstructed;
+	}
+	
+	private boolean checkAndBuildSingle(Field buildObstacle, char value, boolean replaceObstacles){
+		boolean obstructed = false;
+			try{
+				if(buildObstacle.getValue()!='R' && buildObstacle.getValue()!='X' && buildObstacle.getValue()!='Y'
+						&& buildObstacle.getValue()!='B' && buildObstacle.getValue()!='G'){
+					if(!replaceObstacles && buildObstacle.getValue()=='O')
+						obstructed = true;
+					buildObstacle.setValue(value);
+					setField(buildObstacle.getX(), buildObstacle.getY(), buildObstacle);
+				}
+				else
+					obstructed = true;
+			}catch(IndexOutOfBoundsException e) {}
 		return obstructed;
 	}
 
