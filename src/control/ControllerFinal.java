@@ -241,6 +241,7 @@ public class ControllerFinal {
 
 				//				board.clearRobot(realCamera.getRobot().position);
 				//				board.clearBalls(realCamera.getBalls());
+				board.clearBoard();
 
 
 				iterations++; // fjernes
