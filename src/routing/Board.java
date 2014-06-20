@@ -232,7 +232,8 @@ public class Board {
 //				}
 //			}catch(IndexOutOfBoundsException e) { break; }
 //		}		
-
+		if(path_direction.equals("Failed to identify direction"))
+			System.out.println("Failed to identify path direction for " + point.pixel_x + ", " + point.pixel_y);
 		return path_direction;
 	}
 
