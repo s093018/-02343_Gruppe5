@@ -309,7 +309,15 @@ public class Board {
 				for(int i = 0; i < fieldListNew.size(); i++){
 					Point newGoalPoint = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
 					newGoalPoint.setPathDirection(directions.get(i));
-
+					
+					if(newGoalPoint.pathDirection.contains("W"))
+						newGoalPoint.setPathDirection("N");
+					else if(newGoalPoint.pathDirection.contains("E"))
+						newGoalPoint.setPathDirection("S");
+					else if(newGoalPoint.pathDirection.contains("S"))
+						newGoalPoint.setPathDirection("W");
+					else if(newGoalPoint.pathDirection.contains("N"))
+						newGoalPoint.setPathDirection("E");
 					buildPath(newGoalPoint,	pixelLength, ' ');
 				}
 				for(Field fieldOld : fieldListOld)
