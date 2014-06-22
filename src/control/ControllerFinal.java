@@ -128,8 +128,9 @@ public class ControllerFinal {
 
 					// No path found!
 					if(path == null && allBalls.size() > 0) {
-						realCamera.getRobot().position.setPathDirection(board.directionToObstacle(realCamera.getRobot().position));
-						board.buildPath(realCamera.getRobot().position, pixelDistance, ' ');
+						Point robotPosition = realCamera.getRobot().position;
+						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
+						board.buildPath(robotPosition, pixelDistance, ' ');
 						bfs = new BFS(board.getGrid(), 'B');
 					} 
 					// If path found -> Drive!
