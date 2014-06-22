@@ -49,7 +49,11 @@ public class Board {
 		if(grid[ball.pixel_x-1][ball.pixel_y].getValue() == 'O' &&
 				grid[ball.pixel_x+1][ball.pixel_y].getValue() == 'O' &&
 				grid[ball.pixel_x][ball.pixel_y+1].getValue() == 'O' &&
-				grid[ball.pixel_x][ball.pixel_y-1].getValue() == 'O')
+				grid[ball.pixel_x][ball.pixel_y-1].getValue() == 'O' &&
+				grid[ball.pixel_x-1][ball.pixel_y-1].getValue() == 'O' &&
+				grid[ball.pixel_x-1][ball.pixel_y+1].getValue() == 'O' &&
+				grid[ball.pixel_x+1][ball.pixel_y-1].getValue() == 'O' &&
+				grid[ball.pixel_x+1][ball.pixel_y+1].getValue() == 'O')
 			return true;
 		return false;
 	}
