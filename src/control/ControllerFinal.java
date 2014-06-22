@@ -52,8 +52,8 @@ public class ControllerFinal {
 
 			while(!endGame) {
 				board = new Board(map);
-				 closeBalls = new ArrayList<Point>();
-				 allBalls = realCamera.getBalls();
+				closeBalls = new ArrayList<Point>();
+				allBalls = realCamera.getBalls();
 				// Bruges ikke lige pt - skal det slettes?
 				//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
 				//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
@@ -73,17 +73,17 @@ public class ControllerFinal {
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
 				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+3;
-//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+				//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
 				board.clearBalls(allBalls);
-//				System.out.println("Number of balls = " + allBalls.size());
-//				System.out.println("number of close balls = " + closeBalls.size());
+				//				System.out.println("Number of balls = " + allBalls.size());
+				//				System.out.println("number of close balls = " + closeBalls.size());
 				allBalls.removeAll(closeBalls);
-//				System.out.println("Number of balls when removing close balls = " + allBalls.size());
-				
+				//				System.out.println("Number of balls when removing close balls = " + allBalls.size());
+
 				board.fakeWallsBuild(pixelRadius);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 
@@ -93,13 +93,21 @@ public class ControllerFinal {
 					board.fillInBalls(closeBalls);
 					board.moveBallsPastFakeWalls(closeBalls, ' ');
 				}
-				
+
 
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
 
+					// No path found!
+					if(path == null && allBalls.size() > 0) {
+						Point robotPosition = realCamera.getRobot().position;
+						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
+						board.buildPath(robotPosition, pixelDistance, ' ');
+						bfs = new BFS(board.getGrid(), 'B');
+						path = bfs.findPath(closeBalls);
+					} 
 					// To be deleted - only used for testing!
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
 					f = new File(filepath);
@@ -126,13 +134,6 @@ public class ControllerFinal {
 
 					System.out.println("robotHeading: "+ro.radianToDegree1(realCamera.getRobot().heading));
 
-					// No path found!
-					if(path == null && allBalls.size() > 0) {
-						Point robotPosition = realCamera.getRobot().position;
-						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
-						board.buildPath(robotPosition, pixelDistance, ' ');
-						bfs = new BFS(board.getGrid(), 'B');
-					} 
 					// If path found -> Drive!
 					if(path != null) { 
 						di = ro.sequence(path);
@@ -199,71 +200,81 @@ public class ControllerFinal {
 
 					}
 					else {
-		
+
 						endGame = true;
 						System.out.println("no path found shutdown");
-						
+
 					}
 				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
 					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
 					// on the field -> Drive to goal and deliver the balls.
 					bfs = new BFS(board.getGrid(), 'G');
 					path = bfs.findPath(closeBalls);
-					ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
-					di = ro.sequence(path);
 
-					int temp1 = 0; //
-					// Only used for testing.
-					for (DriverInstructions i : di) { //
-						System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength()); //
-						temp1++; //
-					} //
+					// No path found!
+					if(path == null && ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING) {
+						Point robotPosition = realCamera.getRobot().position;
+						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
+						board.buildPath(robotPosition, pixelDistance, ' ');
+						bfs = new BFS(board.getGrid(), 'G');
+						path = bfs.findPath(closeBalls);
 
-					ro.in();
+						ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
+						di = ro.sequence(path);
 
-					int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
-					if (turn < 0) {
-						ro.turnLeft(turn);
-					} else if(turn > 0) {
-						ro.turnRight(turn);
-					}
+						int temp1 = 0; //
+						// Only used for testing.
+						for (DriverInstructions i : di) { //
+							System.out.println("instructions "+temp1+": Heading:"+i.getHeading()+", length: "+i.getLength()); //
+							temp1++; //
+						} //
 
-					ro.forward(di.get(0).getLength() * realCamera.getMap().pixelSize);
+						ro.in();
 
-					for(int i = 1; i < di.size(); i++) {
-
-						if(di.get(i).getLength() == 0) {
-							System.out.println("robotHeading before update: "+ro.radianToDegree1(realCamera.getRobot().heading));
-							System.out.println("NYT BILLEDE KALIBRERING");
-							realCamera.update();
-							System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
-
-							turn = ro.turnDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
-
-							if (turn < 0) {
-								ro.turnLeft(turn);
-							} else if(turn > 0) {
-								ro.turnRight(turn);
-							}
-
-						} else {
-
-							turn = ro.turnDegree(di.get(i).getHeading(), di.get(i-1).getHeading());
-							if (turn < 0) {
-								ro.turnLeft(turn);
-							} else if(turn > 0) {
-								ro.turnRight(turn);
-							}
-
-							ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
+						int turn = ro.turnDegree(di.get(0).getHeading(), ro.radianToDegree1(realCamera.getRobot().heading));
+						if (turn < 0) {
+							ro.turnLeft(turn);
+						} else if(turn > 0) {
+							ro.turnRight(turn);
 						}
-					}
-					ro.out();
-					ro.kick();
-					ro.stop();
 
-					ballsInRobot = 0;
-					MAX_NO_BALLS = realCamera.getBalls().size();
+						ro.forward(di.get(0).getLength() * realCamera.getMap().pixelSize);
+
+						for(int i = 1; i < di.size(); i++) {
+
+							if(di.get(i).getLength() == 0) {
+								System.out.println("robotHeading before update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+								System.out.println("NYT BILLEDE KALIBRERING");
+								realCamera.update();
+								System.out.println("RobotHeading after Update: "+ro.radianToDegree1(realCamera.getRobot().heading));
+
+								turn = ro.turnDegree(di.get(i).getHeading(),ro.radianToDegree1(realCamera.getRobot().heading));
+
+								if (turn < 0) {
+									ro.turnLeft(turn);
+								} else if(turn > 0) {
+									ro.turnRight(turn);
+								}
+
+							} else {
+
+								turn = ro.turnDegree(di.get(i).getHeading(), di.get(i-1).getHeading());
+								if (turn < 0) {
+									ro.turnLeft(turn);
+								} else if(turn > 0) {
+									ro.turnRight(turn);
+								}
+
+								ro.forward(di.get(i).getLength() * realCamera.getMap().pixelSize);
+							}
+						}
+						ro.out();
+						ro.kick();
+						ro.stop();
+
+						ballsInRobot = 0;
+						MAX_NO_BALLS = realCamera.getBalls().size();
+					}
 				}
 
 				// Bruges ikke lige pt - skal det slettes?
