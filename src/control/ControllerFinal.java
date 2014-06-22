@@ -79,29 +79,22 @@ public class ControllerFinal {
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
-//				board.clearBalls(closeBalls);
-				
-//				for(Point ball : allBalls) {
-//					for(Point closeBall : closeBalls) {
-//						if(ball.pixel_x != closeBall.pixel_x && ball.pixel_y != closeBall.pixel_y) {
-//							notCloseBalls.add(ball);
-//							break;
-//						}
-//					}
-//				}
-//				if(notCloseBalls.size() > 0) {
-//					board.fillInBalls(notCloseBalls);
-//					System.out.println("not close balls filled: " + notCloseBalls.size());
-//				} else {
-//					board.fillInBalls(closeBalls);				
-//					System.out.println("close balls filled: " + closeBalls.size());
-//				}
-//				notCloseBalls.clear();
+				board.clearBalls(allBalls);
+				System.out.println("Number of balls = " + allBalls.size());
+				System.out.println("number of close balls = " + closeBalls.size());
+				allBalls.removeAll(closeBalls);
+				System.out.println("Number of balls when removing close balls = " + allBalls.size());
 				
 				board.fakeWallsBuild(pixelRadius);
-
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBallsPastFakeWalls(closeBalls, ' ');
+
+				if(allBalls != null && allBalls.size() > 0) {
+					board.fillInBalls(allBalls);
+				} else if(closeBalls != null && closeBalls.size() > 0) {
+					board.fillInBalls(closeBalls);
+					board.moveBallsPastFakeWalls(closeBalls, ' ');
+				}
+				
 
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
