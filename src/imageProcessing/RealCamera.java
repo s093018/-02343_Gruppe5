@@ -284,6 +284,7 @@ public class RealCamera implements Camera
 	{
 		Mat intensity = new Mat();
 		Mat template = new Mat(new Size(detectorSize, detectorSize), obstacle.type());
+		template.setTo(new Scalar(0));
 		Imgproc.matchTemplate(obstacle, template, intensity, Imgproc.TM_SQDIFF);
 		MinMaxLocResult extrema = Core.minMaxLoc(intensity);
 		return new Point((int)(extrema.minLoc.x + detectorSize/2), (int)(extrema.minLoc.y + detectorSize/2), pixelSize);
