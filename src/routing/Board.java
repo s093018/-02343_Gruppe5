@@ -105,7 +105,7 @@ public class Board {
 				while(!done){
 					temp_pixel_y--;
 					temp_pixel_x++;
-					temp_dist++;
+					temp_dist = temp_dist + 2;
 					try{
 						if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 							if(temp_dist < shortest_dist || shortest_dist == 0){
@@ -144,7 +144,7 @@ public class Board {
 				while(!done){
 					temp_pixel_y++;
 					temp_pixel_x++;
-					temp_dist++;
+					temp_dist = temp_dist + 2;
 					try{
 						if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 							if(temp_dist < shortest_dist || shortest_dist == 0){
@@ -183,7 +183,7 @@ public class Board {
 				while(!done){
 					temp_pixel_y++;
 					temp_pixel_x--;
-					temp_dist++;
+					temp_dist = temp_dist + 2;
 					try{
 						if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 							if(temp_dist < shortest_dist || shortest_dist == 0){
@@ -223,7 +223,7 @@ public class Board {
 				while(!done){
 					temp_pixel_y--;
 					temp_pixel_x++;
-					temp_dist++;
+					temp_dist = temp_dist + 2;
 					try{
 						if(grid[temp_pixel_x][temp_pixel_y].getValue() == 'O'){
 							if(temp_dist < shortest_dist || shortest_dist == 0){
@@ -271,16 +271,16 @@ public class Board {
 			fieldListOld.add(new Field(goals.get(i).center.pixel_x, goals.get(i).center.pixel_y, newValueAtOldLocation));
 			int x_new = goals.get(i).center.pixel_x, y_new = goals.get(i).center.pixel_y;
 
-			if(directions.get(i).equals("N")){
+			if(directions.get(i).contains("N")){
 				y_new = goals.get(i).center.pixel_y - pixelDistance;
 			}
-			else if(directions.get(i).equals("S")){
+			else if(directions.get(i).contains("S")){
 				y_new = goals.get(i).center.pixel_y + pixelDistance;
 			}
-			else if(directions.get(i).equals("E")){
+			else if(directions.get(i).contains("E")){
 				x_new = goals.get(i).center.pixel_x + pixelDistance;
 			}
-			else if(directions.get(i).equals("W")){
+			else if(directions.get(i).contains("W")){
 				x_new = goals.get(i).center.pixel_x - pixelDistance;
 			}
 			else if(directions.get(i).equals("NW")){
