@@ -498,16 +498,16 @@ public class Board {
 	public void buildPath(Point center, int pixelLength, char value){
 		List<Field> path = new ArrayList<Field>();
 		for(int i = 1; i <= pixelLength; i++){ //Could be optimized to: while <pixelLength and next char == F
-			if(center.pathDirection.equals("N")){
+			if(center.pathDirection.contains("N")){
 				try{path.add(grid[center.pixel_x -i][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
-			if(center.pathDirection.equals("S")){
+			if(center.pathDirection.contains("S")){
 				try{path.add(grid[center.pixel_x +i][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
-			if(center.pathDirection.equals("E")){
+			if(center.pathDirection.contains("E")){
 				try{path.add(grid[center.pixel_x][center.pixel_y +i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			if(center.pathDirection.equals("W")){
+			if(center.pathDirection.contains("W")){
 				try{path.add(grid[center.pixel_x][center.pixel_y -i]);}catch(IndexOutOfBoundsException e) {}
 			}
 			if(center.pathDirection.equals("NW")){
