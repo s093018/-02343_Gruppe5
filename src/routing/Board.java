@@ -515,7 +515,9 @@ public class Board {
 				try{path.add(grid[center.pixel_x + i][center.pixel_y + i]);}catch(IndexOutOfBoundsException e) {}
 			}
 		}
-		checkAndBuild(path, value, true);
+		for(Field field: path)
+			checkAndBuildSingle(field, value, true);
+		//checkAndBuild(path, value, true);
 	}
 
 	/**
