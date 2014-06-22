@@ -72,7 +72,7 @@ public class ControllerFinal {
 				 * pixelLength is for making paths for balls or goals through (fake) obstacles
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
-				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+9;
+				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 				//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
@@ -200,7 +200,7 @@ public class ControllerFinal {
 						}
 
 						if(bfs.getCloseToWall()) {
-							ro.reverse((int)(pixelRadius*realCamera.getMap().pixelSize));
+							ro.reverse((int)(pixelRadius/2*realCamera.getMap().pixelSize));
 						}
 
 						if(MAX_NO_BALLS > realCamera.getBalls().size()) {
@@ -284,7 +284,7 @@ public class ControllerFinal {
 						ro.out();
 						ro.kick();
 						ro.in();
-						ro.reverse((int)(pixelRadius*realCamera.getMap().pixelSize));
+						ro.reverse((int)(pixelRadius/2*realCamera.getMap().pixelSize));
 
 						ballsInRobot = 0;
 						MAX_NO_BALLS = realCamera.getBalls().size();
