@@ -435,58 +435,90 @@ public class Board {
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
 			if(ball.pathDirection.contains("N")){
 				try{
-					for(int i = 1; grid[ball.pixel_x-i][ball.pixel_y].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x - i - 1][ball.pixel_y].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x - i - 1,ball.pixel_y, 0));
+					for(int i = 1; grid[ball.pixel_x-i][ball.pixel_y].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x - i - 1][ball.pixel_y].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x - i - 1,ball.pixel_y, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.contains("S")){
 				try{
-					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x + i +1, ball.pixel_y, 0));
+					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x + i +1, ball.pixel_y, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.contains("E")){
 				try{
-					for(int i = 1; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x, ball.pixel_y + i +1, 0));
+					for(int i = 1; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x, ball.pixel_y + i +1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.contains("W")){
 				try{
-					for(int i = 1; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x, ball.pixel_y - i -1, 0));
+					for(int i = 1; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x, ball.pixel_y - i -1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.equals("NW")){
 				try{
-					for(int i = 1; grid[ball.pixel_x - i][ball.pixel_y - i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x - i -1][ball.pixel_y - i -1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x - i -1, ball.pixel_y - i -1, 0));
+					for(int i = 1; grid[ball.pixel_x - i][ball.pixel_y - i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x - i -1][ball.pixel_y - i -1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x - i -1, ball.pixel_y - i -1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.equals("NE")){
 				try{
-					for(int i = 1; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x - i -1, ball.pixel_y + i +1, 0));
+					for(int i = 1; grid[ball.pixel_x - i][ball.pixel_y + i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x - i -1][ball.pixel_y + i +1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x - i -1, ball.pixel_y + i +1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.equals("SW")){
 				try{
-					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x + i +1, ball.pixel_y - i -1, 0));
+					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y - i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x + i +1][ball.pixel_y - i -1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x + i +1, ball.pixel_y - i -1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 			if(ball.pathDirection.equals("SE")){
 				try{
-					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y + i].getValue() == 'F'; i++)
-						if(grid[ball.pixel_x + i +1][ball.pixel_y + i +1].getValue() != 'F')
-							newBalls.add(new Point(ball.pixel_x + i +1, ball.pixel_y + i +1, 0));
+					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y + i].getValue() == 'F'; i++){
+						if(grid[ball.pixel_x + i +1][ball.pixel_y + i +1].getValue() != 'F'){
+							Point newBall = new Point(ball.pixel_x + i +1, ball.pixel_y + i +1, 0);
+							newBall.setPathDirection(ball.pathDirection);
+							newBalls.add(newBall);
+						}
+					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
 
