@@ -272,12 +272,12 @@ public class RealCamera implements Camera
 		}
 
 	}
-	private Goal makeGoal(org.opencv.core.Point left, org.opencv.core.Point right)
+	private Goal makeGoal(org.opencv.core.Point left, org.opencv.core.Point right, double width)
 	{
 		int x = (int)(left.x+right.x)/2;
 		int y = (int)(left.y+right.y)/2;
 		double heading = Math.atan2(right.x-left.x, left.y-right.y);
-		return new Goal(new Point(x, y, pixelSize), 10, heading);
+		return new Goal(new Point(x, y, pixelSize), width, heading);
 	}
 	public void updateMap()
 	{
@@ -301,8 +301,8 @@ public class RealCamera implements Camera
 		System.out.println("Estimated pixel size: " + pixelSize + " cm/pixel");
 
 		goals = new ArrayList<Goal>();
-		goals.add(makeGoal(corners.get(2), corners.get(1)));
-		goals.add(makeGoal(corners.get(0), corners.get(3)));
+		goals.add(makeGoal(corners.get(2), corners.get(1), 20));
+		goals.add(makeGoal(corners.get(0), corners.get(3), 10));
 
 		for(Goal g : goals)
 			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
@@ -332,6 +332,7 @@ public class RealCamera implements Camera
 
 		String update = String.format("%05d", updates++);
 		System.out.println("Update " + update + " at " + (System.currentTimeMillis() - startTime) + " ms.");
+		showStep("update" + update +".png", image, 1);
 
 		Mat ballImg = findBalls(image.clone(), "src/imgInOut/Template.png");
 		showStep("balls" + update +".png", ballImg, 1);

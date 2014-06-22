@@ -7,6 +7,7 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
@@ -92,5 +93,22 @@ public class Proc
 	public static org.opencv.core.Point sub(org.opencv.core.Point lhs, org.opencv.core.Point rhs)
 	{
 		return new org.opencv.core.Point(lhs.x - rhs.x, lhs.y - rhs.y);
+	}
+	public static Mat classify(Mat image, Scalar a, Scalar b)
+	{
+		Mat detector = new Mat(new Size(1, 1), image.type());
+		Mat response[] = {new Mat(), new Mat()};
+		detector.setTo(a);
+		Imgproc.matchTemplate(image, detector, response[0], Imgproc.TM_SQDIFF);
+		detector.setTo(b);
+		Imgproc.matchTemplate(image, detector, response[1], Imgproc.TM_SQDIFF);
+		Mat diff = new Mat();
+		Core.subtract(response[1], response[0], diff);
+		Mat result = new Mat();
+		Imgproc.threshold(diff, result, 0.0, 1, Imgproc.THRESH_BINARY);
+		saveImage("src/imgDump/response0.png", response[0], 0.01);
+		saveImage("src/imgDump/response1.png", response[1], 0.01);
+		saveImage("src/imgDump/diff.png", diff, 0.05);
+		return result;
 	}
 }
