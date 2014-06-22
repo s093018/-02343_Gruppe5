@@ -426,8 +426,9 @@ public class Board {
 
 	/**
 	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
+	 * @return TODO
 	 */
-	public void moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation, int pixelLength){
+	public ArrayList<Point> moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation, int pixelLength){
 		ArrayList<Field> fieldListOld = new ArrayList<Field>();
 		ArrayList<Point> newBalls = new ArrayList<Point>();
 		for(Point ball: balls){
@@ -531,6 +532,8 @@ public class Board {
 
 		if(fieldListOld.size() != newBalls.size())
 			System.out.println(newBalls.size() + " balls were moved, out of " +fieldListOld.size());
+	
+		return newBalls;
 	}
 
 

@@ -92,7 +92,7 @@ public class ControllerBoard {
 						board.fillInBalls(allBalls);
 					} else if(closeBalls != null && closeBalls.size() > 0) {
 						board.fillInBalls(closeBalls);
-						board.moveBallsPastFakeWalls(closeBalls, ' ', pixelLength);
+						closeBalls = board.moveBallsPastFakeWalls(closeBalls, ' ', pixelLength);
 					}
 
 
