@@ -493,25 +493,25 @@ public class Board {
 			if(center.pathDirection.equals("N")){
 				try{path.add(grid[center.pixel_x -i][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("S")){
+			if(center.pathDirection.equals("S")){
 				try{path.add(grid[center.pixel_x +i][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("E")){
+			if(center.pathDirection.equals("E")){
 				try{path.add(grid[center.pixel_x][center.pixel_y +i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("W")){
+			if(center.pathDirection.equals("W")){
 				try{path.add(grid[center.pixel_x][center.pixel_y -i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("NW")){
+			if(center.pathDirection.equals("NW")){
 				try{path.add(grid[center.pixel_x - i][center.pixel_y - i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("NE")){
+			if(center.pathDirection.equals("NE")){
 				try{path.add(grid[center.pixel_x - i][center.pixel_y + i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("SW")){
+			if(center.pathDirection.equals("SW")){
 				try{path.add(grid[center.pixel_x + i][center.pixel_y - i]);}catch(IndexOutOfBoundsException e) {}
 			}
-			else if(center.pathDirection.equals("SE")){
+			if(center.pathDirection.equals("SE")){
 				try{path.add(grid[center.pixel_x + i][center.pixel_y + i]);}catch(IndexOutOfBoundsException e) {}
 			}
 		}
