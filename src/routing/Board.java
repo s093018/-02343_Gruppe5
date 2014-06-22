@@ -568,6 +568,7 @@ public class Board {
 
 	public void fakeWallsBuild(int pixelRadius) {		
 		ArrayList<Field> fakeObstacles = new ArrayList<Field>();
+		int halfRadius = Math.round((float)(pixelRadius/2));
 
 		for (int i = 0 ; i < grid.length ; i++) {
 			for (int j = 0 ; j < grid[i].length ; j++) {
@@ -578,10 +579,10 @@ public class Board {
 					try{fakeObstacles.add(grid[i][j-pixelRadius]); }catch(IndexOutOfBoundsException e) {}
 					
 					// Diagonal
-					try{fakeObstacles.add(grid[i-pixelRadius][j-pixelRadius]); }catch(IndexOutOfBoundsException e) {}
-					try{fakeObstacles.add(grid[i-pixelRadius][j+pixelRadius]); }catch(IndexOutOfBoundsException e) {}
-					try{fakeObstacles.add(grid[i+pixelRadius][j-pixelRadius]); }catch(IndexOutOfBoundsException e) {}
-					try{fakeObstacles.add(grid[i+pixelRadius][j+pixelRadius]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i-halfRadius][j-halfRadius]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i-halfRadius][j+halfRadius]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i+halfRadius][j-halfRadius]); }catch(IndexOutOfBoundsException e) {}
+					try{fakeObstacles.add(grid[i+halfRadius][j+halfRadius]); }catch(IndexOutOfBoundsException e) {}
 				}
 			}
 		}
