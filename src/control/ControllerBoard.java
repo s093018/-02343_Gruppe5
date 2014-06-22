@@ -17,6 +17,7 @@ public class ControllerBoard {
 	private ArrayList<Integer> path;
 	private ArrayList<Point> closeBalls;
 	private List<Point> allBalls;
+	private List<Goal> goals;
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
@@ -54,7 +55,7 @@ public class ControllerBoard {
 					// Add balls, robot and goals to the board.
 					board.fillInBalls(allBalls);
 					board.fillInRobotPosition(realCamera.getRobot().position);
-					board.fillInGoals(realCamera.getGoals());
+					board.fillInSmallestGoal(realCamera.getGoals());
 
 					/* pixelRadius is for fake walls.
 					 * pixelDistance is for moving goals and balls away from obstacles
@@ -66,7 +67,7 @@ public class ControllerBoard {
 					pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 					//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 					pixelDistance = pixelRadius;
-					pixelLength = pixelRadius/4;
+					pixelLength = 2;
 
 
 					//Solve problem with balls outside playground.

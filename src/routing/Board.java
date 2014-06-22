@@ -659,12 +659,12 @@ public class Board {
 		}
 	}
 	
-	public void fillInWidestGoal(List<Goal> goals) {
+	public void fillInSmallestGoal(List<Goal> goals) {
 		Point tempPoint = goals.get(0).center;
 		double tempWidth = goals.get(0).width;
 		
 		for(Goal goal: goals)
-			if(goal.width >= tempWidth)
+			if(goal.width <= tempWidth)
 				tempPoint = goal.center;
 		
 		grid[tempPoint.pixel_x][tempPoint.pixel_y].setValue('G');
