@@ -77,7 +77,7 @@ public class ControllerRobot {
 //				}
 				
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength, pixelRadius);
+				board.moveBalls(closeBalls, pixelDistance, ' ', pixelLength);
 				
 				if(ballCount <= MAX_NO_BALLS) {
 

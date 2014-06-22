@@ -66,16 +66,17 @@ public class ControllerFinal {
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
-				/* pixelRadius is for fake walls and fake obstacles around balls.
+				/* pixelRadius is for fake walls.
 				 * pixelDistance is for moving goals and balls away from obstacles
 				 * 		and should be equal to or less than pixelRadius.
-				 * pixelLength is for making paths for balls or goals through (fake) obstacles
+				 * pixelLength is for fake obstacles around balls and
+				 * 		making paths for balls or goals through (fake) obstacles
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
 				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 				//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
-				pixelLength = pixelRadius;
+				pixelLength = pixelRadius/2;
 
 
 				//Solve problem with balls outside playground.
@@ -100,7 +101,7 @@ public class ControllerFinal {
 					board.fillInBalls(allBalls);
 				} else if(closeBalls != null && closeBalls.size() > 0) {
 					board.fillInBalls(closeBalls);
-					board.moveBallsPastFakeWalls(closeBalls, ' ');
+					board.moveBallsPastFakeWalls(closeBalls, ' ', pixelLength);
 				}
 
 

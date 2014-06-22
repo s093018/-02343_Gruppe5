@@ -253,15 +253,15 @@ public class Board {
 		return path_direction;
 	}
 
-	private void buildObstacleAroundBall(Point ball, int pixelRadius){
+	private void buildObstacleAroundBall(Point ball, int pixelLength){
 
 		List<Field> buildObstacles = new ArrayList<Field>();
-		try{buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y - pixelRadius]);}catch(IndexOutOfBoundsException e){}
-		try{buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y - pixelRadius]);}catch(IndexOutOfBoundsException e){}
-		try{buildObstacles.add(grid[ball.pixel_x + pixelRadius][ball.pixel_y + pixelRadius]);}catch(IndexOutOfBoundsException e){}
-		try{buildObstacles.add(grid[ball.pixel_x - pixelRadius][ball.pixel_y + pixelRadius]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x - pixelLength][ball.pixel_y - pixelLength]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x + pixelLength][ball.pixel_y - pixelLength]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x + pixelLength][ball.pixel_y + pixelLength]);}catch(IndexOutOfBoundsException e){}
+		try{buildObstacles.add(grid[ball.pixel_x - pixelLength][ball.pixel_y + pixelLength]);}catch(IndexOutOfBoundsException e){}
 
-		for(int i = 0; i < pixelRadius * 2; i++){
+		for(int i = 0; i < pixelLength * 2; i++){
 			checkAndBuild(buildObstacles, 'F', false);
 			incrBuildObstacles(buildObstacles);
 		}
@@ -354,7 +354,7 @@ public class Board {
 	/**
 	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
 	 */
-	public List<Field> moveBalls(List<Point> balls, int pixelDistance, char newValueAtOldLocation, int pixelLength, int pixelRadius){
+	public List<Field> moveBalls(List<Point> balls, int pixelDistance, char newValueAtOldLocation, int pixelLength){
 		ArrayList<Field> fieldListOld = new ArrayList<Field>();
 		ArrayList<Field> fieldListNew = new ArrayList<Field>();
 
@@ -403,7 +403,7 @@ public class Board {
 				if(!checkAndBuildSingle(fieldListNew.get(i), 'B', true)){
 					Point newBall = new Point(fieldListNew.get(i).getX(), fieldListNew.get(i).getY(), 0);
 					newBall.setPathDirection(balls.get(i).pathDirection);
-					buildObstacleAroundBall(newBall, pixelRadius);
+					buildObstacleAroundBall(newBall, pixelLength);
 					buildPath(newBall,	pixelLength, ' ');
 					for(Field fieldOld : fieldListOld)
 						setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
@@ -426,10 +426,11 @@ public class Board {
 
 	/**
 	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
+	 * @param pixelLength TODO
 	 */
-	public List<Point> moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation){
+	public void moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation, int pixelLength){
 		ArrayList<Field> fieldListOld = new ArrayList<Field>();
-		ArrayList<Point> newBalls = new ArrayList<Field>();
+		ArrayList<Point> newBalls = new ArrayList<Point>();
 		for(Point ball: balls){
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
 			if(ball.pathDirection.contains("N")){
@@ -490,15 +491,15 @@ public class Board {
 			}
 
 		}
-		for(Point newBall : newBalls)
+		for(Point newBall : newBalls){
 			grid[newBall.pixel_x][newBall.pixel_y].setValue('B');
+			buildObstacleAroundBall(newBall, pixelLength);
+		}
 		for(Field fieldOld : fieldListOld)
 			grid[fieldOld.getX()][fieldOld.getY()].setValue(newValueAtOldLocation);
 
 		if(fieldListOld.size() != newBalls.size())
 			System.out.println(newBalls.size() + " balls were moved, out of " +fieldListOld.size());
-
-		return newBalls;
 	}
 
 
