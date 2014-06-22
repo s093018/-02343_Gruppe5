@@ -22,6 +22,7 @@ public class RealCamera implements Camera
 	private List<Point> balls;
 	private Robot robot;
 	public Point frontPoint, backPoint;
+	private Point obstacleCenter;
 
 	private VideoCapture capture;
 	private Configuration settings = new Configuration("settings.cfg");
@@ -279,6 +280,14 @@ public class RealCamera implements Camera
 		double heading = Math.atan2(right.x-left.x, left.y-right.y);
 		return new Goal(new Point(x, y, pixelSize), width, heading);
 	}
+	private Point locateObstacleCenter(Mat obstacle, int detectorSize)
+	{
+		Mat intensity = new Mat();
+		Mat template = new Mat(new Size(detectorSize, detectorSize), obstacle.type());
+		Imgproc.matchTemplate(obstacle, template, intensity, Imgproc.TM_SQDIFF);
+		MinMaxLocResult extrema = Core.minMaxLoc(intensity);
+		return new Point((int)(extrema.minLoc.x + detectorSize/2), (int)(extrema.minLoc.y + detectorSize/2), pixelSize);
+	}
 	public void updateMap()
 	{
 		Mat image = getImage();
@@ -308,7 +317,9 @@ public class RealCamera implements Camera
 			Core.circle(marked, new org.opencv.core.Point(g.center.pixel_x, g.center.pixel_y), 4, new Scalar(0, 255, 255), -1);
 		showStep("corners.png", marked, 1.0);
 
-		map = buildMap(image, corners, detectCentralObstacle(image));
+		Mat centralObstacle = detectCentralObstacle(image);
+		obstacleCenter = locateObstacleCenter(centralObstacle, 20);
+		map = buildMap(image, corners, centralObstacle);
 	}
 	public RealCamera()
 	{
@@ -322,6 +333,9 @@ public class RealCamera implements Camera
 		}
 		updateMap();
 		update();
+		Mat image = Proc.norm(getImage());
+		double floor[] = Proc.estimateFloorColor(image, settings.NW, settings.SE);
+		showStep("bisect.png", Proc.classify(image, new Scalar(floor[0], floor[1], floor[2], 255), settings.centralObstacleColor), 255);
 	}
 	public void update()
 	{
@@ -436,4 +450,5 @@ public class RealCamera implements Camera
 	public List<Point> getBalls(){return balls;}
 	public List<Goal> getGoals(){return goals;}
 	public Map getMap(){return map;}
+	public Point getObstacleCenter(){return obstacleCenter;}
 }
