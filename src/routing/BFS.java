@@ -182,14 +182,14 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
-				NE = grid[current.getX() + 1][current.getY() + 1];
-				if (NE.getValue() != obstacle && NE.getValue() != fakeObstacle && !grid[NE.getX()][NE.getY()].isVisited()) {
-					grid[NE.getX()][NE.getY()].visit();
-					current.setParent(NE);
-					bfsQueue.add(NE);
-				}
-			}
+//			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
+//				NE = grid[current.getX() + 1][current.getY() + 1];
+//				if (NE.getValue() != obstacle && NE.getValue() != fakeObstacle && !grid[NE.getX()][NE.getY()].isVisited()) {
+//					grid[NE.getX()][NE.getY()].visit();
+//					current.setParent(NE);
+//					bfsQueue.add(NE);
+//				}
+//			}
 
 			/*
 			 *	Northwest child

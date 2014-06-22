@@ -26,7 +26,6 @@ public class ControllerFinal {
 	private ArrayList<Integer> path;
 	private ArrayList<Point> closeBalls;
 	private List<Point> allBalls;
-	private ArrayList<Point> notCloseBalls = new ArrayList<Point>();
 	private RobotOperations ro;
 	private Control robotControl;
 	private RealCamera realCamera;
@@ -73,17 +72,17 @@ public class ControllerFinal {
 				 * pixelLength is for making paths for balls or goals through (fake) obstacles
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
-				pixelRadius = (int)realCamera.getRobot().robotLength/2;
+				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+3;
 //				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
 				board.clearBalls(allBalls);
-				System.out.println("Number of balls = " + allBalls.size());
-				System.out.println("number of close balls = " + closeBalls.size());
+//				System.out.println("Number of balls = " + allBalls.size());
+//				System.out.println("number of close balls = " + closeBalls.size());
 				allBalls.removeAll(closeBalls);
-				System.out.println("Number of balls when removing close balls = " + allBalls.size());
+//				System.out.println("Number of balls when removing close balls = " + allBalls.size());
 				
 				board.fakeWallsBuild(pixelRadius);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
@@ -128,6 +127,11 @@ public class ControllerFinal {
 					System.out.println("robotHeading: "+ro.radianToDegree1(realCamera.getRobot().heading));
 
 					// No path found!
+					if(path == null && allBalls.size() > 0) {
+						board.buildPath(realCamera.getRobot().position, pixelDistance, ' ');
+						bfs = new BFS(board.getGrid(), 'B');
+					} 
+					// If path found -> Drive!
 					if(path != null) { 
 						di = ro.sequence(path);
 						int temp1 = 0;
@@ -193,8 +197,7 @@ public class ControllerFinal {
 
 					}
 					else {
-						
-						ro.shutdown();
+		
 						endGame = true;
 						System.out.println("no path found shutdown");
 						

@@ -15,11 +15,12 @@ public class ControllerBoard {
 
 	private Field frontField, backField;
 	private ArrayList<Integer> path;
+	private ArrayList<Point> closeBalls;
+	private List<Point> allBalls;
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
 	private final int MAX_NO_BALLS =0;
-	private ArrayList<Point> closeBalls;
 	private int pixelRadius, pixelDistance, pixelLength;
 
 	File f;
@@ -42,6 +43,7 @@ public class ControllerBoard {
 			while(!endGame) {
 				board = new Board(map);
 				 closeBalls = new ArrayList<Point>();
+				 allBalls = realCamera.getBalls();
 				
 				Point tempPoint = realCamera.frontPoint;
 				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
@@ -51,7 +53,7 @@ public class ControllerBoard {
 				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
 
 
-				board.fillInBalls(realCamera.getBalls());
+				board.fillInBalls(allBalls);
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
@@ -67,7 +69,13 @@ public class ControllerBoard {
 				pixelLength = pixelRadius;
 
 				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
-				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				board.clearBalls(allBalls);
+				System.out.println("Number of balls = " + allBalls.size());
+				System.out.println("number of close balls = " + closeBalls.size());
+				allBalls.removeAll(closeBalls);
+				System.out.println("Number of balls when removing close balls = " + allBalls.size());
+				
+				board.fakeWallsBuild((int)(realCamera.getRobot().robotLength/2)+3);
 
 				/* Encase all not close to wall-balls in fake obstacles
 				 * and create a path outward in the direction away from closest obstacle */
@@ -80,7 +88,16 @@ public class ControllerBoard {
 //				}
 
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				board.moveBallsPastFakeWalls(closeBalls, ' ');
+				
+				
+				if(allBalls != null && allBalls.size() > 0) {
+					board.fillInBalls(allBalls);
+					
+				} else if(closeBalls != null && closeBalls.size() > 0) {
+					board.fillInBalls(closeBalls);
+					board.moveBallsPastFakeWalls(closeBalls, ' ');
+				}
+				
 				
 				if(ballCount <= MAX_NO_BALLS) {
 
@@ -111,7 +128,7 @@ public class ControllerBoard {
 							System.out.println("Emergency shutdown");
 						} 
 					}
-
+					
 					if(path == null) {
 						endGame = true;
 					}
