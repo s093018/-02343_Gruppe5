@@ -266,8 +266,8 @@ public class Board {
 			incrBuildObstacles(buildObstacles);
 		}
 
-		// Outcomment this if using moveBalls()
-		//	buildPath(ball, pixelRadius, ' ');
+		// Outcomment this if using moveBalls() but not if using moveBallsPastFakeObstacles()
+			buildPath(ball, pixelRadius, ' ');
 	}
 
 	/**
