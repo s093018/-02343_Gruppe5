@@ -44,6 +44,15 @@ public class Board {
 		printer.append("\n");
 		return printer.toString();
 	}
+	
+	public boolean ballSurroundedByObstacles(Point ball){
+		if(grid[ball.pixel_x-1][ball.pixel_y].getValue() == 'O' &&
+				grid[ball.pixel_x+1][ball.pixel_y].getValue() == 'O' &&
+				grid[ball.pixel_x][ball.pixel_y+1].getValue() == 'O' &&
+				grid[ball.pixel_x][ball.pixel_y-1].getValue() == 'O')
+			return true;
+		return false;
+	}
 
 	public List<Point> ballsCloseToObstacle(List<Point> balls, int pixelRadius){
 		List<Point> closeBalls = new ArrayList<Point>();
