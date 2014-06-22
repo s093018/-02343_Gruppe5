@@ -57,7 +57,7 @@ public class ControllerRobot {
 
 				board.fillInBalls(realCamera.getBalls());
 				board.fillInRobotPosition(realCamera.getRobot().position);
-				board.fillInGoals(realCamera.getGoals());
+				board.fillInSmallestGoal(realCamera.getGoals());
 
 				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
 				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
