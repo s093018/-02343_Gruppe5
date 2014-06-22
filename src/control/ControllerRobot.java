@@ -165,7 +165,7 @@ public class ControllerRobot {
 						}
 
 						if(bfs.getCloseToWall()) {
-							ro.reverse();
+//							ro.reverse();
 						}
 
 						ballCount++;

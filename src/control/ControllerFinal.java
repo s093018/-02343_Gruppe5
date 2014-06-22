@@ -107,7 +107,8 @@ public class ControllerFinal {
 						board.buildPath(robotPosition, pixelDistance, ' ');
 						bfs = new BFS(board.getGrid(), 'B');
 						path = bfs.findPath(closeBalls);
-					} 
+					}
+
 					// To be deleted - only used for testing!
 					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
 					f = new File(filepath);
@@ -190,7 +191,7 @@ public class ControllerFinal {
 						}
 
 						if(bfs.getCloseToWall()) {
-							ro.reverse();
+							ro.reverse((int)(pixelRadius*realCamera.getMap().pixelSize));
 						}
 
 						if(MAX_NO_BALLS > realCamera.getBalls().size()) {
@@ -218,6 +219,9 @@ public class ControllerFinal {
 						board.buildPath(robotPosition, pixelDistance, ' ');
 						bfs = new BFS(board.getGrid(), 'G');
 						path = bfs.findPath(closeBalls);
+					}
+
+					if(path != null) {
 
 						ro = new RobotOperations(robotControl, realCamera.getRobot().heading, realCamera.getMap().pixelSize);
 						di = ro.sequence(path);
@@ -270,7 +274,8 @@ public class ControllerFinal {
 						}
 						ro.out();
 						ro.kick();
-						ro.stop();
+						ro.in();
+						ro.reverse((int)(pixelRadius*realCamera.getMap().pixelSize));
 
 						ballsInRobot = 0;
 						MAX_NO_BALLS = realCamera.getBalls().size();
@@ -293,7 +298,6 @@ public class ControllerFinal {
 					endGame = true;
 				}
 			}
-
 			ro.shutdown();
 			System.out.println("shutdown done");
 		} catch (Exception e) {

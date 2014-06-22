@@ -141,10 +141,10 @@ public class RobotOperations {
 
 	}
 
-	public void reverse() {
+	public void reverse(int lenght) {
 		boolean done = false;
 		while(!done) {
-			done = robotControl.revers(10);
+			done = robotControl.revers(lenght);
 		}
 	}
 	

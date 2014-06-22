@@ -20,7 +20,7 @@ public class ControllerBoard {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =0;
+	private final int MAX_NO_BALLS =6;
 	private int pixelRadius, pixelDistance, pixelLength;
 
 	File f;
@@ -36,98 +36,89 @@ public class ControllerBoard {
 
 	public void run() {
 
-		try {
-			System.out.println("Started!");
-			map = realCamera.getMap().obstacle;
+			try {
+				System.out.println("Started!");
+				map = realCamera.getMap().obstacle;
 
-			while(!endGame) {
-				board = new Board(map);
-				 closeBalls = new ArrayList<Point>();
-				 allBalls = realCamera.getBalls();
-				
-				Point tempPoint = realCamera.frontPoint;
-				frontField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'X');
-				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, frontField);
-				tempPoint = realCamera.backPoint;
-				backField = new Field(tempPoint.pixel_x, tempPoint.pixel_y, 'Y');
-				board.setField(tempPoint.pixel_x, tempPoint.pixel_y, backField);
+				while(!endGame) {
+					board = new Board(map);
+					closeBalls = new ArrayList<Point>();
+					allBalls = realCamera.getBalls();
+					// Bruges ikke lige pt - skal det slettes?
+					//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
+					//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
+					//				backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
+					//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, backField);
 
 
-				board.fillInBalls(allBalls);
-				board.fillInRobotPosition(realCamera.getRobot().position);
-				board.fillInGoals(realCamera.getGoals());
-
-				/* pixelRadius is for fake walls and fake obstacles around balls.
-				 * pixelDistance is for moving goals and balls away from obstacles
-				 * 		and should be equal to or less than pixelRadius.
-				 * pixelLength is for making paths for balls or goals through (fake) obstacles
-				 * 		and should be equal to or bigger than pixelRadius.
-				 * @author Julian */
-				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
-//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
-				pixelDistance = pixelRadius;
-				pixelLength = pixelRadius;
-
-				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
-				board.clearBalls(allBalls);
-				System.out.println("Number of balls = " + allBalls.size());
-				System.out.println("number of close balls = " + closeBalls.size());
-				allBalls.removeAll(closeBalls);
-				System.out.println("Number of balls when removing close balls = " + allBalls.size());
-				
-				board.fakeWallsBuild((int)(realCamera.getRobot().robotLength/2)+3);
-
-				/* Encase all not close to wall-balls in fake obstacles
-				 * and create a path outward in the direction away from closest obstacle */
-//				for(Point ball: realCamera.getBalls()){
-//					if(!closeBalls.contains(ball)){
-//						ball.setPathDirection(board.directionToObstacle(ball));
-//						board.buildObstacleAroundBall(ball, pixelRadius);
-//						board.buildPath(ball, pixelLength, ' ');
-//					}
-//				}
-
-				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
-				
-				
-				if(allBalls != null && allBalls.size() > 0) {
+					// Add balls, robot and goals to the board.
 					board.fillInBalls(allBalls);
-					
-				} else if(closeBalls != null && closeBalls.size() > 0) {
-					board.fillInBalls(closeBalls);
-					board.moveBallsPastFakeWalls(closeBalls, ' ');
-				}
-				
-				
-				if(ballCount <= MAX_NO_BALLS) {
+					board.fillInRobotPosition(realCamera.getRobot().position);
+					board.fillInGoals(realCamera.getGoals());
 
-					//					Iterator<Point> it = closeBalls.iterator();
-					//					while(it.hasNext()) {
-					//						Point p = it.next();
-					//						board.buildObstacleAroundBall(p, pixelRadius);
-					//						System.out.println("Closeball found at [" + p.pixel_x + "," + p.pixel_y + "]");
-					//					}
+					/* pixelRadius is for fake walls and fake obstacles around balls.
+					 * pixelDistance is for moving goals and balls away from obstacles
+					 * 		and should be equal to or less than pixelRadius.
+					 * pixelLength is for making paths for balls or goals through (fake) obstacles
+					 * 		and should be equal to or bigger than pixelRadius.
+					 * @author Julian */
+					pixelRadius = (int)(realCamera.getRobot().robotLength/2)+3;
+					//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
+					pixelDistance = pixelRadius;
+					pixelLength = pixelRadius;
 
-					bfs = new BFS(board.getGrid(), 'B');  
-					path = bfs.findPath(closeBalls);
+					closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
+					board.clearBalls(allBalls);
+					//				System.out.println("Number of balls = " + allBalls.size());
+					//				System.out.println("number of close balls = " + closeBalls.size());
+					allBalls.removeAll(closeBalls);
+					//				System.out.println("Number of balls when removing close balls = " + allBalls.size());
 
-					String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
+					board.fakeWallsBuild(pixelRadius);
+					board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 
-					f = new File(filepath);
-					FileWriter fw = null;
-					try  {
-						fw =  new  FileWriter(f);
-						fw.write(board.toString());
-					}  catch  (IOException e) {
-						e.printStackTrace();
-						System.out.println("Emergency shutdown");
-						try {
-							fw.close();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-							System.out.println("Emergency shutdown");
-						} 
+					if(allBalls != null && allBalls.size() > 0) {
+						board.fillInBalls(allBalls);
+					} else if(closeBalls != null && closeBalls.size() > 0) {
+						board.fillInBalls(closeBalls);
+						board.moveBallsPastFakeWalls(closeBalls, ' ');
 					}
+
+
+					if(ballCount < MAX_NO_BALLS) {
+
+						bfs = new BFS(board.getGrid(), 'B');  
+						path = bfs.findPath(closeBalls);
+
+						// No path found!
+						if(path == null && allBalls.size() > 0) {
+							Point robotPosition = realCamera.getRobot().position;
+							robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
+							board.buildPath(robotPosition, pixelDistance, ' ');
+							bfs = new BFS(board.getGrid(), 'B');
+							path = bfs.findPath(closeBalls);
+						} 
+						// To be deleted - only used for testing!
+						String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
+						f = new File(filepath);
+						FileWriter fw = null;
+						try  {
+							fw =  new  FileWriter(f);
+							fw.write(board.toString());
+						}  catch  (IOException e) {
+							e.printStackTrace();
+
+							System.out.println("Emergency shutdown");
+							try {
+								fw.close();
+							} catch (IOException e1) {
+								e1.printStackTrace();
+
+								System.out.println("Emergency shutdown");
+							} 
+						}
+						System.out.println("Board file called: "+filepath+" created.");
+						//
 					
 					if(path == null) {
 						endGame = true;
@@ -140,7 +131,7 @@ public class ControllerBoard {
 
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-				if(ballCount == 0) {
+				if(ballCount == 3) {
 					endGame = true;
 				}
 				ballCount++;
