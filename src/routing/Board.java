@@ -440,6 +440,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x - i - 1,ball.pixel_y, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -451,6 +453,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x + i +1, ball.pixel_y, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -462,6 +466,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x, ball.pixel_y + i +1, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -473,6 +479,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x, ball.pixel_y - i -1, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -484,6 +492,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x - i -1, ball.pixel_y - i -1, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -495,6 +505,8 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x - i -1, ball.pixel_y + i +1, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
@@ -506,6 +518,7 @@ public class Board {
 							Point newBall = new Point(ball.pixel_x + i +1, ball.pixel_y - i -1, 0);
 							newBall.setPathDirection(ball.pathDirection);
 							newBalls.add(newBall);
+							System.out.println(newBall.pathDirection);
 						}
 					}
 				}catch(IndexOutOfBoundsException e) {}
