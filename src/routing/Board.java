@@ -331,7 +331,7 @@ public class Board {
 						newGoalPoint.setPathDirection("W");
 					else if(newGoalPoint.pathDirection.contains("N"))
 						newGoalPoint.setPathDirection("E");
-					buildPath(newGoalPoint,	pixelLength, ' ');
+					buildObstacleAroundBall(newGoalPoint,	pixelLength);
 				}
 				for(Field fieldOld : fieldListOld)
 					setField(fieldOld.getX(), fieldOld.getY(), fieldOld);
