@@ -12,8 +12,9 @@ public class ControllerFinal {
 
 	private boolean endGame = false;
 	private static int MAX_NO_BALLS;
-	private final int MAX_NO_BALLS_BEFORE_SCORING = 5;
+	private final int MAX_NO_BALLS_BEFORE_SCORING = 4;
 	int ballsInRobot = 0;
+	int numberOfBallLeft;
 
 	//	private Field frontField, backField;
 	private char [][] map;
@@ -24,6 +25,8 @@ public class ControllerFinal {
 	private ArrayList<DriverInstructions> di;
 	private ArrayList<Integer> path;
 	private ArrayList<Point> closeBalls;
+	private List<Point> allBalls;
+	private ArrayList<Point> notCloseBalls = new ArrayList<Point>();
 	private RobotOperations ro;
 	private Control robotControl;
 	private RealCamera realCamera;
@@ -51,7 +54,7 @@ public class ControllerFinal {
 			while(!endGame) {
 				board = new Board(map);
 				 closeBalls = new ArrayList<Point>();
-
+				 allBalls = realCamera.getBalls();
 				// Bruges ikke lige pt - skal det slettes?
 				//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
 				//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
@@ -60,7 +63,7 @@ public class ControllerFinal {
 
 
 				// Add balls, robot and goals to the board.
-				board.fillInBalls(realCamera.getBalls());
+				board.fillInBalls(allBalls);
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInGoals(realCamera.getGoals());
 
@@ -70,13 +73,32 @@ public class ControllerFinal {
 				 * pixelLength is for making paths for balls or goals through (fake) obstacles
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
-				pixelRadius = (int)realCamera.getRobot().robotWidth/2;
+				pixelRadius = (int)realCamera.getRobot().robotLength/2;
 //				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
 				pixelLength = pixelRadius;
 
-				closeBalls.addAll(board.ballsCloseToObstacle(realCamera.getBalls(), pixelRadius));
-				board.fakeWallsBuild((int)realCamera.getRobot().robotWidth/2);
+				closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
+//				board.clearBalls(closeBalls);
+				
+//				for(Point ball : allBalls) {
+//					for(Point closeBall : closeBalls) {
+//						if(ball.pixel_x != closeBall.pixel_x && ball.pixel_y != closeBall.pixel_y) {
+//							notCloseBalls.add(ball);
+//							break;
+//						}
+//					}
+//				}
+//				if(notCloseBalls.size() > 0) {
+//					board.fillInBalls(notCloseBalls);
+//					System.out.println("not close balls filled: " + notCloseBalls.size());
+//				} else {
+//					board.fillInBalls(closeBalls);				
+//					System.out.println("close balls filled: " + closeBalls.size());
+//				}
+//				notCloseBalls.clear();
+				
+				board.fakeWallsBuild(pixelRadius);
 
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 				board.moveBallsPastFakeWalls(closeBalls, ' ');
@@ -243,6 +265,7 @@ public class ControllerFinal {
 					ro.stop();
 
 					ballsInRobot = 0;
+					MAX_NO_BALLS = realCamera.getBalls().size();
 				}
 
 				// Bruges ikke lige pt - skal det slettes?
@@ -256,8 +279,8 @@ public class ControllerFinal {
 				iterations++; // fjernes
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-				MAX_NO_BALLS = realCamera.getBalls().size();
-				if(MAX_NO_BALLS == 0 && ballsInRobot == 0) {
+				numberOfBallLeft = realCamera.getBalls().size();
+				if(numberOfBallLeft == 0 && ballsInRobot == 0) {
 					endGame = true;
 				}
 			}

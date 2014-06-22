@@ -332,7 +332,6 @@ public class RealCamera implements Camera
 
 		String update = String.format("%05d", updates++);
 		System.out.println("Update " + update + " at " + (System.currentTimeMillis() - startTime) + " ms.");
-		showStep("update" + update +".png", image, 1);
 
 		Mat ballImg = findBalls(image.clone(), "src/imgInOut/Template.png");
 		showStep("balls" + update +".png", ballImg, 1);
