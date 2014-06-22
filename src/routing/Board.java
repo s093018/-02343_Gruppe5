@@ -487,7 +487,7 @@ public class Board {
 	/**
 	 * Create path from a point and outwards in the entrance directions
 	 */
-	private void buildPath(Point center, int pixelLength, char value){
+	public void buildPath(Point center, int pixelLength, char value){
 		List<Field> path = new ArrayList<Field>();
 		for(int l = 1; l <= pixelLength; l++){ //Could be optimized to: while <pixelLength and next char == F
 			if(center.pathDirection.equals("N")){
