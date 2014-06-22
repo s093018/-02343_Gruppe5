@@ -426,14 +426,13 @@ public class Board {
 
 	/**
 	 * Assumes the balls already have been assigned pathDirections (by ballsCloseToObstacle()). 
-	 * @param pixelLength TODO
 	 */
 	public void moveBallsPastFakeWalls(List<Point> balls, char newValueAtOldLocation, int pixelLength){
 		ArrayList<Field> fieldListOld = new ArrayList<Field>();
 		ArrayList<Point> newBalls = new ArrayList<Point>();
 		for(Point ball: balls){
 			fieldListOld.add(new Field(ball.pixel_x, ball.pixel_y, newValueAtOldLocation));
-			if(ball.pathDirection.contains("N")){
+			if(ball.pathDirection.equals("N")){
 				try{
 					for(int i = 1; grid[ball.pixel_x-i][ball.pixel_y].getValue() == 'F'; i++){
 						if(grid[ball.pixel_x - i - 1][ball.pixel_y].getValue() != 'F'){
@@ -444,7 +443,7 @@ public class Board {
 					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
-			if(ball.pathDirection.contains("S")){
+			if(ball.pathDirection.equals("S")){
 				try{
 					for(int i = 1; grid[ball.pixel_x + i][ball.pixel_y].getValue() == 'F'; i++){
 						if(grid[ball.pixel_x + i +1][ball.pixel_y].getValue() != 'F'){
@@ -455,7 +454,7 @@ public class Board {
 					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
-			if(ball.pathDirection.contains("E")){
+			if(ball.pathDirection.equals("E")){
 				try{
 					for(int i = 1; grid[ball.pixel_x][ball.pixel_y + i].getValue() == 'F'; i++){
 						if(grid[ball.pixel_x][ball.pixel_y + i +1].getValue() != 'F'){
@@ -466,7 +465,7 @@ public class Board {
 					}
 				}catch(IndexOutOfBoundsException e) {}
 			}
-			if(ball.pathDirection.contains("W")){
+			if(ball.pathDirection.equals("W")){
 				try{
 					for(int i = 1; grid[ball.pixel_x][ball.pixel_y - i].getValue() == 'F'; i++){
 						if(grid[ball.pixel_x][ball.pixel_y - i -1].getValue() != 'F'){
