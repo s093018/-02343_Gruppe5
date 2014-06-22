@@ -79,12 +79,14 @@ public class ControllerFinal {
 
 
 				//Solve problem with balls outside playground.
+				ArrayList<Point> ballsToBeRemoved = new ArrayList<Point>();
 				for (Point ball : allBalls) {
 					if(board.ballSurroundedByObstacles(ball)){
 						board.setField(ball.pixel_x, ball.pixel_y, new Field(ball.pixel_x,ball.pixel_y , 'O'));
-						allBalls.remove(ball);
+						ballsToBeRemoved.add(ball);
 					}
 				}
+				allBalls.removeAll(ballsToBeRemoved);
 
 				closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
 				board.clearBalls(allBalls);
