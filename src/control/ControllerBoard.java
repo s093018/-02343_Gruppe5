@@ -63,17 +63,26 @@ public class ControllerBoard {
 					 * 		making paths for balls or goals through (fake) obstacles
 					 * 		and should be equal to or bigger than pixelRadius.
 					 * @author Julian */
-					pixelRadius = (int)(realCamera.getRobot().robotLength/2)+3;
+					pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 					//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 					pixelDistance = pixelRadius;
-					pixelLength = pixelRadius/2;
+					pixelLength = pixelRadius/4;
+
+
+					//Solve problem with balls outside playground.
+					ArrayList<Point> ballsToBeRemoved = new ArrayList<Point>();
+					for (Point ball : allBalls) {
+						if(board.ballSurroundedByObstacles(ball)){
+							board.setField(ball.pixel_x, ball.pixel_y, new Field(ball.pixel_x,ball.pixel_y , 'O'));
+							ballsToBeRemoved.add(ball);
+						}
+					}
+					allBalls.removeAll(ballsToBeRemoved);
 
 					closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
 					board.clearBalls(allBalls);
-					//				System.out.println("Number of balls = " + allBalls.size());
-					//				System.out.println("number of close balls = " + closeBalls.size());
+
 					allBalls.removeAll(closeBalls);
-					//				System.out.println("Number of balls when removing close balls = " + allBalls.size());
 
 					board.fakeWallsBuild(pixelRadius);
 					board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
@@ -98,7 +107,8 @@ public class ControllerBoard {
 							board.buildPath(robotPosition, pixelDistance, ' ');
 							bfs = new BFS(board.getGrid(), 'B');
 							path = bfs.findPath(closeBalls);
-						} 
+						}
+
 						// To be deleted - only used for testing!
 						String filepath = "/Users/Christian/Desktop/PathDirections/outputPath"+iterations+".txt";
 						f = new File(filepath);
@@ -108,7 +118,7 @@ public class ControllerBoard {
 							fw.write(board.toString());
 						}  catch  (IOException e) {
 							e.printStackTrace();
-
+	
 							System.out.println("Emergency shutdown");
 							try {
 								fw.close();

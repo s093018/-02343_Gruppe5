@@ -18,12 +18,7 @@ public class RobotOperations {
 	}
 
 	public ArrayList<DriverInstructions> sequence (ArrayList<Integer> path) { 
-
-		for(int k : path) {
-			System.out.print(k+", ");
-		}
-		System.out.println();		
-
+	
 		ArrayList<DriverInstructions> robotInstructions = new ArrayList<DriverInstructions>();
 		int count = 0;
 		int updateCount = 0;

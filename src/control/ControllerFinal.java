@@ -76,7 +76,7 @@ public class ControllerFinal {
 				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 				//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
-				pixelLength = pixelRadius/2;
+				pixelLength = pixelRadius/4;
 
 
 				//Solve problem with balls outside playground.

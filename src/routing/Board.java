@@ -267,7 +267,7 @@ public class Board {
 		}
 
 		// Outcomment this if using moveBalls() but not if using moveBallsPastFakeObstacles()
-			buildPath(ball, pixelRadius, ' ');
+			buildPath(ball, pixelLength, ' ');
 	}
 
 	/**
