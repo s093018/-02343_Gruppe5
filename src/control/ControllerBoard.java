@@ -21,7 +21,7 @@ public class ControllerBoard {
 	private char [][] map;
 	private boolean endGame = false;
 	private int ballCount = 0;
-	private final int MAX_NO_BALLS =6;
+	private final int MAX_NO_BALLS =1;
 	private int pixelRadius, pixelDistance, pixelLength;
 
 	File f;
@@ -43,6 +43,10 @@ public class ControllerBoard {
 
 				while(!endGame) {
 					board = new Board(map);
+					for(int i = 1; i < (realCamera.getRobot().robotLength/2)+33; i++) {
+						board.buildObstacleAroundBall(realCamera.getObstacleCenter(), i);
+					}
+					
 					closeBalls = new ArrayList<Point>();
 					allBalls = realCamera.getBalls();
 					// Bruges ikke lige pt - skal det slettes?
@@ -98,7 +102,7 @@ public class ControllerBoard {
 
 					if(ballCount < MAX_NO_BALLS) {
 
-						bfs = new BFS(board.getGrid(), 'B');  
+						bfs = new BFS(board.getGrid(), 'G');  
 						path = bfs.findPath(closeBalls);
 
 						// No path found!
@@ -143,7 +147,7 @@ public class ControllerBoard {
 
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
-				if(ballCount == 3) {
+				if(ballCount == 1) {
 					endGame = true;
 				}
 				ballCount++;

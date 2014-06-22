@@ -30,8 +30,9 @@ public class ControllerFinal {
 	private Control robotControl;
 	private RealCamera realCamera;
 	private Board board;
-	private BFS bfs;
+	private BFS bfs, bfsg;
 	private int pixelRadius, pixelDistance, pixelLength;
+	private int ballsInWall = -1;
 
 	public ControllerFinal () {
 		try {
@@ -52,6 +53,10 @@ public class ControllerFinal {
 
 			while(!endGame) {
 				board = new Board(map);
+				for(int i = 1; i < (realCamera.getRobot().robotLength/2)+30; i++) {
+					board.buildObstacleAroundBall(realCamera.getObstacleCenter(), i);
+				}
+				
 				closeBalls = new ArrayList<Point>();
 				allBalls = realCamera.getBalls();
 				// Bruges ikke lige pt - skal det slettes?
@@ -97,21 +102,22 @@ public class ControllerFinal {
 				board.fakeWallsBuild(pixelRadius);
 				board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 
-				if(allBalls != null && allBalls.size() > 0) {
+				if(allBalls != null && allBalls.size() > 0 && allBalls.size() != ballsInWall) {
 					board.fillInBalls(allBalls);
 				} else if(closeBalls != null && closeBalls.size() > 0) {
 					board.fillInBalls(closeBalls);
 					closeBalls = board.moveBallsPastFakeWalls(closeBalls, ' ', pixelLength);
 				}
-
-
+				ballsInWall = -1;
+				
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
 					bfs = new BFS(board.getGrid(), 'B');  
 					path = bfs.findPath(closeBalls);
+					
 
 					// No path found!
-					if(path == null && allBalls.size() > 0) {
+					if(path == null ) {//&& allBalls.size() > 0
 						Point robotPosition = realCamera.getRobot().position;
 						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
 						board.buildPath(robotPosition, pixelDistance, ' ');
@@ -208,26 +214,32 @@ public class ControllerFinal {
 							ballsInRobot = MAX_NO_BALLS - realCamera.getBalls().size();
 						}
 						System.out.println("Number of balls currently in the robot = " + ballsInRobot);
+						
 
 					}
 					else {
-
-						endGame = true;
-						System.out.println("no path found shutdown");
-
+						ballsInWall = allBalls.size();	
+						System.out.println("CloseBalls.size: "+closeBalls.size());
+						if(closeBalls.size() == 0) {
+							endGame = true;
+						}
 					}
-				} else if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0) {
+				}  
+				
+				if(ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING || realCamera.getBalls().size() == 0 || endGame == true) {
 					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
 					// on the field -> Drive to goal and deliver the balls.
 					bfs = new BFS(board.getGrid(), 'G');
+					System.out.println("LINIE 235 PATH");
 					path = bfs.findPath(closeBalls);
 
 					// No path found!
-					if(path == null && ballsInRobot >= MAX_NO_BALLS_BEFORE_SCORING) {
+					if(path == null) {
 						Point robotPosition = realCamera.getRobot().position;
 						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
 						board.buildPath(robotPosition, pixelDistance, ' ');
 						bfs = new BFS(board.getGrid(), 'G');
+						System.out.println("LINIE 239 PATH");
 						path = bfs.findPath(closeBalls);
 					}
 

@@ -320,6 +320,7 @@ public class RealCamera implements Camera
 
 		Mat centralObstacle = detectCentralObstacle(image);
 		obstacleCenter = locateObstacleCenter(centralObstacle, 20);
+		obstacleCenter.setPathDirection("");
 		map = buildMap(image, corners, centralObstacle);
 	}
 	public RealCamera()

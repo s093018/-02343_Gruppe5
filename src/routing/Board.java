@@ -253,7 +253,7 @@ public class Board {
 		return path_direction;
 	}
 
-	private void buildObstacleAroundBall(Point ball, int pixelLength){
+	public void buildObstacleAroundBall(Point ball, int pixelLength){
 
 		List<Field> buildObstacles = new ArrayList<Field>();
 		try{buildObstacles.add(grid[ball.pixel_x - pixelLength][ball.pixel_y - pixelLength]);}catch(IndexOutOfBoundsException e){}
