@@ -488,34 +488,35 @@ public class Board {
 	 * Create path from a point and outwards in the entrance directions
 	 */
 	public void buildPath(Point center, int pixelLength, char value){
-		List<Field> path = new ArrayList<Field>();
+//		List<Field> path = new ArrayList<Field>();
 		for(int l = 1; l <= pixelLength; l++){ //Could be optimized to: while <pixelLength and next char == F
 			if(center.pathDirection.equals("N")){
-				try{path.add(grid[center.pixel_x -1][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
+				checkAndBuildSingle(grid[center.pixel_x +1][center.pixel_y], value, true);
+//				try{path.add(grid[center.pixel_x -1][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("S")){
-				try{path.add(grid[center.pixel_x +1][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x +1][center.pixel_y]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("E")){
-				try{path.add(grid[center.pixel_x][center.pixel_y +1]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x][center.pixel_y +1]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("W")){
-				try{path.add(grid[center.pixel_x][center.pixel_y -1]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x][center.pixel_y -1]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("NW")){
-				try{path.add(grid[center.pixel_x - l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x - l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("NE")){
-				try{path.add(grid[center.pixel_x - l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x - l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("SW")){
-				try{path.add(grid[center.pixel_x + l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x + l][center.pixel_y - l]);}catch(IndexOutOfBoundsException e) {}
 			}
 			else if(center.pathDirection.equals("SE")){
-				try{path.add(grid[center.pixel_x + l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
+//				try{path.add(grid[center.pixel_x + l][center.pixel_y + l]);}catch(IndexOutOfBoundsException e) {}
 			}
 		}
-		checkAndBuild(path, value, true);
+		//checkAndBuild(path, value, true);
 	}
 
 	/**
