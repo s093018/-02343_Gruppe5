@@ -28,6 +28,7 @@ public class BFS {
 	private char      robotChar;
 	private char 	   obstacle;
 	private char   fakeObstacle;
+	private char 	   goalChar;
 	private boolean closeToWall;
 
 	/**
@@ -55,6 +56,7 @@ public class BFS {
 		this.robotChar = 'R';
 		this.obstacle = 'O';
 		this.fakeObstacle = 'F';
+		this.goalChar = 'G';
 		this.closeToWall = false;
 
 		for (int i = 0 ; i < board.length; i++) {
@@ -89,18 +91,24 @@ public class BFS {
 		while(!bfsQueue.isEmpty()) {
 
 			current = bfsQueue.remove();
+			
 
-			if(current.getValue() == endChar) {      
-				for(Point ball : closeBalls) {
-					if(ball.pixel_x == current.getX() && ball.pixel_x == current.getX()) {
-						System.out.println("The found ball is close to a wall!");
-						setCloseToWall();
-						break;
+			if(current.getValue() == 'G' && current.getValue() == endChar) {
+				return printPath(current);
+			}else if(current.getValue() == 'B'  && current.getValue() == endChar) { 
+				if(closeBalls != null && closeBalls.size() > 0) {
+					for(Point ball : closeBalls) {
+						if(ball.pixel_x == current.getX() && ball.pixel_x == current.getX()) {
+							System.out.println("The found ball is close to a wall!");
+							setCloseToWall();
+							break;
+						}
 					}
 				}
 				/* Call printPath to get a list of directions to return. */
 				return printPath(current);
 			}
+			
 
 			if(current.getY() + 1 < grid[0].length) {               
 				// Get North Field
@@ -182,14 +190,14 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-//			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
-//				NE = grid[current.getX() + 1][current.getY() + 1];
-//				if (NE.getValue() != obstacle && NE.getValue() != fakeObstacle && !grid[NE.getX()][NE.getY()].isVisited()) {
-//					grid[NE.getX()][NE.getY()].visit();
-//					current.setParent(NE);
-//					bfsQueue.add(NE);
-//				}
-//			}
+			//			if (current.getX() + 1 < grid.length && current.getY() + 1 < grid[0].length) {
+			//				NE = grid[current.getX() + 1][current.getY() + 1];
+			//				if (NE.getValue() != obstacle && NE.getValue() != fakeObstacle && !grid[NE.getX()][NE.getY()].isVisited()) {
+			//					grid[NE.getX()][NE.getY()].visit();
+			//					current.setParent(NE);
+			//					bfsQueue.add(NE);
+			//				}
+			//			}
 
 			/*
 			 *	Northwest child
@@ -201,14 +209,14 @@ public class BFS {
 			 *  Add Field to queue.
 			 */
 
-//			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
-//				NW = grid[current.getX() - 1][current.getY() + 1];
-//				if (NW.getValue() != obstacle && NW.getValue() != fakeObstacle && !grid[NW.getX()][NW.getY()].isVisited()) {
-//					grid[NW.getX()][NW.getY()].visit();
-//					current.setParent(NW);
-//					bfsQueue.add(NW);
-//				}
-//			}
+			//			if (current.getX() - 1 >= 0 && current.getY() + 1 < grid[0].length) {
+			//				NW = grid[current.getX() - 1][current.getY() + 1];
+			//				if (NW.getValue() != obstacle && NW.getValue() != fakeObstacle && !grid[NW.getX()][NW.getY()].isVisited()) {
+			//					grid[NW.getX()][NW.getY()].visit();
+			//					current.setParent(NW);
+			//					bfsQueue.add(NW);
+			//				}
+			//			}
 
 			/*
 			 *	Southeast child
@@ -220,14 +228,14 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-//			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
-//				SE = grid[current.getX() + 1][current.getY() - 1];
-//				if (SE.getValue() != obstacle && SE.getValue() != fakeObstacle && !grid[SE.getX()][SE.getY()].isVisited()) {
-//					grid[SE.getX()][SE.getY()].visit();
-//					current.setParent(SE);
-//					bfsQueue.add(SE);
-//				}
-//			}
+			//			if (current.getX() + 1 < grid.length && current.getY() - 1 >= 0) {               
+			//				SE = grid[current.getX() + 1][current.getY() - 1];
+			//				if (SE.getValue() != obstacle && SE.getValue() != fakeObstacle && !grid[SE.getX()][SE.getY()].isVisited()) {
+			//					grid[SE.getX()][SE.getY()].visit();
+			//					current.setParent(SE);
+			//					bfsQueue.add(SE);
+			//				}
+			//			}
 
 			/*
 			 *	Southwest child
@@ -239,14 +247,14 @@ public class BFS {
 			 * 	Add Field to queue.
 			 */
 
-//			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
-//				SW = grid[current.getX() - 1][current.getY() - 1];
-//				if (SW.getValue() != obstacle && SW.getValue() != fakeObstacle && !grid[SW.getX()][SW.getY()].isVisited()) {
-//					grid[SW.getX()][SW.getY()].visit();
-//					current.setParent(SW);
-//					bfsQueue.add(SW);
-//				}
-//			}
+			//			if (current.getX() - 1 >= 0 && current.getY() - 1 >= 0) {
+			//				SW = grid[current.getX() - 1][current.getY() - 1];
+			//				if (SW.getValue() != obstacle && SW.getValue() != fakeObstacle && !grid[SW.getX()][SW.getY()].isVisited()) {
+			//					grid[SW.getX()][SW.getY()].visit();
+			//					current.setParent(SW);
+			//					bfsQueue.add(SW);
+			//				}
+			//			}
 		}
 
 		// If we get here, we're screwed!

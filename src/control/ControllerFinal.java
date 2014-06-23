@@ -20,6 +20,7 @@ public class ControllerFinal {
 	private char [][] map;
 
 	int iterations = 0; //Skal slettes 
+	int iterations1 = 0;
 	private File f; // Skal slettes
 
 	private ArrayList<DriverInstructions> di;
@@ -53,7 +54,7 @@ public class ControllerFinal {
 
 			while(!endGame) {
 				board = new Board(map);
-				for(int i = 1; i < (realCamera.getRobot().robotLength/2)+30; i++) {
+				for(int i = 1; i < (realCamera.getRobot().robotLength/2)+15; i++) {
 					board.buildObstacleAroundBall(realCamera.getObstacleCenter(), i);
 				}
 				
@@ -70,6 +71,7 @@ public class ControllerFinal {
 				board.fillInBalls(allBalls);
 				board.fillInRobotPosition(realCamera.getRobot().position);
 				board.fillInSmallestGoal(realCamera.getGoals());
+//				board.fillInGoals(realCamera.getGoals());
 
 				/* pixelRadius is for fake walls.
 				 * pixelDistance is for moving goals and balls away from obstacles
@@ -78,7 +80,7 @@ public class ControllerFinal {
 				 * 		making paths for balls or goals through (fake) obstacles
 				 * 		and should be equal to or bigger than pixelRadius.
 				 * @author Julian */
-				pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
+				pixelRadius = (int)(realCamera.getRobot().robotLength/2);
 				//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 				pixelDistance = pixelRadius;
 				pixelLength = 9;
@@ -113,8 +115,7 @@ public class ControllerFinal {
 				if(ballsInRobot < MAX_NO_BALLS_BEFORE_SCORING) {
 
 					bfs = new BFS(board.getGrid(), 'B');  
-					path = bfs.findPath(closeBalls);
-					
+					path = bfs.findPath(closeBalls);			
 
 					// No path found!
 					if(path == null ) {//&& allBalls.size() > 0
@@ -134,13 +135,11 @@ public class ControllerFinal {
 						fw.write(board.toString());
 					}  catch  (IOException e) {
 						e.printStackTrace();
-
 						System.out.println("Emergency shutdown");
 						try {
 							fw.close();
 						} catch (IOException e1) {
 							e1.printStackTrace();
-
 							System.out.println("Emergency shutdown");
 						} 
 					}
@@ -230,7 +229,6 @@ public class ControllerFinal {
 					// The robot has collected the maximum number of balls it can contain, or there are not any balls left 
 					// on the field -> Drive to goal and deliver the balls.
 					bfs = new BFS(board.getGrid(), 'G');
-					System.out.println("LINIE 235 PATH");
 					path = bfs.findPath(closeBalls);
 
 					// No path found!
@@ -239,9 +237,29 @@ public class ControllerFinal {
 						robotPosition.setPathDirection(board.directionToObstacle(robotPosition));
 						board.buildPath(robotPosition, pixelDistance, ' ');
 						bfs = new BFS(board.getGrid(), 'G');
-						System.out.println("LINIE 239 PATH");
 						path = bfs.findPath(closeBalls);
 					}
+					
+					// To be deleted - only used for testing!
+					String filepath = "/Users/Christian/Desktop/PathDirections/outputPathGoal"+iterations1+".txt";
+					f = new File(filepath);
+					FileWriter fw = null;
+					try  {
+						fw =  new  FileWriter(f);
+						fw.write(board.toString());
+					}  catch  (IOException e) {
+						e.printStackTrace();
+
+						System.out.println("Emergency shutdown");
+						try {
+							fw.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+
+							System.out.println("Emergency shutdown");
+						} 
+					}
+					System.out.println("Board file called: "+filepath+" created.");
 
 					if(path != null) {
 
@@ -313,6 +331,7 @@ public class ControllerFinal {
 				board.clearBoard();
 
 				iterations++; // fjernes
+				iterations1++;
 				System.out.println("NYT BILLEDE NY RUTE");
 				realCamera.update();
 				numberOfBallLeft = realCamera.getBalls().size();
