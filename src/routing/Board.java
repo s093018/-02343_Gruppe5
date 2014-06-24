@@ -621,7 +621,7 @@ public class Board {
 
 	public void fakeWallsBuild(int pixelRadius) {		
 		ArrayList<Field> fakeObstacles = new ArrayList<Field>();
-		int halfRadius = Math.round((float)(pixelRadius/2));
+		int halfRadius = Math.round((float)(pixelRadius/2)+9);
 
 		for (int i = 0 ; i < grid.length ; i++) {
 			for (int j = 0 ; j < grid[i].length ; j++) {

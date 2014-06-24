@@ -1,5 +1,7 @@
 package control;
 
+import imageProcessing.RealCamera;
+
 
 /**
  * @author Christoffer - s103148
@@ -16,5 +18,6 @@ public class Main {
 	
 //		ControllerRobot ctrl = new ControllerRobot();
 		ctrl.run();
+//		RealCamera camera = new RealCamera();
 	}
 }

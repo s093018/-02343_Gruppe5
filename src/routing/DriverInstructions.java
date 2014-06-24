@@ -5,6 +5,9 @@ public class DriverInstructions {
 	private int heading;
 	private int length;
 	
+	/**
+	 * @author Christian W. Nielsen - s093018
+	 */
 	public DriverInstructions (int heading, int length) {
 		this.heading = heading;
 		this.length = length;

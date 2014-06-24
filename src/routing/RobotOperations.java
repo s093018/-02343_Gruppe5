@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import routing.DriverInstructions;
 
+/**
+ * @author Christian W. Nielsen - s093018
+ */
 public class RobotOperations {
 
 	//	 private final int N = 0, NE = 45, E = 90, SE = 135, S = 180, SW = 225, W = 270, NW = 315; 
@@ -68,20 +71,7 @@ public class RobotOperations {
 	//			}
 	//		}
 	//	}
-	/**
-	 * 
-	 * @param double radian
-	 * @return int result
-	 * 
-	 * finds degree in 45degree-interval
-	 */
-	public int radianToDegree(double radian) {
-		double degree = (radian*180)/Math.PI;
-		int result = (int)(degree + 22.5)/45;
-		result *=45;
-		return result;
-	}
-
+	
 	public int radianToDegree1(double radian) {
 
 		int result = (int)Math.toDegrees(radian);
@@ -89,7 +79,6 @@ public class RobotOperations {
 		if (result < 0) {
 			result = result + 360;
 		}
-
 		return result;
 	}
 
@@ -105,12 +94,10 @@ public class RobotOperations {
 	}
 
 	public void turnRight(int turn) {
-
 		boolean done = false;
 		while (!done) {
 			done = robotControl.turnRight(turn);
 		}
-
 	}
 
 	public void turnLeft(int turn) {
@@ -133,7 +120,6 @@ public class RobotOperations {
 
 	public void stop() {
 		robotControl.collectStop();
-
 	}
 
 	public void reverse(int lenght) {
@@ -149,21 +135,17 @@ public class RobotOperations {
 
 	public void kick() {
 		boolean done = false;
-
 		while(!done) {
 			done = robotControl.kick();
 		}
 		done = false;
-
 		while(!done) {
 			done = robotControl.kick();
 		}
 		done = false;
-
 		while(!done) {
 			done = robotControl.kick();
 		}
-
 	}
 }
 
