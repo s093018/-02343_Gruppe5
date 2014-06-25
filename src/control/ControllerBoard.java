@@ -28,6 +28,10 @@ public class ControllerBoard {
 	int ballsOnTrack;
 	int iterations = 0;
 
+	/**
+	 * @author Christian W. Nielsen - s093018
+	 * @author Julian Villadsen - s123641
+	 */
 	public ControllerBoard () {
 		try {
 			this.realCamera = new RealCamera();
@@ -49,7 +53,7 @@ public class ControllerBoard {
 					
 					closeBalls = new ArrayList<Point>();
 					allBalls = realCamera.getBalls();
-					// Bruges ikke lige pt - skal det slettes?
+					// Front and back positions for testing purposes
 					//				frontField = new Field(realCamera.frontPoint.pixel_x, realCamera.frontPoint.pixel_y, 'X');
 					//				board.setField(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, frontField);
 					//				backField = new Field(realCamera.backPoint.pixel_x, realCamera.backPoint.pixel_y, 'Y');
@@ -62,12 +66,13 @@ public class ControllerBoard {
 					board.fillInSmallestGoal(realCamera.getGoals());
 
 					/* pixelRadius is for fake walls.
-					 * pixelDistance is for moving goals and balls away from obstacles
+					 * pixelDistance is for moving goals (or balls, if using moveBalls())
+					 * 		away from obstacles
 					 * 		and should be equal to or less than pixelRadius.
 					 * pixelLength is for fake obstacles around balls and
 					 * 		making paths for balls or goals through (fake) obstacles
-					 * 		and should be equal to or bigger than pixelRadius.
-					 * @author Julian */
+					 * 		and should be quite small.
+					 * @author Julian Villadsen - s123641 */
 					pixelRadius = (int)(realCamera.getRobot().robotLength/2)+6;
 					//				pixelDistance = (int)realCamera.getRobot().robotLength/2 + 6;
 					pixelDistance = pixelRadius;
