@@ -34,6 +34,7 @@ public class ControllerFinal {
 	
 	/**
 	 * @author Christian W. Nielsen - s093018
+	 * @author Christoffer Passer Jensen - s103148
 	 */
 	public ControllerFinal () {
 		try {
