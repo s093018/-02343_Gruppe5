@@ -47,9 +47,9 @@ public class ControllerBoard {
 
 				while(!endGame) {
 					board = new Board(map);
-					for(int i = 1; i < (realCamera.getRobot().robotLength/2)+33; i++) {
-						board.buildObstacleAroundBall(realCamera.getObstacleCenter(), i);
-					}
+//					for(int i = 1; i < (realCamera.getRobot().robotLength/2)+33; i++) {
+//						board.buildObstacleAroundBall(realCamera.getObstacleCenter(), i);
+//					}
 					
 					closeBalls = new ArrayList<Point>();
 					allBalls = realCamera.getBalls();
@@ -80,29 +80,29 @@ public class ControllerBoard {
 
 
 					//Solve problem with balls outside playground.
-					ArrayList<Point> ballsToBeRemoved = new ArrayList<Point>();
-					for (Point ball : allBalls) {
-						if(board.ballSurroundedByObstacles(ball)){
-							board.setField(ball.pixel_x, ball.pixel_y, new Field(ball.pixel_x,ball.pixel_y , 'O'));
-							ballsToBeRemoved.add(ball);
-						}
-					}
-					allBalls.removeAll(ballsToBeRemoved);
-
+//					ArrayList<Point> ballsToBeRemoved = new ArrayList<Point>();
+//					for (Point ball : allBalls) {
+//						if(board.ballSurroundedByObstacles(ball)){
+//							board.setField(ball.pixel_x, ball.pixel_y, new Field(ball.pixel_x,ball.pixel_y , 'O'));
+//							ballsToBeRemoved.add(ball);
+//						}
+//					}
+//					allBalls.removeAll(ballsToBeRemoved);
+//
 					closeBalls.addAll(board.ballsCloseToObstacle(allBalls, pixelRadius));
-					board.clearBalls(allBalls);
-
-					allBalls.removeAll(closeBalls);
+//					board.clearBalls(allBalls);
+//
+//					allBalls.removeAll(closeBalls);
 
 					board.fakeWallsBuild(pixelRadius);
 					board.moveGoals(realCamera.getGoals(), pixelDistance, 'F', pixelLength);
 
-					if(allBalls != null && allBalls.size() > 0) {
-						board.fillInBalls(allBalls);
-					} else if(closeBalls != null && closeBalls.size() > 0) {
-						board.fillInBalls(closeBalls);
+//					if(allBalls != null && allBalls.size() > 0) {
+//						board.fillInBalls(allBalls);
+//					} else if(closeBalls != null && closeBalls.size() > 0) {
+//						board.fillInBalls(closeBalls);
 						closeBalls = board.moveBallsPastFakeWalls(closeBalls, ' ', pixelLength);
-					}
+//					}
 
 
 					if(ballCount < MAX_NO_BALLS) {
